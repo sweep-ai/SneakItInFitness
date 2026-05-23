@@ -1,0 +1,18 @@
+.testimonial-section {
+  margin-top: var(--space-xl);
+  padding-bottom: var(--space-md);
+}
+
+.dual-banners {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.booking-banners {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+  padding-bottom: var(--space-md);
+}

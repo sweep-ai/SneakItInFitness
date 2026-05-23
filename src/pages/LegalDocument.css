@@ -1,0 +1,65 @@
+.legal-page .legal-header {
+  margin-bottom: var(--space-lg);
+}
+
+.legal-page h1 {
+  text-align: center;
+}
+
+.legal-page .legal-header .subhead {
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.legal-content section h2 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-xs);
+  color: var(--color-fg);
+}
+
+.legal-content p,
+.legal-content li {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  line-height: 1.75;
+}
+
+.legal-content p + p {
+  margin-top: var(--space-sm);
+}
+
+.legal-content ul {
+  margin: var(--space-sm) 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.legal-content a {
+  color: var(--color-accent);
+}
+
+.legal-content strong {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+.legal-back {
+  margin-top: var(--space-xl);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.legal-back a {
+  color: var(--color-muted);
+}
+
+.legal-back a:hover {
+  color: var(--color-fg);
+}

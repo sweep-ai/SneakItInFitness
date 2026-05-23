@@ -1,0 +1,30 @@
+:root {
+  --color-bg: #000000;
+  --color-bg-center: #1a1a1a;
+  --color-fg: #ffffff;
+  --color-accent: #d70000;
+  --color-accent-hover: #b80000;
+  --color-muted: #a3a3a3;
+  --color-border: #2a2a2a;
+
+  --font-display: 'Bebas Neue', Impact, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --max-width: 720px;
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --banner-height: 180px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --banner-height: 240px;
+  }
+}

@@ -1,0 +1,25 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-header {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-md) var(--space-sm) var(--space-sm);
+}
+
+.layout-logo {
+  height: 96px;
+  width: auto;
+  max-width: min(100%, 420px);
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .layout-logo {
+    height: 128px;
+    max-width: 520px;
+  }
+}

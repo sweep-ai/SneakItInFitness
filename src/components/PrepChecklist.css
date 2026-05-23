@@ -1,0 +1,30 @@
+.prep-checklist h2 {
+  margin-bottom: var(--space-md);
+}
+
+.prep-checklist ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.prep-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.prep-check {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 1rem;
+}
