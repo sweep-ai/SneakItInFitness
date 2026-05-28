@@ -79,6 +79,17 @@ export function PrivacyPolicyPage() {
                 )
               </li>
               <li>
+                <strong>Meta (Facebook) Pixel</strong> for site analytics and ad measurement (
+                <a
+                  href="https://www.facebook.com/privacy/policy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Meta Privacy Policy
+                </a>
+                )
+              </li>
+              <li>
                 <strong>Vercel</strong> (or similar hosting) to deliver the website securely
               </li>
             </ul>

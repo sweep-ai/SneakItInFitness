@@ -1,5 +1,16 @@
 /// <reference types="vite/client" />
 
+interface Fbq {
+  (command: 'init', pixelId: string): void;
+  (command: 'track', event: string, params?: Record<string, unknown>): void;
+  (command: 'trackCustom', event: string, params?: Record<string, unknown>): void;
+}
+
+interface Window {
+  fbq?: Fbq;
+  _fbq?: Fbq;
+}
+
 declare module '*.png' {
   const src: string;
   export default src;

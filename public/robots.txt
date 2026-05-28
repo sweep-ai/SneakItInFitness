@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /post-booking
+
+Sitemap: https://sneakitinfitness.com/sitemap.xml

@@ -8,6 +8,9 @@ import { GenderFunnelPage } from './pages/GenderFunnelPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsPage } from './pages/TermsPage';
 import { DisclaimerPage } from './pages/DisclaimerPage';
+import { FoodPage } from './pages/FoodPage';
+import { YoyoPage } from './pages/YoyoPage';
+import { MetaPixelRouteTracker } from './components/MetaPixelRouteTracker';
 
 const BookingPage = lazy(() =>
   import('./pages/BookingPage').then((m) => ({ default: m.BookingPage }))
@@ -29,6 +32,7 @@ function PageLoader() {
 export default function App() {
   return (
     <BrowserRouter>
+      <MetaPixelRouteTracker />
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
@@ -55,6 +59,8 @@ export default function App() {
           <Route path="privacy" element={<PrivacyPolicyPage />} />
           <Route path="terms" element={<TermsPage />} />
           <Route path="disclaimer" element={<DisclaimerPage />} />
+          <Route path="food" element={<FoodPage />} />
+          <Route path="yoyo" element={<YoyoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

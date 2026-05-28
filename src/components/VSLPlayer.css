@@ -19,12 +19,18 @@
   overflow: hidden;
 }
 
-.vsl-player iframe {
+.vsl-player iframe,
+.vsl-player-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.vsl-player-video {
+  object-fit: contain;
+  background: #000;
 }
 
 .vsl-player-facade {

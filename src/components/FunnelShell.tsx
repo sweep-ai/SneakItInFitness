@@ -15,6 +15,8 @@ interface FunnelShellProps {
   copy: FunnelCopy;
   bannerMode: 'men' | 'women' | 'both';
   showGenderLinks?: boolean;
+  genderLinkMale?: string;
+  genderLinkFemale?: string;
   children?: ReactNode;
   afterBanner?: ReactNode;
 }
@@ -23,6 +25,8 @@ export function FunnelShell({
   copy,
   bannerMode,
   showGenderLinks = false,
+  genderLinkMale = '/male/systems',
+  genderLinkFemale = '/female/cultural',
   children,
   afterBanner,
 }: FunnelShellProps) {
@@ -33,8 +37,8 @@ export function FunnelShell({
         <PageHero headline={copy.headline} subhead={copy.subhead} />
         {showGenderLinks && (
           <nav className="gender-links" aria-label="Gender-specific pages">
-            <Link to="/male/systems">Men&apos;s page</Link>
-            <Link to="/female/cultural">Women&apos;s page</Link>
+            <Link to={genderLinkMale}>Men&apos;s page</Link>
+            <Link to={genderLinkFemale}>Women&apos;s page</Link>
           </nav>
         )}
         <VSLPlayer />

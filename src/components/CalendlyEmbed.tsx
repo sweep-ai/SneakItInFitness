@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { trackSchedule } from '../lib/metaPixel';
 import './CalendlyEmbed.css';
 
 const CALENDLY_URL =
-  'https://calendly.com/swolekol/45min?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=d70000';
+  'https://calendly.com/swolekol/1-on-1-strategy-call-clone?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=d70000';
 
 const EMBED_SCRIPT_ID = 'calendly-widget-script';
 const EMBED_SCRIPT_SRC = 'https://assets.calendly.com/assets/external/widget.js';
@@ -60,6 +61,7 @@ export function CalendlyEmbed() {
       if (!isCalendlyMessage(event)) return;
 
       if (event.data.event === 'calendly.event_scheduled') {
+        trackSchedule();
         navigate('/post-booking', { replace: true });
       }
     };

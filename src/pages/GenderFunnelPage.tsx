@@ -8,7 +8,7 @@ import {
 import { FunnelShell } from '../components/FunnelShell';
 import { RealClientStories } from '../components/RealClientStories';
 
-const VALID_CONCEPTS: FunnelConcept[] = ['cultural', 'work', 'systems'];
+const VALID_CONCEPTS: FunnelConcept[] = ['cultural', 'work', 'systems', 'food', 'yoyo'];
 
 function isFunnelConcept(value: string | undefined): value is FunnelConcept {
   return VALID_CONCEPTS.includes(value as FunnelConcept);

@@ -1,37 +1,120 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { VideoPlacement } from '../data/videos';
+import { videosByPlacement } from '../data/videos';
 import './VSLPlayer.css';
 
-const YOUTUBE_ID = 'Q7arXH-jGyU';
-const THUMBNAIL = `https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`;
+function PlayButton() {
+  return (
+    <span className="vsl-player-play" aria-hidden="true">
+      <svg viewBox="0 0 68 48" width="68" height="48">
+        <path
+          d="M66.52 7.74a8 8 0 0 0-5.64-5.66C55.3 1 34 1 34 1s-21.3 0-26.88 1.08a8 8 0 0 0-5.64 5.66A83.27 83.27 0 0 0 1 24a83.27 83.27 0 0 0 1.48 16.26 8 8 0 0 0 5.64 5.66C12.7 47 34 47 34 47s21.3 0 26.88-1.08a8 8 0 0 0 5.64-5.66A83.27 83.27 0 0 0 67 24a83.27 83.27 0 0 0-1.48-16.26z"
+          fill="#D70000"
+        />
+        <path d="M45 24 27 14v20" fill="#fff" />
+      </svg>
+    </span>
+  );
+}
 
-const embedParams = new URLSearchParams({
-  autoplay: '1',
-  rel: '0',
-  modestbranding: '1',
-  controls: '0',
-  iv_load_policy: '3',
-  fs: '0',
-  disablekb: '1',
-  playsinline: '1',
-  cc_load_policy: '0',
-});
+interface VSLPlayerProps {
+  placement?: VideoPlacement;
+}
 
-const EMBED_SRC = `https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?${embedParams.toString()}`;
+function buildYoutubeEmbedSrc(youtubeId: string, autoplay: boolean) {
+  const embedParams = new URLSearchParams({
+    rel: '0',
+    modestbranding: '1',
+    playsinline: '1',
+    cc_load_policy: '0',
+  });
 
-export function VSLPlayer() {
-  const [playing, setPlaying] = useState(false);
+  if (autoplay) {
+    embedParams.set('autoplay', '1');
+    embedParams.set('controls', '0');
+    embedParams.set('iv_load_policy', '3');
+    embedParams.set('fs', '0');
+    embedParams.set('disablekb', '1');
+  } else {
+    embedParams.set('controls', '1');
+  }
+
+  return `https://www.youtube-nocookie.com/embed/${youtubeId}?${embedParams.toString()}`;
+}
+
+export function VSLPlayer({ placement = 'funnel' }: VSLPlayerProps) {
+  const config = videosByPlacement[placement];
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(
+    config.provider === 'loom' ||
+      config.provider === 'file' ||
+      (config.provider === 'youtube' && placement === 'postBooking')
+  );
+
+  useEffect(() => {
+    if (config.provider !== 'loom') {
+      return;
+    }
+
+    const link = document.createElement('link');
+    link.rel = 'preconnect';
+    link.href = 'https://www.loom.com';
+    document.head.appendChild(link);
+    return () => link.remove();
+  }, [config.provider]);
+
+  useEffect(() => {
+    if (!playing || config.provider !== 'file') {
+      return;
+    }
+    void videoRef.current?.play();
+  }, [playing, config.provider]);
+
+  const youtubeId = config.youtubeId;
+  const thumbnail =
+    youtubeId && `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+  const embedSrc =
+    youtubeId && buildYoutubeEmbedSrc(youtubeId, playing && placement === 'funnel');
 
   return (
     <div className="vsl-section">
-      <h2 className="vsl-section-label">Learn The System</h2>
+      {config.sectionLabel && (
+        <h2 className="vsl-section-label">{config.sectionLabel}</h2>
+      )}
       <div className="vsl-player">
-        {playing ? (
+        {config.provider === 'loom' && config.loomEmbedUrl && (
+          <iframe src={config.loomEmbedUrl} title={config.title} allowFullScreen />
+        )}
+        {config.provider === 'youtube' && youtubeId && playing && embedSrc && (
           <iframe
-            src={EMBED_SRC}
-            title="Sneak-it-in System video"
+            src={embedSrc}
+            title={config.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />
-        ) : (
+        )}
+        {config.provider === 'file' && config.src && !playing && (
+          <button
+            type="button"
+            className="vsl-player-facade"
+            onClick={() => setPlaying(true)}
+            aria-label="Play video"
+          >
+            <PlayButton />
+          </button>
+        )}
+        {config.provider === 'file' && config.src && playing && (
+          <video
+            ref={videoRef}
+            className="vsl-player-video"
+            src={config.src}
+            title={config.title}
+            controls
+            autoPlay
+            playsInline
+            preload="auto"
+          />
+        )}
+        {config.provider === 'youtube' && youtubeId && !playing && thumbnail && (
           <button
             type="button"
             className="vsl-player-facade"
@@ -39,24 +122,16 @@ export function VSLPlayer() {
             aria-label="Play video"
           >
             <img
-              src={THUMBNAIL}
+              src={thumbnail}
               alt=""
               className="vsl-player-thumb"
               loading="eager"
               onError={(e) => {
                 const target = e.currentTarget;
-                target.src = `https://img.youtube.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
+                target.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
               }}
             />
-            <span className="vsl-player-play" aria-hidden="true">
-              <svg viewBox="0 0 68 48" width="68" height="48">
-                <path
-                  d="M66.52 7.74a8 8 0 0 0-5.64-5.66C55.3 1 34 1 34 1s-21.3 0-26.88 1.08a8 8 0 0 0-5.64 5.66A83.27 83.27 0 0 0 1 24a83.27 83.27 0 0 0 1.48 16.26 8 8 0 0 0 5.64 5.66C12.7 47 34 47 34 47s21.3 0 26.88-1.08a8 8 0 0 0 5.64-5.66A83.27 83.27 0 0 0 67 24a83.27 83.27 0 0 0-1.48-16.26z"
-                  fill="#D70000"
-                />
-                <path d="M45 24 27 14v20" fill="#fff" />
-              </svg>
-            </span>
+            <PlayButton />
           </button>
         )}
       </div>

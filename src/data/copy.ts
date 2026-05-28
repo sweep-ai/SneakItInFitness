@@ -1,5 +1,5 @@
 export type CopyVariant = 'neutral' | 'male' | 'female';
-export type FunnelConcept = 'cultural' | 'work' | 'systems';
+export type FunnelConcept = 'cultural' | 'work' | 'systems' | 'food' | 'yoyo';
 export type FunnelGender = 'male' | 'female';
 
 export interface FunnelCopy {
@@ -14,9 +14,9 @@ export const funnelCopy: Record<CopyVariant, FunnelCopy> = {
       'I know that feeling. I lived it. The Sneak-it-in System is how I help Jewish men and women stop restarting and finally build a body, and an identity, they are proud of. No BS. Built around your real life.',
   },
   male: {
-    headline: "You're eating clean but you're still not lean. Here's why.",
+    headline: "You don't need more discipline. You need a system that fits your real life.",
     subhead:
-      'Straight up. It is usually not food quality. It is calories, protein, and consistency. I help you build a system around your 9 to 5 so you stop spinning your wheels and start becoming someone you are proud to be.',
+      'Between work, family, and everything else on your plate, fitness keeps losing. I built the Sneak-it-in System for men who are done restarting and ready to feel strong, lean, and proud again.',
   },
   female: {
     headline: "You don't need more discipline. You need a system that fits your real life.",
@@ -36,35 +36,71 @@ export const funnelCopyByConcept: Record<
         "That is not a you problem. That is a plan problem. Generic programs were never built for kosher living, holidays, or a home that runs on Jewish time. I design yours around your week so your faith and your goals stop feeling like they are at war.",
     },
     male: {
-      headline: "You keep restarting because your plan was not built for Jewish life.",
+      headline: "Every week you start over. Shabbat hits. The plan falls apart again.",
       subhead:
-        "Shabbat. Holidays. Family meals. A kosher kitchen. I am not asking you to pick between your values and your body. I map training and nutrition around the life you actually live. You are meant for more than another failed cut.",
+        "That is not a you problem. That is a plan problem. Generic programs were never built for kosher living, holidays, or a home that runs on Jewish time. I design yours around your week so your faith and your goals stop feeling like they are at war.",
     },
   },
   work: {
     female: {
-      headline: "You are exhausted after work. So the gym waits. Again.",
+      headline: "You are exhausted after work. So your health continues to takes a backseat.",
       subhead:
-        "You are not lazy. You are running on empty. I work with women who hold down full time jobs, carry stress home, and still want to feel lean, strong, and proud. We build a system around your hours, not some fantasy schedule.",
+        "You are not lazy. You are running on empty. I work with women who hold down full time jobs, carry stress home, and still want to feel lean, strong, healthy,and proud. We build a system around your hours, not some fantasy schedule.",
     },
     male: {
-      headline: "What nobody tells you about getting lean while working 60 hours a week.",
+      headline: "You are exhausted after work. So your health continues to takes a backseat.",
       subhead:
-        "You eat decent. You train when you can. Results still are not there. Life knocks you off every time you build momentum. Sound familiar? The problem is not effort. You do not have a system built for your actual life. I will help you build one.",
+        "You are not lazy. You are running on empty. I work with men who hold down full time jobs, carry stress home, and still want to feel lean, strong, healthy,and proud. We build a system around your hours, not some fantasy schedule.",
     },
   },
   systems: {
     female: {
-      headline: "You are putting in effort. Your body still is not changing. Here is why.",
+      headline: "You are putting in effort. But your body still is not changing. Here is why.",
       subhead:
-        "Most women I coach are not failing because they do not care. They are failing because they lack structure and someone keeping them honest. We fix that first. Confidence comes when you stop restarting every month.",
+        "Most women I coach are not failing because they do not care. They are failing because they lack correct sustainable structure and someone keeping them honest. We fix that first. Confidence comes when you stop restarting every month.",
     },
     male: {
-      headline: "You're eating clean but you're still not lean. Here's why.",
+      headline: "You are putting in effort. But your body still is not changing. Here is why.",
       subhead:
-        "Straight up. It is usually not food quality. It is calories, protein, and consistency. This is not about a six pack. It is about becoming someone who shows up for himself. I have done it. I will show you how.",
+        "Most men I coach are not failing because they do not care. They are failing because they lack correct sustainable structure and someone keeping them honest. We fix that first. Confidence comes when you stop restarting every month.",
     },
   },
+  food: {
+    female: {
+      headline: "You Don't Need To Sacrifice Your Favorite Foods to Get In Shape",
+      subhead:
+        'Every week you start over after Friday night. That is not a willpower problem. Your plan treats Shabbat like a cheat day. I help you eat with your family, keep kosher, and stay on track. No pretending challah does not exist. A system built for your real week.',
+    },
+    male: {
+      headline: "You Don't Need To Sacrifice Your Favorite Foods to Get In Shape",
+      subhead:
+        'Every week you start over after Friday night. That is not a willpower problem. Your plan treats Shabbat like a cheat day. I help you eat with your family, keep kosher, and stay on track. No pretending challah does not exist. A system built for your real week.',
+    },
+  },
+  yoyo: {
+    female: {
+      headline: 'You are not the problem. The restrictive plans were.',
+      subhead:
+        'Meal plans that fight your life are why you keep losing progress and starting over. I work with women who are tired of being harder on themselves than the program was on them. We build a system around your week so staying on track feels easier, not like another full-time job.',
+    },
+    male: {
+      headline: 'You are not the problem. The restrictive plans were.',
+      subhead:
+        'Meal plans that fight your life are why you keep losing progress and starting over. I work with men who are tired of being harder on themselves than the program was on them. We build a system around your week so staying on track feels easier, not like another full-time job. Crash cuts. Chicken and rice forever. Guilt every weekend. That is how you lose weight and gain it back, not how you actually change. I build systems for men who are done white-knuckling it. More structure, less punishment. Built around your job, your schedule, and your actual life.',
+    },
+  },
+};
+
+export const foodFunnelCopy: FunnelCopy = {
+  headline: 'What I eat on Shabbat and still hit my macros.',
+  subhead:
+    'This is the food demo angle built for Jewish life. Kosher kitchens, family meals, Friday night. Watch how the Sneak-it-in System fits Shabbat into your week so you stop undoing the whole cut every weekend. No BS.',
+};
+
+export const yoyoFunnelCopy: FunnelCopy = {
+  headline: 'Done with losing weight just to gain it back?',
+  subhead:
+    'Most programs fail because they are too restrictive for real life. The Sneak-it-in System fits your schedule, your family, and your culture so you stop the restart cycle. No starvation mindset. No BS. Pick the page that fits you below.',
 };
 
 export const bookingCopy = {
@@ -76,7 +112,7 @@ export const bookingCopy = {
 export const postBookingCopy = {
   headline: 'Watch this before your call',
   subhead:
-    'I recorded this so you know exactly what to expect and we do not waste a minute when we talk. Watch it before we meet.',
+    'The video below dives deep in to my backstory - who I am, what I do, why I do it, and how I do it',
 };
 
 export const testimonialSectionTitle = 'Take their word for it';
@@ -89,8 +125,7 @@ export const finalCtaCopy = {
 
 export const prepChecklist = [
   'Confirm the booking email',
-  'Come prepared with questions',
-  'Come prepared to make a decision',
+  'Come prepared with questions and a pen and paper',
   'Join in a quiet place with strong wifi connection',
 ];
 
@@ -103,12 +138,12 @@ export const faqItems: FAQItem[] = [
   {
     question: 'I work long hours. Will I actually have time for this?',
     answer:
-      'That is who I built this for. Not gym rats with empty calendars. We build training and nutrition into the life you already live. Your job, your stress, your real hours. Fitness stops being the thing that always loses.',
+      'That is the exact reason I built this structure. A lot of people think long hours are why they cannot do it, but long hours are actually why you need a sustainable system that fits your life. If you only have 2 to 3 hours per week, maximum, and you want to make a real change, this is built for you.',
   },
   {
     question: 'I have tried programs before and always fall off. Why would this be different?',
     answer:
-      'Because most plans ask you to live like someone you are not. I do not do that. You get a system built for your week, and I keep you accountable when life gets messy. That is the difference. Not more motivation. Real structure.',
+      'Most programs are cookie-cutter: copy-and-paste routines with zero personalization. That is exactly why this is different. Most plans ask you to live like someone you are not, and I do not do that. You get a system built around you, your goals, and your real life—plus consistent accountability so that no matter what comes up, you keep progressing.',
   },
   {
     question: 'Will this work with Shabbat, holidays, and kosher lifestyle?',
@@ -118,21 +153,21 @@ export const faqItems: FAQItem[] = [
   {
     question: 'Is this another crash diet or extreme cut?',
     answer:
-      'No. I do not run that. Crash diets are how you end up heavier than when you started. We build habits you can actually keep. Slow, steady, sustainable. The way it should be.',
+      'No—and I would never do that again, and I do not want you to either. Crash diets are how you lose the weight and then gain it back, or end up heavier than when you started. We build habits you can actually keep long-term, because anyone can lose weight—the real goal is keeping it off forever. This is about building the correct, sustainable habits for the rest of your life, not hopping from program to program.',
   },
   {
     question: 'How much support do I actually get?',
     answer:
-      'Real 1:1 support. Not a PDF and good luck. You get me. Direct access. Regular check-ins. I adjust your plan when life shifts. I care if you win because my name is on your result.',
+      'Real, persistent 1:1 support and accountability—not a PDF and “good luck.” You get direct access to me and my team, with regular check-ins. I adjust your plan consistently when life shifts, your goals shift, you plateau, or all of the above. I care if you win because my name is on your result—and I genuinely want to see you succeed. Especially another Jew.',
   },
   {
     question: 'What happens on the strategy call?',
     answer:
-      'We get honest about your goals, your schedule, and what has not worked before. If coaching makes sense, I will tell you. If it does not, I will tell you that too. No hard pitch. Just a straight conversation.',
+      'We get honest about your goals, your schedule, and what has not worked before. If coaching makes sense, I will tell you. If it does not, I will tell you that too.  Just a straight conversation.',
   },
   {
     question: 'How fast will I see results?',
     answer:
-      'I will be real with you. The scale moves when you stop restarting. Mindset and consistency can shift fast once you have a system. We build the person first. The body follows when you finally stick to something.',
+      'Most people start seeing results within the first couple of weeks. It depends on the person and their situation, but things move surprisingly fast when you have a truly personalized system and real accountability.',
   },
 ];
