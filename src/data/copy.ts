@@ -106,7 +106,7 @@ export const yoyoFunnelCopy: FunnelCopy = {
 export const bookingCopy = {
   headline: 'Book your Sneak-it-in Strategy Call',
   subhead:
-    'Pick a time below. Come as you are. We will talk about your week, what has been getting in the way, and what you actually want to change. If we are a fit, great. If not, that is fine too.',
+    'Pick a time below. Come as you are. We will talk about your situation, what has been getting in the way, and what you actually want to change. If we are a fit, great. If not, you will leave with clarity on what to do next.',
 };
 
 export const postBookingCopy = {
