@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import type { FunnelCopy } from '../data/copy';
+import type { FunnelCopy, FunnelGender } from '../data/copy';
 import { testimonialSectionTitle } from '../data/copy';
 import { PageHero } from './PageHero';
 import { VSLPlayer } from './VSLPlayer';
@@ -14,6 +14,7 @@ import './FunnelShell.css';
 interface FunnelShellProps {
   copy: FunnelCopy;
   bannerMode: 'men' | 'women' | 'both';
+  gender?: FunnelGender;
   showGenderLinks?: boolean;
   genderLinkMale?: string;
   genderLinkFemale?: string;
@@ -24,6 +25,7 @@ interface FunnelShellProps {
 export function FunnelShell({
   copy,
   bannerMode,
+  gender,
   showGenderLinks = false,
   genderLinkMale = '/male/systems',
   genderLinkFemale = '/female/cultural',
@@ -41,7 +43,7 @@ export function FunnelShell({
             <Link to={genderLinkFemale}>Women&apos;s page</Link>
           </nav>
         )}
-        <VSLPlayer />
+        <VSLPlayer gender={gender} />
         <ApplyButton />
         {children}
         <section className="section testimonial-section">

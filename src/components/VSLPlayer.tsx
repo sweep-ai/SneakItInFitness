@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import type { FunnelGender } from '../data/copy';
 import type { VideoPlacement } from '../data/videos';
-import { videosByPlacement } from '../data/videos';
+import { funnelVideosByGender, postBookingVideo } from '../data/videos';
 import './VSLPlayer.css';
 
 function PlayButton() {
@@ -19,6 +20,7 @@ function PlayButton() {
 
 interface VSLPlayerProps {
   placement?: VideoPlacement;
+  gender?: FunnelGender;
 }
 
 function buildYoutubeEmbedSrc(youtubeId: string, autoplay: boolean) {
@@ -42,8 +44,9 @@ function buildYoutubeEmbedSrc(youtubeId: string, autoplay: boolean) {
   return `https://www.youtube-nocookie.com/embed/${youtubeId}?${embedParams.toString()}`;
 }
 
-export function VSLPlayer({ placement = 'funnel' }: VSLPlayerProps) {
-  const config = videosByPlacement[placement];
+export function VSLPlayer({ placement = 'funnel', gender = 'male' }: VSLPlayerProps) {
+  const config =
+    placement === 'postBooking' ? postBookingVideo : funnelVideosByGender[gender];
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(
     config.provider === 'loom' ||

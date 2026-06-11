@@ -34,6 +34,7 @@ export function GenderFunnelPage({ gender }: GenderFunnelPageProps) {
     <FunnelShell
       copy={copy}
       bannerMode={bannerMode}
+      gender={gender}
       afterBanner={<RealClientStories stories={stories} />}
     />
   );

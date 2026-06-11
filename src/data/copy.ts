@@ -9,19 +9,19 @@ export interface FunnelCopy {
 
 export const funnelCopy: Record<CopyVariant, FunnelCopy> = {
   neutral: {
-    headline: "You're trying. You're putting in effort. And you're still not proud of who you see.",
+    headline: "You're putting in effort. Still not proud of who you see.",
     subhead:
-      'I know that feeling. I lived it. The Sneak-it-in System is how I help Jewish men and women stop restarting and finally build a body, and an identity, they are proud of. No BS. Built around your real life.',
+      'I lived that. The Sneak-it-in System helps Jewish men and women stop restarting and build a body—and identity—they are proud of. No BS. Built around your real life.',
   },
   male: {
     headline: "You don't need more discipline. You need a system that fits your real life.",
     subhead:
-      'Between work, family, and everything else on your plate, fitness keeps losing. I built the Sneak-it-in System for men who are done restarting and ready to feel strong, lean, and proud again.',
+      'Work, family, life—fitness keeps losing. I built the Sneak-it-in System for men done restarting who want to feel strong, lean, and proud again.',
   },
   female: {
     headline: "You don't need more discipline. You need a system that fits your real life.",
     subhead:
-      'Between work, family, and everything else on your plate, fitness keeps losing. I built the Sneak-it-in System for women who are done restarting and ready to feel strong, lean, and proud again.',
+      'Work, family, life—fitness keeps losing. I built the Sneak-it-in System for women done restarting who want to feel strong, lean, and proud again.',
   },
 };
 
@@ -31,62 +31,62 @@ export const funnelCopyByConcept: Record<
 > = {
   cultural: {
     female: {
-      headline: "Every week you start over. Shabbat hits. The plan falls apart again.",
+      headline: "Every week you restart. Shabbat hits. The plan falls apart.",
       subhead:
-        "That is not a you problem. That is a plan problem. Generic programs were never built for kosher living, holidays, or a home that runs on Jewish time. I design yours around your week so your faith and your goals stop feeling like they are at war.",
+        "That is a plan problem, not a you problem. Generic programs ignore kosher living, holidays, and Jewish time. I build yours around your week so faith and goals stop fighting.",
     },
     male: {
-      headline: "Every week you start over. Shabbat hits. The plan falls apart again.",
+      headline: "Every week you restart. Shabbat hits. The plan falls apart.",
       subhead:
-        "That is not a you problem. That is a plan problem. Generic programs were never built for kosher living, holidays, or a home that runs on Jewish time. I design yours around your week so your faith and your goals stop feeling like they are at war.",
+        "That is a plan problem, not a you problem. Generic programs ignore kosher living, holidays, and Jewish time. I build yours around your week so faith and goals stop fighting.",
     },
   },
   work: {
     female: {
-      headline: "You are exhausted after work. So your health continues to takes a backseat.",
+      headline: "Exhausted after work. Health keeps taking a backseat.",
       subhead:
-        "You are not lazy. You are running on empty. I work with women who hold down full time jobs, carry stress home, and still want to feel lean, strong, healthy,and proud. We build a system around your hours, not some fantasy schedule.",
+        "You are not lazy—you are running on empty. I work with women with full-time jobs who still want to feel lean, strong, and proud. A system built around your hours, not a fantasy schedule.",
     },
     male: {
-      headline: "You are exhausted after work. So your health continues to takes a backseat.",
+      headline: "Exhausted after work. Health keeps taking a backseat.",
       subhead:
-        "You are not lazy. You are running on empty. I work with men who hold down full time jobs, carry stress home, and still want to feel lean, strong, healthy,and proud. We build a system around your hours, not some fantasy schedule.",
+        "You are not lazy—you are running on empty. I work with men with full-time jobs who still want to feel lean, strong, and proud. A system built around your hours, not a fantasy schedule.",
     },
   },
   systems: {
     female: {
-      headline: "You are putting in effort. But your body still is not changing. Here is why.",
+      headline: "You are putting in effort. Your body still is not changing. Here is why.",
       subhead:
-        "Most women I coach are not failing because they do not care. They are failing because they lack correct sustainable structure and someone keeping them honest. We fix that first. Confidence comes when you stop restarting every month.",
+        "Most women I coach are not failing from lack of care—they lack structure and accountability. We fix that first. Confidence comes when you stop restarting every month.",
     },
     male: {
-      headline: "You are putting in effort. But your body still is not changing. Here is why.",
+      headline: "You are putting in effort. Your body still is not changing. Here is why.",
       subhead:
-        "Most men I coach are not failing because they do not care. They are failing because they lack correct sustainable structure and someone keeping them honest. We fix that first. Confidence comes when you stop restarting every month.",
+        "Most men I coach are not failing from lack of care—they lack structure and accountability. We fix that first. Confidence comes when you stop restarting every month.",
     },
   },
   food: {
     female: {
-      headline: "You Don't Need To Sacrifice Your Favorite Foods to Get In Shape",
+      headline: "You do not need to give up your favorite foods to get in shape.",
       subhead:
-        'Every week you start over after Friday night. That is not a willpower problem. Your plan treats Shabbat like a cheat day. I help you eat with your family, keep kosher, and stay on track. No pretending challah does not exist. A system built for your real week.',
+        'Every week you restart after Friday night. That is not willpower—that is a plan treating Shabbat like a cheat day. Eat with your family, keep kosher, stay on track. No pretending challah does not exist.',
     },
     male: {
-      headline: "You Don't Need To Sacrifice Your Favorite Foods to Get In Shape",
+      headline: "You do not need to give up your favorite foods to get in shape.",
       subhead:
-        'Every week you start over after Friday night. That is not a willpower problem. Your plan treats Shabbat like a cheat day. I help you eat with your family, keep kosher, and stay on track. No pretending challah does not exist. A system built for your real week.',
+        'Every week you restart after Friday night. That is not willpower—that is a plan treating Shabbat like a cheat day. Eat with your family, keep kosher, stay on track. No pretending challah does not exist.',
     },
   },
   yoyo: {
     female: {
       headline: 'You are not the problem. The restrictive plans were.',
       subhead:
-        'Meal plans that fight your life are why you keep losing progress and starting over. I work with women who are tired of being harder on themselves than the program was on them. We build a system around your week so staying on track feels easier, not like another full-time job.',
+        'Plans that fight your life keep knocking you off track. I work with women tired of being harder on themselves than any program was. A system built around your week—not another full-time job.',
     },
     male: {
       headline: 'You are not the problem. The restrictive plans were.',
       subhead:
-        'Meal plans that fight your life are why you keep losing progress and starting over. I work with men who are tired of being harder on themselves than the program was on them. We build a system around your week so staying on track feels easier, not like another full-time job. Crash cuts. Chicken and rice forever. Guilt every weekend. That is how you lose weight and gain it back, not how you actually change. I build systems for men who are done white-knuckling it. More structure, less punishment. Built around your job, your schedule, and your actual life.',
+        'Plans that fight your life keep knocking you off track. Crash cuts. Chicken and rice. Guilt every weekend. That is how you lose weight and gain it back—not how you change. I build systems for men done white-knuckling it. More structure, less punishment. Built around your real life.',
     },
   },
 };
@@ -94,13 +94,13 @@ export const funnelCopyByConcept: Record<
 export const foodFunnelCopy: FunnelCopy = {
   headline: 'What I eat on Shabbat and still hit my macros.',
   subhead:
-    'This is the food demo angle built for Jewish life. Kosher kitchens, family meals, Friday night. Watch how the Sneak-it-in System fits Shabbat into your week so you stop undoing the whole cut every weekend. No BS.',
+    'Built for Jewish life—kosher kitchens, family meals, Friday night. See how the Sneak-it-in System fits Shabbat into your week so you stop undoing every cut. No BS.',
 };
 
 export const yoyoFunnelCopy: FunnelCopy = {
   headline: 'Done with losing weight just to gain it back?',
   subhead:
-    'Most programs fail because they are too restrictive for real life. The Sneak-it-in System fits your schedule, your family, and your culture so you stop the restart cycle. No starvation mindset. No BS. Pick the page that fits you below.',
+    'Most programs are too restrictive for real life. The Sneak-it-in System fits your schedule, family, and culture so you stop the restart cycle. No starvation mindset. No BS. Pick your page below.',
 };
 
 export const bookingCopy = {
