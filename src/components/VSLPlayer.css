@@ -4,10 +4,14 @@
 
 .vsl-section-label {
   text-align: center;
-  font-size: clamp(1.1rem, 4vw, 1.35rem);
-  letter-spacing: 0.1em;
-  color: var(--color-muted);
-  margin-bottom: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: clamp(0.8125rem, 2.6vw, 0.9375rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: normal;
+  color: var(--color-fg);
+  margin: 0 auto var(--space-md);
+  max-width: 36rem;
 }
 
 .vsl-player {

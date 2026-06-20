@@ -1,0 +1,382 @@
+.application-form {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  scroll-margin-top: var(--space-md);
+}
+
+.application-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.application-form-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+}
+
+.application-form-progress {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.application-form-progress-bar {
+  height: 3px;
+  margin-bottom: var(--space-lg);
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.application-form-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.application-form-question {
+  margin-bottom: var(--space-md);
+  font-size: clamp(1rem, 3.5vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--color-fg);
+}
+
+.application-form-question span {
+  color: var(--color-accent);
+}
+
+.application-form-hint {
+  margin: calc(-1 * var(--space-xs)) 0 var(--space-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.application-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.application-form-step-panel {
+  overflow: hidden;
+}
+
+.application-form-step-content {
+  animation: application-form-slide-forward 0.38s ease;
+}
+
+.application-form-step-content--back {
+  animation: application-form-slide-back 0.38s ease;
+}
+
+@keyframes application-form-slide-forward {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes application-form-slide-back {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.application-form-input,
+.application-form-textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-fg);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.application-form-input::placeholder,
+.application-form-textarea::placeholder {
+  color: var(--color-muted);
+}
+
+.application-form-input:focus,
+.application-form-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(215, 0, 0, 0.2);
+}
+
+.application-form-textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.application-form-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.application-form-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  min-height: 48px;
+  text-align: left;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--color-fg);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.application-form-option:hover {
+  border-color: rgba(215, 0, 0, 0.45);
+  background: rgba(215, 0, 0, 0.06);
+}
+
+.application-form-option--selected {
+  border-color: var(--color-accent);
+  background: rgba(215, 0, 0, 0.12);
+}
+
+.application-form-option--confirmed {
+  border-color: var(--color-accent);
+  background: rgba(215, 0, 0, 0.22);
+  transform: scale(1.015);
+  box-shadow: 0 0 0 2px rgba(215, 0, 0, 0.35);
+}
+
+.application-form-option-check {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-fg);
+  background: var(--color-accent);
+  border-radius: 50%;
+  animation: application-form-check-pop 0.28s ease;
+}
+
+@keyframes application-form-check-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .application-form-step-content,
+  .application-form-step-content--back {
+    animation: none;
+  }
+
+  .application-form-option-check {
+    animation: none;
+  }
+
+  .application-form-option--confirmed {
+    transform: none;
+  }
+}
+
+.application-form-option--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.application-form-option--disabled:hover {
+  border-color: var(--color-border);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.application-form-option-key {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-fg);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+
+.application-form-option-label {
+  flex: 1;
+  padding-top: 0.1rem;
+}
+
+.application-form-yesno {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.application-form-error {
+  margin-bottom: var(--space-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.application-form-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  min-height: 48px;
+}
+
+.application-form-back {
+  flex: 0 0 auto;
+  padding: 1rem 1.25rem;
+  min-height: 48px;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.application-form-back:hover {
+  border-color: var(--color-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.application-form-next {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  min-height: 48px;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 4.5vw, 1.25rem);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.application-form-next:hover {
+  background: var(--color-accent-hover);
+}
+
+.application-form-next:active {
+  transform: scale(0.98);
+}
+
+.application-form-next:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.application-form-contact-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.application-form-dq {
+  text-align: center;
+}
+
+.application-form-dq-headline {
+  margin: 0 0 var(--space-md);
+  font-size: clamp(1.0625rem, 3.8vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--color-fg);
+}
+
+.application-form-dq-subhead {
+  margin: 0 0 var(--space-md);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.application-form-resources {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.application-form-resource-link {
+  display: block;
+  padding: 1rem 1.5rem;
+  min-height: 48px;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 4.5vw, 1.125rem);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.application-form-resource-link:hover {
+  background: var(--color-accent-hover);
+  text-decoration: none;
+}
+
+.application-form-resource-link:active {
+  transform: scale(0.98);
+}

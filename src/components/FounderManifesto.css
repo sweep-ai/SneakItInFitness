@@ -1,0 +1,95 @@
+.founder-manifesto {
+  width: 100%;
+  background: #f2f2f2;
+  color: #111111;
+  margin-top: var(--space-xl);
+}
+
+.founder-manifesto-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-sm);
+  text-align: center;
+}
+
+.founder-manifesto-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.founder-manifesto-line {
+  margin: 0;
+  font-size: clamp(0.8125rem, 2.8vw, 0.9375rem);
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.founder-manifesto-line--emphasis {
+  font-weight: 700;
+}
+
+.founder-manifesto-photo {
+  display: block;
+  width: min(100%, 280px);
+  height: auto;
+  margin: 0 auto;
+  filter: grayscale(100%);
+  object-fit: contain;
+}
+
+.founder-manifesto-tagline {
+  margin: var(--space-lg) 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(1.35rem, 5.5vw, 2rem);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #111111;
+}
+
+.founder-manifesto-brand {
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.founder-manifesto-tagline-strong {
+  font-weight: 800;
+}
+
+.founder-manifesto-signature {
+  margin: var(--space-md) 0 0;
+  font-family: 'Brush Script MT', 'Segoe Script', cursive;
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  line-height: 1;
+  color: #111111;
+}
+
+.founder-manifesto-title {
+  margin: 0.35rem 0 var(--space-lg);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #111111;
+}
+
+.founder-manifesto .apply-btn {
+  max-width: 24rem;
+  margin: var(--space-lg) auto 0;
+  border-radius: 999px;
+}
+
+@media (min-width: 768px) {
+  .founder-manifesto-inner {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .founder-manifesto-photo {
+    width: min(100%, 320px);
+  }
+}

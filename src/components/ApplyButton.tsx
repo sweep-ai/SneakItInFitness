@@ -1,12 +1,26 @@
-import { useNavigate } from 'react-router-dom';
 import './ApplyButton.css';
 
-export function ApplyButton() {
-  const navigate = useNavigate();
+interface ApplyButtonProps {
+  variant?: 'primary' | 'inverse';
+}
 
+function scrollToApplicationForm() {
+  const form = document.getElementById('application-form');
+  if (form) {
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  window.location.href = '/#application-form';
+}
+
+export function ApplyButton({ variant = 'primary' }: ApplyButtonProps) {
   return (
-    <button type="button" className="apply-btn" onClick={() => navigate('/booking')}>
-      Book a Strategy Call
+    <button
+      type="button"
+      className={`apply-btn${variant === 'inverse' ? ' apply-btn--inverse' : ''}`}
+      onClick={scrollToApplicationForm}
+    >
+      Start Your Transformation
     </button>
   );
 }

@@ -3,16 +3,11 @@
   padding-bottom: var(--space-md);
 }
 
-.dual-banners {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
+.testimonial-banners,
 .booking-banners {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  margin-top: var(--space-xl);
+  margin-top: var(--space-md);
   padding-bottom: var(--space-md);
 }

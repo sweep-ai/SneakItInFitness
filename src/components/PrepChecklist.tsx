@@ -1,10 +1,14 @@
 import { prepChecklist } from '../data/copy';
 import './PrepChecklist.css';
 
-export function PrepChecklist() {
+interface PrepChecklistProps {
+  hideTitle?: boolean;
+}
+
+export function PrepChecklist({ hideTitle = false }: PrepChecklistProps) {
   return (
     <section className="prep-checklist section">
-      <h2>Before your call</h2>
+      {!hideTitle && <h2>Before your call</h2>}
       <ul>
         {prepChecklist.map((item) => (
           <li key={item}>

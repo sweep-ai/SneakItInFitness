@@ -22,6 +22,11 @@ import kristaVideo from '../../assets/testimonials/Krista.mp4';
 import mrsSokolVideo from '../../assets/testimonials/MrsSokol.mp4';
 
 import logo from '../../assets/branding/swolekolLogo.png';
+import ariHeader from '../../assets/branding/ari_header.png';
+import ariMom from '../../assets/branding/ari_mom.png';
+import ariComp from '../../assets/branding/ari_comp.png';
+import meetingConfirm from '../../assets/post-booking/meeting_confirm.png';
+import meetingLink from '../../assets/post-booking/meeting_link.png';
 
 export interface Testimonial {
   src: string;
@@ -29,8 +34,11 @@ export interface Testimonial {
   stat: string;
 }
 
+const harris = '/assets/men/Harris.png';
+
 export const menTestimonials: Testimonial[] = [
   { src: drew, name: 'Drew', stat: 'Lost 200 lbs' },
+  { src: harris, name: 'Harris', stat: '-50 lbs in 8 months' },
   { src: sam, name: 'Sam', stat: '-30 lbs in 3 months' },
   { src: david, name: 'David', stat: '-45 lbs in 6 months' },
 ];
@@ -64,3 +72,13 @@ export const womenClientStories: ClientStoryVideo[] = [
 ];
 
 export const logoSrc = logo;
+export const ariHeaderSrc = ariHeader;
+export const ariMomSrc = ariMom;
+export const ariCompSrc = ariComp;
+export const meetingConfirmSrc = meetingConfirm;
+export const meetingLinkSrc = meetingLink;
+
+export const heroBackgroundPhotos = [
+  ...menTestimonials.map((t) => t.src),
+  ...womenTestimonials.map((t) => t.src),
+];

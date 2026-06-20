@@ -1,16 +1,6 @@
 import { Link } from 'react-router-dom';
+import { socialLinks } from '../data/social';
 import './Footer.css';
-
-const SOCIAL_LINKS = [
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/swolekol/',
-  },
-  {
-    label: 'YouTube',
-    href: 'https://www.youtube.com/@Swolekol',
-  },
-] as const;
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -19,7 +9,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="site-footer-inner container">
         <nav className="site-footer-social" aria-label="Social media">
-          {SOCIAL_LINKS.map((link) => (
+          {socialLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}

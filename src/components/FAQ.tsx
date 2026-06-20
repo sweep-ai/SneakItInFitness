@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { faqItems } from '../data/copy';
 import './FAQ.css';
 
-export function FAQ() {
+interface FAQProps {
+  hideTitle?: boolean;
+}
+
+export function FAQ({ hideTitle = false }: FAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="faq section">
-      <h2>Common questions</h2>
+    <section className="faq section" aria-label="Common questions">
+      {!hideTitle && <h2>Common questions</h2>}
       <div className="faq-list">
         {faqItems.map((item, index) => {
           const isOpen = openIndex === index;

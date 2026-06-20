@@ -20,7 +20,7 @@ export const maleFunnelVideo: VideoConfig = {
   provider: 'loom',
   loomEmbedUrl: loomEmbedUrl('102fb03a275749e9b5121329a798bdc1'),
   title: 'Sneak-it-in System video',
-  sectionLabel: 'Learn The System',
+  sectionLabel: null,
 };
 
 /** Women's funnel pages — Loom VSL. */
@@ -28,7 +28,7 @@ export const femaleFunnelVideo: VideoConfig = {
   provider: 'loom',
   loomEmbedUrl: loomEmbedUrl('189dd947f75147be88567e59791313cd'),
   title: 'Sneak-it-in System video',
-  sectionLabel: 'Learn The System',
+  sectionLabel: null,
 };
 
 export const funnelVideosByGender: Record<FunnelGender, VideoConfig> = {

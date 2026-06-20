@@ -22,3 +22,14 @@
 .apply-btn:active {
   transform: scale(0.98);
 }
+
+.apply-btn--inverse {
+  color: #2a0808;
+  background: #ffffff;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.apply-btn--inverse:hover {
+  background: #f0f0f0;
+}

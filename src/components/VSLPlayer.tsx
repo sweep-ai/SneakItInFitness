@@ -21,6 +21,7 @@ function PlayButton() {
 interface VSLPlayerProps {
   placement?: VideoPlacement;
   gender?: FunnelGender;
+  sectionLabel?: string | null;
 }
 
 function buildYoutubeEmbedSrc(youtubeId: string, autoplay: boolean) {
@@ -44,9 +45,14 @@ function buildYoutubeEmbedSrc(youtubeId: string, autoplay: boolean) {
   return `https://www.youtube-nocookie.com/embed/${youtubeId}?${embedParams.toString()}`;
 }
 
-export function VSLPlayer({ placement = 'funnel', gender = 'male' }: VSLPlayerProps) {
+export function VSLPlayer({
+  placement = 'funnel',
+  gender = 'male',
+  sectionLabel,
+}: VSLPlayerProps) {
   const config =
     placement === 'postBooking' ? postBookingVideo : funnelVideosByGender[gender];
+  const label = sectionLabel ?? config.sectionLabel;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(
     config.provider === 'loom' ||
@@ -81,9 +87,7 @@ export function VSLPlayer({ placement = 'funnel', gender = 'male' }: VSLPlayerPr
 
   return (
     <div className="vsl-section">
-      {config.sectionLabel && (
-        <h2 className="vsl-section-label">{config.sectionLabel}</h2>
-      )}
+      {label && <h2 className="vsl-section-label">{label}</h2>}
       <div className="vsl-player">
         {config.provider === 'loom' && config.loomEmbedUrl && (
           <iframe src={config.loomEmbedUrl} title={config.title} allowFullScreen />

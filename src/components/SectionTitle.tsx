@@ -1,7 +1,12 @@
 interface SectionTitleProps {
   children: string;
+  id?: string;
 }
 
-export function SectionTitle({ children }: SectionTitleProps) {
-  return <h2 className="section-title">{children}</h2>;
+export function SectionTitle({ children, id }: SectionTitleProps) {
+  return (
+    <h2 id={id} className="section-title">
+      {children}
+    </h2>
+  );
 }

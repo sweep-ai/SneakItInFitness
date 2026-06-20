@@ -7,21 +7,63 @@ export interface FunnelCopy {
   subhead: string;
 }
 
+export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
+  if (gender === 'male') return 'Jewish men';
+  if (gender === 'female') return 'Jewish women';
+  return 'Jewish men and women';
+}
+
+export function getIcpCallout(gender?: FunnelGender | 'neutral'): string {
+  return `For ${getIcpAudienceLabel(gender)} looking for change`;
+}
+
+function titleCaseWords(value: string): string {
+  return value.replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+export function getVslSectionLabel(gender?: FunnelGender | 'neutral'): string {
+  const audience = titleCaseWords(getIcpAudienceLabel(gender));
+  return `Discover The Simple System Transforming ${audience} In Less Than 4 Hrs/Week Without Sacrificing Their Career And Culture`;
+}
+
+export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutral'): string {
+  if (gender === 'male') {
+    return 'Jewish men ready to achieve a body and identity they are proud of';
+  }
+  if (gender === 'female') {
+    return 'Jewish women ready to achieve a body and identity they are proud of';
+  }
+  return 'Jewish men and women ready to achieve a body and identity they are proud of';
+}
+
+export const founderManifestoLines = [
+  { text: "You'll only change as much as your standards allow.", emphasis: false },
+  {
+    text: 'I built this system because I refuse to keep starting over.',
+    emphasis: true,
+  },
+  { text: 'You have the effort but you are missing the structure.', emphasis: false },
+  {
+    text: "It's time to stop hiding from who you were meant to become.",
+    emphasis: true,
+  },
+] as const;
+
 export const funnelCopy: Record<CopyVariant, FunnelCopy> = {
   neutral: {
     headline: "You're putting in effort. Still not proud of who you see.",
     subhead:
-      'I lived that. The Sneak-it-in System helps Jewish men and women stop restarting and build a body—and identity—they are proud of. No BS. Built around your real life.',
+      'Tired of putting in effort and still not being proud of who you see, and are ready for a system built around your real Jewish life...',
   },
   male: {
     headline: "You don't need more discipline. You need a system that fits your real life.",
     subhead:
-      'Work, family, life—fitness keeps losing. I built the Sneak-it-in System for men done restarting who want to feel strong, lean, and proud again.',
+      'Tired of work, family, and life always winning over your health, and are ready for a system built for how you actually live...',
   },
   female: {
     headline: "You don't need more discipline. You need a system that fits your real life.",
     subhead:
-      'Work, family, life—fitness keeps losing. I built the Sneak-it-in System for women done restarting who want to feel strong, lean, and proud again.',
+      'Tired of work, family, and life always winning over your health, and are ready for a system built for how you actually live...',
   },
 };
 
@@ -33,60 +75,60 @@ export const funnelCopyByConcept: Record<
     female: {
       headline: "Every week you restart. Shabbat hits. The plan falls apart.",
       subhead:
-        "That is a plan problem, not a you problem. Generic programs ignore kosher living, holidays, and Jewish time. I build yours around your week so faith and goals stop fighting.",
+        'Tired of restarting every week when Shabbat hits, and are ready for a plan built around kosher living and your real Jewish week...',
     },
     male: {
       headline: "Every week you restart. Shabbat hits. The plan falls apart.",
       subhead:
-        "That is a plan problem, not a you problem. Generic programs ignore kosher living, holidays, and Jewish time. I build yours around your week so faith and goals stop fighting.",
+        'Tired of restarting every week when Shabbat hits, and are ready for a plan built around kosher living and your real Jewish week...',
     },
   },
   work: {
     female: {
       headline: "Exhausted after work. Health keeps taking a backseat.",
       subhead:
-        "You are not lazy—you are running on empty. I work with women with full-time jobs who still want to feel lean, strong, and proud. A system built around your hours, not a fantasy schedule.",
+        'Tired of coming home exhausted and watching fitness keep taking a back seat, and are ready for a system built around your actual hours...',
     },
     male: {
       headline: "Exhausted after work. Health keeps taking a backseat.",
       subhead:
-        "You are not lazy—you are running on empty. I work with men with full-time jobs who still want to feel lean, strong, and proud. A system built around your hours, not a fantasy schedule.",
+        'Tired of coming home exhausted and watching fitness keep taking a back seat, and are ready for a system built around your actual hours...',
     },
   },
   systems: {
     female: {
       headline: "You are putting in effort. Your body still is not changing. Here is why.",
       subhead:
-        "Most women I coach are not failing from lack of care—they lack structure and accountability. We fix that first. Confidence comes when you stop restarting every month.",
+        'Tired of putting in effort without seeing your body change, and are ready to finally build something that holds...',
     },
     male: {
       headline: "You are putting in effort. Your body still is not changing. Here is why.",
       subhead:
-        "Most men I coach are not failing from lack of care—they lack structure and accountability. We fix that first. Confidence comes when you stop restarting every month.",
+        'Tired of putting in effort without seeing your body change, and are ready to finally build something that holds...',
     },
   },
   food: {
     female: {
       headline: "You do not need to give up your favorite foods to get in shape.",
       subhead:
-        'Every week you restart after Friday night. That is not willpower—that is a plan treating Shabbat like a cheat day. Eat with your family, keep kosher, stay on track. No pretending challah does not exist.',
+        'Tired of feeling like you have to skip Shabbat dinner to get lean, and are ready to keep your meals and still hit your goals...',
     },
     male: {
       headline: "You do not need to give up your favorite foods to get in shape.",
       subhead:
-        'Every week you restart after Friday night. That is not willpower—that is a plan treating Shabbat like a cheat day. Eat with your family, keep kosher, stay on track. No pretending challah does not exist.',
+        'Tired of feeling like you have to skip Shabbat dinner to get lean, and are ready to keep your meals and still hit your goals...',
     },
   },
   yoyo: {
     female: {
       headline: 'You are not the problem. The restrictive plans were.',
       subhead:
-        'Plans that fight your life keep knocking you off track. I work with women tired of being harder on themselves than any program was. A system built around your week—not another full-time job.',
+        'Tired of the losing and gaining fat endless cycle, and are ready to lose the weight for good...',
     },
     male: {
       headline: 'You are not the problem. The restrictive plans were.',
       subhead:
-        'Plans that fight your life keep knocking you off track. Crash cuts. Chicken and rice. Guilt every weekend. That is how you lose weight and gain it back—not how you change. I build systems for men done white-knuckling it. More structure, less punishment. Built around your real life.',
+        'Tired of crash cutting, gaining it back, and starting over again, and are ready to break the cycle for good...',
     },
   },
 };
@@ -94,25 +136,46 @@ export const funnelCopyByConcept: Record<
 export const foodFunnelCopy: FunnelCopy = {
   headline: 'What I eat on Shabbat and still hit my macros.',
   subhead:
-    'Built for Jewish life—kosher kitchens, family meals, Friday night. See how the Sneak-it-in System fits Shabbat into your week so you stop undoing every cut. No BS.',
+    'Tired of undoing every cut because your plan never fit Shabbat or family meals, and are ready to see how you can keep both and still hit your goals...',
 };
 
 export const yoyoFunnelCopy: FunnelCopy = {
   headline: 'Done with losing weight just to gain it back?',
   subhead:
-    'Most programs are too restrictive for real life. The Sneak-it-in System fits your schedule, family, and culture so you stop the restart cycle. No starvation mindset. No BS. Pick your page below.',
+    'Tired of the losing and gaining fat endless cycle, and are ready to lose the weight for good...',
 };
 
 export const bookingCopy = {
-  headline: 'Book your Sneak-it-in Strategy Call',
-  subhead:
-    'Pick a time below. Come as you are. We will talk about your situation, what has been getting in the way, and what you actually want to change. If we are a fit, great. If not, you will leave with clarity on what to do next.',
+  stepLabel: 'Step 2',
+  headline: 'Book Your Strategy Call',
 };
 
 export const postBookingCopy = {
-  headline: 'Watch this before your call',
-  subhead:
-    'The video below dives deep in to my backstory - who I am, what I do, why I do it, and how I do it',
+  congratsLabel: 'Congrats',
+  headline: "You're Almost There...",
+  phoneNumber: '+1 310-561-5995',
+  steps: {
+    intro: {
+      label: 'Step 1 of 5',
+      prompt: 'Expect A Confirmation Call Within 24 Hours',
+    },
+    video: {
+      label: 'Step 2 of 5',
+      prompt: 'Watch The Breakdown Video Before Continuing',
+    },
+    faq: {
+      label: 'Step 3 of 5',
+      prompt: 'Review These Common Questions Before Continuing',
+    },
+    confirm: {
+      label: 'Step 4 of 5',
+      prompt: 'Confirm Your Appointment In Your Calendar',
+    },
+    prep: {
+      label: 'Step 5 of 5',
+      prompt: 'Prepare For Your Strategy Call',
+    },
+  },
 };
 
 export const testimonialSectionTitle = 'Take their word for it';
@@ -120,7 +183,7 @@ export const testimonialSectionTitle = 'Take their word for it';
 export const finalCtaCopy = {
   headline: 'Ready to stop restarting?',
   subhead:
-    'If you have watched the video and seen the results, the next step is simple. Book a strategy call and we will see if this is the right fit for your life.',
+    'Tired of watching the same restart cycle repeat, and are ready to book a strategy call and see if this is the right fit for your life...',
 };
 
 export const prepChecklist = [
