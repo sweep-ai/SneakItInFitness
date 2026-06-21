@@ -66,7 +66,7 @@ export const womenTestimonials: Testimonial[] = [
 
 export const womenClientStories: ClientStoryVideo[] = [
   { src: kristaVideo, poster: krista, name: 'Krista', stat: '-50 lbs in 4 months' },
-  { src: ajaVideo, poster: aja, name: 'Asia', stat: '-60 lbs in 6 months' },
+  { src: ajaVideo, poster: aja, name: 'Aja', stat: '-60 lbs in 6 months' },
   { src: mrsSokolVideo, poster: mrsSokol, name: 'Roni (My Mom)', stat: '-50 lbs in 8 months' },
   { src: alyssVideo, poster: alyss, name: 'Alyss', stat: '-30 lbs in 3 months' },
 ];
