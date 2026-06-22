@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && vite build",
+    "compress-assets": "node scripts/compress-assets.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

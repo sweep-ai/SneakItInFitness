@@ -10,7 +10,7 @@ interface PageHeroProps {
 }
 
 export function PageHero({ headline, subhead, icpGender }: PageHeroProps) {
-  const gridPhotos = Array.from({ length: 48 }, (_, index) => heroBackgroundPhotos[index % heroBackgroundPhotos.length]);
+  const gridPhotos = Array.from({ length: 24 }, (_, index) => heroBackgroundPhotos[index % heroBackgroundPhotos.length]);
 
   return (
     <header className="page-hero">
@@ -45,6 +45,8 @@ export function PageHero({ headline, subhead, icpGender }: PageHeroProps) {
           className="page-hero-figure"
           width={480}
           height={640}
+          fetchPriority="high"
+          decoding="async"
         />
       </div>
     </header>
