@@ -34,7 +34,6 @@ import janie from '../../assets/women/Janie.JPG';
 import kara from '../../assets/women/Kara.JPG';
 import mrsSokol from '../../assets/women/MrsSokol.JPG';
 import nelly from '../../assets/women/Nelly.png';
-import kristaBanner from '../../assets/testimonial-posters/Krista.JPG';
 
 import ajaVideo from '../../assets/testimonials/Aja.mp4';
 import alyssVideo from '../../assets/testimonials/Alyss.mp4';
@@ -85,7 +84,7 @@ export const menClientStories: ClientStoryVideo[] = [
 
 export const womenTestimonials: Testimonial[] = [
   { src: kara, name: 'Kara', stat: '-45 lbs in 7 months' },
-  { src: kristaBanner, name: 'Krista', stat: '-55 lbs in 5 months' },
+  { src: kristaPoster, name: 'Krista', stat: '-55 lbs in 5 months' },
   { src: alyss, name: 'Alyss', stat: '-30 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: '-35 lbs in 6 months' },
   { src: mrsSokol, name: 'Roni (My Mom)', stat: '-50 lbs in 8 months' },
