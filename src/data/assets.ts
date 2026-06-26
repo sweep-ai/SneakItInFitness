@@ -1,7 +1,7 @@
 import david from '../../assets/men/David.jpeg';
 import drew from '../../assets/men/Drew.JPG';
-import harrisPhoto from '../../assets/men/Harris.jpg';
 import sam from '../../assets/men/Sam.JPG';
+import harrisBanner from '../../assets/testimonial-posters/Harris.jpg';
 
 import drewVideo from '../../assets/testimonials/Drew.mp4';
 import elliottVideo from '../../assets/testimonials/Elliott.mp4';
@@ -31,8 +31,10 @@ import vaishaliPoster from '../../assets/testimonial-posters/Vaishali.jpg';
 
 import alyss from '../../assets/women/Alyss.JPG';
 import janie from '../../assets/women/Janie.JPG';
+import kara from '../../assets/women/Kara.JPG';
 import mrsSokol from '../../assets/women/MrsSokol.JPG';
 import nelly from '../../assets/women/Nelly.png';
+import kristaBanner from '../../assets/testimonial-posters/Krista.JPG';
 
 import ajaVideo from '../../assets/testimonials/Aja.mp4';
 import alyssVideo from '../../assets/testimonials/Alyss.mp4';
@@ -56,11 +58,9 @@ export interface Testimonial {
   stat: string;
 }
 
-const harris = harrisPhoto;
-
 export const menTestimonials: Testimonial[] = [
   { src: drew, name: 'Drew', stat: 'Lost 200 lbs' },
-  { src: harris, name: 'Harris', stat: '-50 lbs in 8 months' },
+  { src: harrisBanner, name: 'Harris', stat: '-50 lbs in 8 months' },
   { src: sam, name: 'Sam', stat: '-30 lbs in 3 months' },
   { src: david, name: 'David', stat: '-45 lbs in 6 months' },
 ];
@@ -84,6 +84,8 @@ export const menClientStories: ClientStoryVideo[] = [
 ];
 
 export const womenTestimonials: Testimonial[] = [
+  { src: kara, name: 'Kara', stat: '-45 lbs in 7 months' },
+  { src: kristaBanner, name: 'Krista', stat: '-55 lbs in 5 months' },
   { src: alyss, name: 'Alyss', stat: '-30 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: '-35 lbs in 6 months' },
   { src: mrsSokol, name: 'Roni (My Mom)', stat: '-50 lbs in 8 months' },
@@ -100,6 +102,21 @@ export const womenClientStories: ClientStoryVideo[] = [
   { src: chrissyVideo, poster: chrissyPoster, name: 'Chrissy', stat: '6 month full body transformation' },
   { src: avivaVideo, poster: avivaPoster, name: 'Aviva', stat: '-12 lbs in 5 weeks' },
 ];
+
+function interleave<T>(first: T[], second: T[]): T[] {
+  const merged: T[] = [];
+  const length = Math.max(first.length, second.length);
+  for (let index = 0; index < length; index += 1) {
+    if (index < first.length) merged.push(first[index]);
+    if (index < second.length) merged.push(second[index]);
+  }
+  return merged;
+}
+
+export const allClientStories: ClientStoryVideo[] = interleave(
+  menClientStories,
+  womenClientStories
+);
 
 export const logoSrc = logo;
 export const ariHeaderSrc = ariHeader;

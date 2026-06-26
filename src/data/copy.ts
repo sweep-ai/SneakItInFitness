@@ -10,7 +10,7 @@ export interface FunnelCopy {
 export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
   if (gender === 'male') return 'Jewish men';
   if (gender === 'female') return 'Jewish women';
-  return 'Jewish men and women';
+  return 'Jewish adults';
 }
 
 export function getIcpCallout(gender?: FunnelGender | 'neutral'): string {
@@ -33,7 +33,7 @@ export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutr
   if (gender === 'female') {
     return 'Jewish women ready to achieve a body and identity they are proud of';
   }
-  return 'Jewish men and women ready to achieve a body and identity they are proud of';
+  return 'Jewish adults ready to achieve a body and identity they are proud of';
 }
 
 export const founderManifestoLines = [

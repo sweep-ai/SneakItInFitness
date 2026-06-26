@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { FunnelGender } from '../data/copy';
-import type { VideoPlacement } from '../data/videos';
+import type { FunnelVideoGender, VideoPlacement } from '../data/videos';
 import { funnelVideosByGender, postBookingVideo } from '../data/videos';
 import './VSLPlayer.css';
 
@@ -20,7 +19,7 @@ function PlayButton() {
 
 interface VSLPlayerProps {
   placement?: VideoPlacement;
-  gender?: FunnelGender;
+  gender?: FunnelVideoGender;
   sectionLabel?: string | null;
 }
 
@@ -47,7 +46,7 @@ function buildYoutubeEmbedSrc(youtubeId: string, autoplay: boolean) {
 
 export function VSLPlayer({
   placement = 'funnel',
-  gender = 'male',
+  gender = 'neutral',
   sectionLabel,
 }: VSLPlayerProps) {
   const config =
@@ -106,6 +105,14 @@ export function VSLPlayer({
             onClick={() => setPlaying(true)}
             aria-label="Play video"
           >
+            {config.poster && (
+              <img
+                src={config.poster}
+                alt=""
+                className="vsl-player-thumb"
+                loading="eager"
+              />
+            )}
             <PlayButton />
           </button>
         )}
@@ -114,6 +121,7 @@ export function VSLPlayer({
             ref={videoRef}
             className="vsl-player-video"
             src={config.src}
+            poster={config.poster}
             title={config.title}
             controls
             autoPlay

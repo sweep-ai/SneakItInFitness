@@ -8,6 +8,9 @@ import { existsSync, mkdirSync, readdirSync, statSync } from 'node:fs';
 import { join, basename, extname } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
+const VSL_SOURCE = join(ROOT, 'assets/ARi SOKOL revision.mp4');
+const VSL_OUTPUT = join(ROOT, 'assets/VSL.mp4');
+const VSL_POSTER = join(ROOT, 'assets/VSL-poster.jpg');
 const TESTIMONIALS = join(ROOT, 'assets/testimonials');
 const POSTERS = join(ROOT, 'assets/testimonial-posters');
 const MEN = join(ROOT, 'assets/men');
@@ -30,6 +33,12 @@ function compressVideo(input, output) {
   );
 }
 
+function compressVsl(input, output) {
+  run(
+    `ffmpeg -y -i "${input}" -c:v libx264 -crf 30 -preset slow -maxrate 400k -bufsize 800k -movflags +faststart -c:a aac -b:a 64k -ac 1 -vf "scale='min(1280,iw)':-2" "${output}"`
+  );
+}
+
 function compressPhoto(input, output, maxWidth = 1200) {
   run(
     `ffmpeg -y -i "${input}" -q:v 4 -vf "scale='min(${maxWidth},iw)':-2" "${output}"`
@@ -44,6 +53,14 @@ function compressPoster(input, output) {
 
 function compressPngToWebp(input, output) {
   run(`ffmpeg -y -i "${input}" -quality 82 "${output}"`);
+}
+
+if (existsSync(VSL_SOURCE)) {
+  console.log('Compressing VSL...');
+  const before = sizeMb(VSL_SOURCE);
+  compressVsl(VSL_SOURCE, VSL_OUTPUT);
+  compressPoster(VSL_OUTPUT, VSL_POSTER);
+  console.log(`  VSL.mp4: ${before}MB -> ${sizeMb(VSL_OUTPUT)}MB`);
 }
 
 console.log('Compressing testimonial videos...');
