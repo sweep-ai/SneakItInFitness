@@ -256,7 +256,6 @@ export function ApplicationForm() {
             onChange={(event) =>
               updateField(step.id as keyof ApplicationFormData, event.target.value)
             }
-            autoFocus
           />
         );
       case 'textarea':
@@ -267,7 +266,6 @@ export function ApplicationForm() {
             value={data.idealOutcome}
             placeholder={step.placeholder}
             onChange={(event) => updateField('idealOutcome', event.target.value)}
-            autoFocus
           />
         );
       case 'yesno':
@@ -360,7 +358,6 @@ export function ApplicationForm() {
               value={data.email}
               placeholder="Best email"
               onChange={(event) => updateField('email', event.target.value)}
-              autoFocus
             />
             <input
               id="application-phone"

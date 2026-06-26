@@ -58,6 +58,27 @@ export function VSLPlayer({
       config.provider === 'file' ||
       (config.provider === 'youtube' && placement === 'postBooking')
   );
+  const [isMuted, setIsMuted] = useState(true);
+
+  const attemptAutoplay = async (video: HTMLVideoElement) => {
+    video.muted = true;
+    setIsMuted(true);
+
+    try {
+      await video.play();
+      video.muted = false;
+      setIsMuted(false);
+      await video.play();
+    } catch {
+      video.muted = true;
+      setIsMuted(true);
+      try {
+        await video.play();
+      } catch {
+        setPlaying(false);
+      }
+    }
+  };
 
   useEffect(() => {
     if (config.provider !== 'loom') {
@@ -75,8 +96,34 @@ export function VSLPlayer({
     if (!playing || config.provider !== 'file') {
       return;
     }
-    void videoRef.current?.play();
+
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    void attemptAutoplay(video);
   }, [playing, config.provider]);
+
+  const handleVideoReady = () => {
+    const video = videoRef.current;
+    if (!video || !playing || config.provider !== 'file' || !video.paused) {
+      return;
+    }
+
+    void attemptAutoplay(video);
+  };
+
+  const handleUnmute = () => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    video.muted = false;
+    setIsMuted(false);
+    void video.play();
+  };
 
   const youtubeId = config.youtubeId;
   const thumbnail =
@@ -117,17 +164,32 @@ export function VSLPlayer({
           </button>
         )}
         {config.provider === 'file' && config.src && playing && (
-          <video
-            ref={videoRef}
-            className="vsl-player-video"
-            src={config.src}
-            poster={config.poster}
-            title={config.title}
-            controls
-            autoPlay
-            playsInline
-            preload="auto"
-          />
+          <>
+            <video
+              ref={videoRef}
+              className="vsl-player-video"
+              src={config.src}
+              poster={config.poster}
+              title={config.title}
+              controls
+              autoPlay
+              muted={isMuted}
+              playsInline
+              preload="auto"
+              onLoadedData={handleVideoReady}
+              onCanPlay={handleVideoReady}
+            />
+            {isMuted && (
+              <button
+                type="button"
+                className="vsl-player-unmute"
+                onClick={handleUnmute}
+                aria-label="Unmute video"
+              >
+                Tap to unmute
+              </button>
+            )}
+          </>
         )}
         {config.provider === 'youtube' && youtubeId && !playing && thumbnail && (
           <button
