@@ -1,5 +1,3 @@
-export type CopyVariant = 'neutral' | 'male' | 'female';
-export type FunnelConcept = 'cultural' | 'work' | 'systems' | 'food' | 'yoyo';
 export type FunnelGender = 'male' | 'female';
 
 export interface FunnelCopy {
@@ -12,10 +10,6 @@ export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
   if (gender === 'male') return 'Jewish men';
   if (gender === 'female') return 'Jewish women';
   return 'Jewish adults';
-}
-
-export function getIcpCallout(gender?: FunnelGender | 'neutral'): string {
-  return `For ${getIcpAudienceLabel(gender)} looking for change`;
 }
 
 function titleCaseWords(value: string): string {
@@ -50,101 +44,11 @@ export const founderManifestoLines = [
   },
 ] as const;
 
-export const funnelCopy: Record<CopyVariant, FunnelCopy> = {
-  neutral: {
-    headline: 'YOU KNOW SOMETHING NEEDS TO CHANGE',
-    headlineHighlight: 'NEEDS TO CHANGE',
-    subhead:
-      "Ready to finally become the person you've always known you could be with a system built around your real Jewish life?",
-  },
-  male: {
-    headline: "You don't need more discipline. You need a system that fits your real life.",
-    subhead:
-      'Tired of work, family, and life always winning over your health, and are ready for a system built for how you actually live...',
-  },
-  female: {
-    headline: "You don't need more discipline. You need a system that fits your real life.",
-    subhead:
-      'Tired of work, family, and life always winning over your health, and are ready for a system built for how you actually live...',
-  },
-};
-
-export const funnelCopyByConcept: Record<
-  FunnelConcept,
-  Record<FunnelGender, FunnelCopy>
-> = {
-  cultural: {
-    female: {
-      headline: "Every week you restart. Shabbat hits. The plan falls apart.",
-      subhead:
-        'Tired of restarting every week when Shabbat hits, and are ready for a plan built around kosher living and your real Jewish week...',
-    },
-    male: {
-      headline: "Every week you restart. Shabbat hits. The plan falls apart.",
-      subhead:
-        'Tired of restarting every week when Shabbat hits, and are ready for a plan built around kosher living and your real Jewish week...',
-    },
-  },
-  work: {
-    female: {
-      headline: "Exhausted after work. Health keeps taking a backseat.",
-      subhead:
-        'Tired of coming home exhausted and watching fitness keep taking a back seat, and are ready for a system built around your actual hours...',
-    },
-    male: {
-      headline: "Exhausted after work. Health keeps taking a backseat.",
-      subhead:
-        'Tired of coming home exhausted and watching fitness keep taking a back seat, and are ready for a system built around your actual hours...',
-    },
-  },
-  systems: {
-    female: {
-      headline: "You are putting in effort. Your body still is not changing. Here is why.",
-      subhead:
-        'Tired of putting in effort without seeing your body change, and are ready to finally build something that holds...',
-    },
-    male: {
-      headline: "You are putting in effort. Your body still is not changing. Here is why.",
-      subhead:
-        'Tired of putting in effort without seeing your body change, and are ready to finally build something that holds...',
-    },
-  },
-  food: {
-    female: {
-      headline: "You do not need to give up your favorite foods to get in shape.",
-      subhead:
-        'Tired of feeling like you have to skip Shabbat dinner to get lean, and are ready to keep your meals and still hit your goals...',
-    },
-    male: {
-      headline: "You do not need to give up your favorite foods to get in shape.",
-      subhead:
-        'Tired of feeling like you have to skip Shabbat dinner to get lean, and are ready to keep your meals and still hit your goals...',
-    },
-  },
-  yoyo: {
-    female: {
-      headline: 'You are not the problem. The restrictive plans were.',
-      subhead:
-        'Tired of the losing and gaining fat endless cycle, and are ready to lose the weight for good...',
-    },
-    male: {
-      headline: 'You are not the problem. The restrictive plans were.',
-      subhead:
-        'Tired of crash cutting, gaining it back, and starting over again, and are ready to break the cycle for good...',
-    },
-  },
-};
-
-export const foodFunnelCopy: FunnelCopy = {
-  headline: 'What I eat on Shabbat and still hit my macros.',
+export const funnelCopy: FunnelCopy = {
+  headline: 'YOU KNOW SOMETHING NEEDS TO CHANGE',
+  headlineHighlight: 'NEEDS TO CHANGE',
   subhead:
-    'Tired of undoing every cut because your plan never fit Shabbat or family meals, and are ready to see how you can keep both and still hit your goals...',
-};
-
-export const yoyoFunnelCopy: FunnelCopy = {
-  headline: 'Done with losing weight just to gain it back?',
-  subhead:
-    'Tired of the losing and gaining fat endless cycle, and are ready to lose the weight for good...',
+    "Ready to finally become the person you've always known you could be with a system built around your real Jewish life?",
 };
 
 export const bookingCopy = {

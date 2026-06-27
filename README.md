@@ -6,44 +6,24 @@ A mobile-first React funnel for the Sneak-it-in System by Ari Sokol (Swolekol LL
 
 | Path | Purpose |
 |------|---------|
-| `/` | Gender-neutral VSL page with both testimonial banners |
-| `/male` | Redirects to `/male/systems` |
-| `/female` | Redirects to `/female/cultural` |
-| `/male/cultural` | Men's VSL, cultural/traditions angle |
-| `/male/work` | Men's VSL, 9 to 5 / busy lifestyle angle |
-| `/male/systems` | Men's VSL, structure and consistency angle |
-| `/female/cultural` | Women's VSL, cultural/traditions angle |
-| `/female/work` | Women's VSL, 9 to 5 / busy lifestyle angle |
-| `/female/systems` | Women's VSL, structure and consistency angle |
-| `/food` | Gender-neutral VSL, Shabbat food demo angle (links to gender pages) |
-| `/male/food` | Men's VSL, Shabbat food demo angle |
-| `/female/food` | Women's VSL, Shabbat food demo angle |
-| `/yoyo` | Gender-neutral VSL, restrictive plans / restart-cycle angle (links to gender pages) |
-| `/male/yoyo` | Men's VSL, restrictive plans misconception angle |
-| `/female/yoyo` | Women's VSL, restrictive plans misconception angle |
+| `/` | Main funnel — same copy, men + women testimonials |
+| `/male` | Same copy as `/`, men-only testimonials |
+| `/female` | Same copy as `/`, women-only testimonials |
 | `/booking` | Calendly embed for 45-minute strategy call |
-| `/post-booking` | Pre-call YouTube video, prep checklist, and FAQ |
+| `/post-booking` | Pre-call Loom video, prep checklist, and FAQ |
 | `/privacy` | Privacy policy |
 | `/terms` | Terms of Service |
 | `/disclaimer` | Health and results disclaimer |
 
-## Instagram deep links
+All three funnel pages share one hero, VSL, application form, and page structure. The only difference is which testimonials appear in the scrolling banners and client story videos.
 
-Point bio or story links directly to:
+## Ad & social deep links
 
-- `https://<your-domain>/` (neutral)
-- `https://<your-domain>/male/systems`
-- `https://<your-domain>/male/work`
-- `https://<your-domain>/male/cultural`
-- `https://<your-domain>/female/cultural`
-- `https://<your-domain>/female/work`
-- `https://<your-domain>/female/systems`
-- `https://<your-domain>/food`
-- `https://<your-domain>/male/food`
-- `https://<your-domain>/female/food`
-- `https://<your-domain>/yoyo`
-- `https://<your-domain>/male/yoyo`
-- `https://<your-domain>/female/yoyo`
+Point Meta ads, Instagram bio, or story links to:
+
+- `https://<your-domain>/` — mixed audience
+- `https://<your-domain>/male` — men-only social proof
+- `https://<your-domain>/female` — women-only social proof
 
 ## Calendly redirect (automatic)
 
@@ -60,6 +40,12 @@ npm install
 npm run dev
 ```
 
+Compress media before committing large assets:
+
+```bash
+npm run compress-assets
+```
+
 ## Deploy to Vercel
 
 1. Push this repo to GitHub.
@@ -72,7 +58,7 @@ npm run dev
 
 ## Sitemap
 
-`npm run build` generates `public/sitemap.xml` and `public/robots.txt` before the Vite build. URLs use, in order:
+`npm run build` generates `public/sitemap.xml` and `public/robots.txt` before the Vite build. Indexed funnel URLs are `/`, `/male`, and `/female`. URLs use, in order:
 
 1. `VITE_SITE_URL` (e.g. `https://www.yourdomain.com`)
 2. `VERCEL_URL` on Vercel deploys
@@ -82,4 +68,4 @@ Submit `https://<your-domain>/sitemap.xml` in Google Search Console.
 
 ## Brand assets
 
-Transformation photos live in `assets/men/` and `assets/women/`. Copy and voice guidelines are in `BrandDoc.md`.
+Transformation photos live in `assets/men/` and `assets/women/`. The hosted VSL is `assets/VSL.mp4` (compress from `assets/ARi SOKOL revision.mp4` via `npm run compress-assets`). Copy and voice guidelines are in `BrandDoc.md`. Ad URL reference is in `MetaAds.md`.

@@ -1,16 +1,13 @@
-import type { FunnelGender } from '../data/copy';
-import { getIcpAudienceLabel } from '../data/copy';
 import { ariHeaderSrc, heroBackgroundPhotos } from '../data/assets';
 import './PageHero.css';
 
 interface PageHeroProps {
-  headline?: string;
+  headline: string;
   headlineHighlight?: string;
   subhead: string;
-  icpGender?: FunnelGender | 'neutral';
 }
 
-export function PageHero({ headline, headlineHighlight, subhead, icpGender }: PageHeroProps) {
+export function PageHero({ headline, headlineHighlight, subhead }: PageHeroProps) {
   const gridPhotos = Array.from({ length: 24 }, (_, index) => heroBackgroundPhotos[index % heroBackgroundPhotos.length]);
 
   return (
@@ -26,28 +23,16 @@ export function PageHero({ headline, headlineHighlight, subhead, icpGender }: Pa
 
       <div className="page-hero-inner">
         <div className="page-hero-copy">
-          {icpGender ? (
-            <>
-              <p className="page-hero-icp-line">
-                For{' '}
-                <span className="page-hero-icp-emphasis">{getIcpAudienceLabel(icpGender)}</span>
-              </p>
-              <p className="page-hero-icp-line">looking for change</p>
-            </>
-          ) : (
-            headline && (
-              <h1 className="page-hero-headline">
-                {headlineHighlight && headline.includes(headlineHighlight) ? (
-                  <>
-                    {headline.slice(0, headline.indexOf(headlineHighlight))}
-                    <span className="page-hero-headline-emphasis">{headlineHighlight}</span>
-                  </>
-                ) : (
-                  headline
-                )}
-              </h1>
-            )
-          )}
+          <h1 className="page-hero-headline">
+            {headlineHighlight && headline.includes(headlineHighlight) ? (
+              <>
+                {headline.slice(0, headline.indexOf(headlineHighlight))}
+                <span className="page-hero-headline-emphasis">{headlineHighlight}</span>
+              </>
+            ) : (
+              headline
+            )}
+          </h1>
           <p className="page-hero-subhead">{subhead}</p>
         </div>
 

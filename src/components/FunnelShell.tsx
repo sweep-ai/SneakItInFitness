@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import type { FunnelCopy, FunnelGender } from '../data/copy';
-import { testimonialSectionTitle, getVslSectionLabel } from '../data/copy';
-import type { FunnelVideoGender } from '../data/videos';
+import type { FunnelGender } from '../data/copy';
+import { funnelCopy, testimonialSectionTitle, getVslSectionLabel } from '../data/copy';
 import { PageHero } from './PageHero';
 import { VSLPlayer } from './VSLPlayer';
 import { ApplicationForm } from './ApplicationForm';
@@ -15,40 +13,21 @@ import { menTestimonials, womenTestimonials } from '../data/assets';
 import './FunnelShell.css';
 
 interface FunnelShellProps {
-  copy: FunnelCopy;
   bannerMode: 'men' | 'women' | 'both';
-  gender?: FunnelGender;
-  vslGender?: FunnelVideoGender;
   icpGender?: FunnelGender | 'neutral';
-  heroMode?: 'headline' | 'icp';
-  showGenderLinks?: boolean;
-  genderLinkMale?: string;
-  genderLinkFemale?: string;
-  testimonialsBeforeForm?: boolean;
   children?: ReactNode;
   afterBanner?: ReactNode;
 }
 
 export function FunnelShell({
-  copy,
   bannerMode,
-  gender,
-  vslGender,
   icpGender: icpGenderProp,
-  heroMode = 'icp',
-  showGenderLinks = false,
-  genderLinkMale = '/male/systems',
-  genderLinkFemale = '/female/cultural',
-  testimonialsBeforeForm = false,
   children,
   afterBanner,
 }: FunnelShellProps) {
   const icpGender =
     icpGenderProp ??
-    gender ??
     (bannerMode === 'men' ? 'male' : bannerMode === 'women' ? 'female' : 'neutral');
-
-  const resolvedVslGender = vslGender ?? gender ?? 'neutral';
 
   const scrollingBanners =
     bannerMode === 'men' ? (
@@ -77,26 +56,18 @@ export function FunnelShell({
   return (
     <main className="page-main">
       <PageHero
-        headline={heroMode === 'headline' ? copy.headline : undefined}
-        headlineHighlight={heroMode === 'headline' ? copy.headlineHighlight : undefined}
-        icpGender={heroMode === 'headline' ? undefined : icpGender}
-        subhead={copy.subhead}
+        headline={funnelCopy.headline}
+        headlineHighlight={funnelCopy.headlineHighlight}
+        subhead={funnelCopy.subhead}
       />
       <div className="container">
-        {showGenderLinks && (
-          <nav className="gender-links" aria-label="Gender-specific pages">
-            <Link to={genderLinkMale}>Men&apos;s page</Link>
-            <Link to={genderLinkFemale}>Women&apos;s page</Link>
-          </nav>
-        )}
-        <VSLPlayer gender={resolvedVslGender} sectionLabel={getVslSectionLabel(icpGender)} />
+        <VSLPlayer gender={icpGender} sectionLabel={getVslSectionLabel(icpGender)} />
       </div>
-      {testimonialsBeforeForm && testimonialSection}
       <div className="container">
         <ApplicationForm />
         {children}
       </div>
-      {!testimonialsBeforeForm && testimonialSection}
+      {testimonialSection}
       <ExclusiveProgram icpGender={icpGender} />
       <FounderManifesto />
       <div className="container">

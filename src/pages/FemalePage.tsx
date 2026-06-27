@@ -1,5 +1,13 @@
-import { Navigate } from 'react-router-dom';
+import { womenClientStories } from '../data/assets';
+import { FunnelShell } from '../components/FunnelShell';
+import { RealClientStories } from '../components/RealClientStories';
 
 export function FemalePage() {
-  return <Navigate to="/female/cultural" replace />;
+  return (
+    <FunnelShell
+      bannerMode="women"
+      icpGender="female"
+      afterBanner={<RealClientStories stories={womenClientStories} />}
+    />
+  );
 }

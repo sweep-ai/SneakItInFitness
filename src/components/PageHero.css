@@ -52,7 +52,6 @@
   z-index: 1;
 }
 
-.page-hero-icp-line,
 .page-hero-headline {
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 6.5vw, 3.25rem);
@@ -63,7 +62,6 @@
   color: var(--color-fg);
 }
 
-.page-hero-icp-emphasis,
 .page-hero-headline-emphasis {
   color: var(--color-accent);
   font-size: 1.18em;
@@ -114,7 +112,6 @@
     min-height: 220px;
   }
 
-  .page-hero-icp-line,
   .page-hero-headline {
     font-size: clamp(1.35rem, 7vw, 1.75rem);
   }

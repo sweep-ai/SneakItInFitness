@@ -6,9 +6,6 @@ import { MetaPixelRouteTracker } from './components/MetaPixelRouteTracker';
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
 const MalePage = lazy(() => import('./pages/MalePage').then((m) => ({ default: m.MalePage })));
 const FemalePage = lazy(() => import('./pages/FemalePage').then((m) => ({ default: m.FemalePage })));
-const GenderFunnelPage = lazy(() =>
-  import('./pages/GenderFunnelPage').then((m) => ({ default: m.GenderFunnelPage }))
-);
 const PrivacyPolicyPage = lazy(() =>
   import('./pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage }))
 );
@@ -16,8 +13,6 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then((m) => ({ default:
 const DisclaimerPage = lazy(() =>
   import('./pages/DisclaimerPage').then((m) => ({ default: m.DisclaimerPage }))
 );
-const FoodPage = lazy(() => import('./pages/FoodPage').then((m) => ({ default: m.FoodPage })));
-const YoyoPage = lazy(() => import('./pages/YoyoPage').then((m) => ({ default: m.YoyoPage })));
 
 const BookingPage = lazy(() =>
   import('./pages/BookingPage').then((m) => ({ default: m.BookingPage }))
@@ -85,22 +80,6 @@ export default function App() {
             }
           />
           <Route
-            path="male/:concept"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <GenderFunnelPage gender="male" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="female/:concept"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <GenderFunnelPage gender="female" />
-              </Suspense>
-            }
-          />
-          <Route
             path="booking"
             element={
               <Suspense fallback={<PageLoader />}>
@@ -137,22 +116,6 @@ export default function App() {
             element={
               <Suspense fallback={<PageLoader />}>
                 <DisclaimerPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="food"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <FoodPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="yoyo"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <YoyoPage />
               </Suspense>
             }
           />
