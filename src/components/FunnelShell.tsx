@@ -78,6 +78,7 @@ export function FunnelShell({
     <main className="page-main">
       <PageHero
         headline={heroMode === 'headline' ? copy.headline : undefined}
+        headlineHighlight={heroMode === 'headline' ? copy.headlineHighlight : undefined}
         icpGender={heroMode === 'headline' ? undefined : icpGender}
         subhead={copy.subhead}
       />

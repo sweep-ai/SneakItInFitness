@@ -35,7 +35,7 @@ function compressVideo(input, output) {
 
 function compressVsl(input, output) {
   run(
-    `ffmpeg -y -i "${input}" -c:v libx264 -crf 30 -preset slow -maxrate 400k -bufsize 800k -movflags +faststart -c:a aac -b:a 64k -ac 1 -vf "scale='min(1280,iw)':-2" "${output}"`
+    `ffmpeg -y -i "${input}" -c:v libx264 -crf 32 -preset slow -maxrate 280k -bufsize 560k -movflags +faststart -c:a aac -b:a 48k -ac 1 -vf "scale='min(960,iw)':-2" "${output}"`
   );
 }
 

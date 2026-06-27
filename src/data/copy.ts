@@ -4,6 +4,7 @@ export type FunnelGender = 'male' | 'female';
 
 export interface FunnelCopy {
   headline: string;
+  headlineHighlight?: string;
   subhead: string;
 }
 
@@ -51,9 +52,10 @@ export const founderManifestoLines = [
 
 export const funnelCopy: Record<CopyVariant, FunnelCopy> = {
   neutral: {
-    headline: "You're putting in effort. Still not proud of who you see.",
+    headline: 'YOU KNOW SOMETHING NEEDS TO CHANGE',
+    headlineHighlight: 'NEEDS TO CHANGE',
     subhead:
-      'Tired of putting in effort and still not being proud of who you see, and are ready for a system built around your real Jewish life...',
+      "Ready to finally become the person you've always known you could be with a system built around your real Jewish life?",
   },
   male: {
     headline: "You don't need more discipline. You need a system that fits your real life.",

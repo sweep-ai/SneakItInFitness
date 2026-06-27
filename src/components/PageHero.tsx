@@ -5,11 +5,12 @@ import './PageHero.css';
 
 interface PageHeroProps {
   headline?: string;
+  headlineHighlight?: string;
   subhead: string;
   icpGender?: FunnelGender | 'neutral';
 }
 
-export function PageHero({ headline, subhead, icpGender }: PageHeroProps) {
+export function PageHero({ headline, headlineHighlight, subhead, icpGender }: PageHeroProps) {
   const gridPhotos = Array.from({ length: 24 }, (_, index) => heroBackgroundPhotos[index % heroBackgroundPhotos.length]);
 
   return (
@@ -34,7 +35,18 @@ export function PageHero({ headline, subhead, icpGender }: PageHeroProps) {
               <p className="page-hero-icp-line">looking for change</p>
             </>
           ) : (
-            headline && <h1 className="page-hero-headline">{headline}</h1>
+            headline && (
+              <h1 className="page-hero-headline">
+                {headlineHighlight && headline.includes(headlineHighlight) ? (
+                  <>
+                    {headline.slice(0, headline.indexOf(headlineHighlight))}
+                    <span className="page-hero-headline-emphasis">{headlineHighlight}</span>
+                  </>
+                ) : (
+                  headline
+                )}
+              </h1>
+            )
           )}
           <p className="page-hero-subhead">{subhead}</p>
         </div>

@@ -63,7 +63,8 @@
   color: var(--color-fg);
 }
 
-.page-hero-icp-emphasis {
+.page-hero-icp-emphasis,
+.page-hero-headline-emphasis {
   color: var(--color-accent);
   font-size: 1.18em;
   font-style: italic;
