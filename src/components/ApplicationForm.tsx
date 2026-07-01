@@ -11,6 +11,7 @@ import {
 } from '../data/applicationForm';
 import { socialLinks } from '../data/social';
 import { submitApplication } from '../lib/submitApplication';
+import { isValidEmail, isValidPhone } from '../lib/validators';
 import './ApplicationForm.css';
 
 const AUTO_ADVANCE_DELAY_MS = 500;
@@ -22,30 +23,74 @@ function getStepValue(data: ApplicationFormData, step: ApplicationStep): string 
   return data[step.id as keyof ApplicationFormData] as string | string[];
 }
 
-function isStepValid(data: ApplicationFormData, step: ApplicationStep): boolean {
+function getContactFieldErrors(data: ApplicationFormData): {
+  email?: string;
+  phone?: string;
+} {
+  const errors: { email?: string; phone?: string } = {};
+  const email = data.email.trim();
+  const phone = data.phone.trim();
+
+  if (!email) {
+    errors.email = 'Please enter your email address.';
+  } else if (!isValidEmail(email)) {
+    errors.email = 'Please enter a valid email address.';
+  }
+
+  if (!phone) {
+    errors.phone = 'Please enter your phone number.';
+  } else if (!isValidPhone(phone)) {
+    errors.phone = 'Please enter a valid phone number.';
+  }
+
+  return errors;
+}
+
+function getStepValidationError(
+  data: ApplicationFormData,
+  step: ApplicationStep,
+): string | null {
   if (!step.required) {
-    return true;
+    return null;
   }
 
   switch (step.type) {
     case 'text':
     case 'textarea': {
       const value = data[step.id as keyof ApplicationFormData] as string;
-      return value.trim().length > 0;
+      if (value.trim().length === 0) {
+        return 'Please complete this question to continue.';
+      }
+      return null;
     }
     case 'yesno':
-      return data.isJewish === 'yes' || data.isJewish === 'no';
+      if (data.isJewish !== 'yes' && data.isJewish !== 'no') {
+        return 'Please complete this question to continue.';
+      }
+      return null;
     case 'single': {
       const value = data[step.id as keyof ApplicationFormData] as string;
-      return value.length > 0;
+      if (value.length === 0) {
+        return 'Please complete this question to continue.';
+      }
+      return null;
     }
     case 'multi':
-      return data.goals.length === (step.maxSelections ?? 1);
-    case 'contact':
-      return data.email.trim().length > 0 && data.phone.trim().length > 0;
+      if (data.goals.length !== (step.maxSelections ?? 1)) {
+        return `Choose exactly ${step.maxSelections} options to continue.`;
+      }
+      return null;
+    case 'contact': {
+      const fieldErrors = getContactFieldErrors(data);
+      return fieldErrors.email ?? fieldErrors.phone ?? null;
+    }
     default:
-      return true;
+      return null;
   }
+}
+
+function isStepValid(data: ApplicationFormData, step: ApplicationStep): boolean {
+  return getStepValidationError(data, step) === null;
 }
 
 function isChoiceStep(step: ApplicationStep): boolean {
@@ -75,6 +120,7 @@ export function ApplicationForm() {
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back'>('forward');
   const [data, setData] = useState<ApplicationFormData>(emptyApplicationFormData);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; phone?: string }>({});
   const [confirmedOption, setConfirmedOption] = useState<string | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,6 +151,9 @@ export function ApplicationForm() {
   const updateField = <K extends keyof ApplicationFormData>(key: K, value: ApplicationFormData[K]) => {
     setData((current) => ({ ...current, [key]: value }));
     setError('');
+    if (key === 'email' || key === 'phone') {
+      setFieldErrors((current) => ({ ...current, [key]: undefined }));
+    }
   };
 
   const completeApplication = async (formData: ApplicationFormData) => {
@@ -207,12 +256,21 @@ export function ApplicationForm() {
   };
 
   const handleNext = () => {
-    if (!isStepValid(data, step)) {
-      if (step.type === 'multi') {
-        setError(`Choose exactly ${step.maxSelections} options to continue.`);
-      } else {
-        setError('Please complete this question to continue.');
+    if (step.type === 'contact') {
+      const contactErrors = getContactFieldErrors(data);
+      if (contactErrors.email || contactErrors.phone) {
+        setFieldErrors(contactErrors);
+        return;
       }
+
+      setFieldErrors({});
+      goToNextStep();
+      return;
+    }
+
+    const validationError = getStepValidationError(data, step);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -230,6 +288,7 @@ export function ApplicationForm() {
     setSlideDirection('back');
     setStepIndex((current) => current - 1);
     setError('');
+    setFieldErrors({});
   };
 
   const getOptionClassName = (optionId: string, selected: boolean) => {
@@ -351,22 +410,56 @@ export function ApplicationForm() {
       case 'contact':
         return (
           <div className="application-form-contact-fields">
-            <input
-              id="application-email"
-              className="application-form-input"
-              type="email"
-              value={data.email}
-              placeholder="Best email"
-              onChange={(event) => updateField('email', event.target.value)}
-            />
-            <input
-              id="application-phone"
-              className="application-form-input"
-              type="tel"
-              value={data.phone}
-              placeholder="Best phone number"
-              onChange={(event) => updateField('phone', event.target.value)}
-            />
+            <div className="application-form-contact-field">
+              <input
+                id="application-email"
+                className={`application-form-input${
+                  fieldErrors.email ? ' application-form-input--error' : ''
+                }`}
+                type="email"
+                value={data.email}
+                placeholder="Best email"
+                required
+                aria-required="true"
+                aria-invalid={fieldErrors.email ? true : undefined}
+                aria-describedby={fieldErrors.email ? 'application-email-error' : undefined}
+                onChange={(event) => updateField('email', event.target.value)}
+              />
+              {fieldErrors.email && (
+                <p
+                  id="application-email-error"
+                  className="application-form-field-error"
+                  role="alert"
+                >
+                  {fieldErrors.email}
+                </p>
+              )}
+            </div>
+            <div className="application-form-contact-field">
+              <input
+                id="application-phone"
+                className={`application-form-input${
+                  fieldErrors.phone ? ' application-form-input--error' : ''
+                }`}
+                type="tel"
+                value={data.phone}
+                placeholder="Best phone number"
+                required
+                aria-required="true"
+                aria-invalid={fieldErrors.phone ? true : undefined}
+                aria-describedby={fieldErrors.phone ? 'application-phone-error' : undefined}
+                onChange={(event) => updateField('phone', event.target.value)}
+              />
+              {fieldErrors.phone && (
+                <p
+                  id="application-phone-error"
+                  className="application-form-field-error"
+                  role="alert"
+                >
+                  {fieldErrors.phone}
+                </p>
+              )}
+            </div>
           </div>
         );
       default:
@@ -467,7 +560,7 @@ export function ApplicationForm() {
               type="button"
               className="application-form-next"
               onClick={handleNext}
-              disabled={isSubmitting || (step.required && !isStepValid(data, step))}
+              disabled={isSubmitting || (!isLastStep && step.required && !isStepValid(data, step))}
             >
               {isSubmitting ? 'Submitting...' : isLastStep ? 'Submit Application' : 'Continue'}
             </button>

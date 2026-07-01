@@ -72,6 +72,7 @@ export const applicationFormSteps: ApplicationStep[] = [
     prompt: "What's your Instagram @ so we can review previous conversations or reach out?",
     type: 'text',
     placeholder: '@yourhandle',
+    required: true,
   },
   {
     id: 'idealOutcome',

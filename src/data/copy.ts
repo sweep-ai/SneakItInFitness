@@ -53,7 +53,7 @@ export const funnelCopy: FunnelCopy = {
 
 export const bookingCopy = {
   stepLabel: 'Step 2',
-  headline: 'Book Your Strategy Call',
+  headline: 'Book A Free Strategy Call',
 };
 
 export const postBookingCopy = {
