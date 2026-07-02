@@ -14,8 +14,14 @@
   color: var(--color-fg);
 }
 
-.booking-page-step {
+.booking-page-congrats,
+.booking-page-title {
+  display: block;
+}
+
+.booking-page-congrats {
   color: var(--color-accent);
   font-size: 1.18em;
   font-style: italic;
+  margin-bottom: 0.25rem;
 }

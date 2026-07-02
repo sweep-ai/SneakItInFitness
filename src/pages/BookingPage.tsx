@@ -11,8 +11,8 @@ export function BookingPage() {
       <div className="container">
         <header className="booking-page-header">
           <h1 className="booking-page-headline">
-            <span className="booking-page-step">{bookingCopy.stepLabel}:</span>{' '}
-            {bookingCopy.headline}
+            <span className="booking-page-congrats">{bookingCopy.congratsLabel}</span>
+            <span className="booking-page-title">{bookingCopy.headline}</span>
           </h1>
         </header>
         <CalendlyEmbed />

@@ -52,8 +52,8 @@ export const funnelCopy: FunnelCopy = {
 };
 
 export const bookingCopy = {
-  stepLabel: 'Step 2',
-  headline: 'Book A Free Strategy Call',
+  congratsLabel: 'Congrats You Qualified!',
+  headline: 'Book Your Free Consultation',
 };
 
 export const postBookingCopy = {

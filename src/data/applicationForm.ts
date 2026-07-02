@@ -76,21 +76,27 @@ export const applicationFormSteps: ApplicationStep[] = [
   },
   {
     id: 'idealOutcome',
-    prompt: 'If we were to work together, what would the ideal outcome look like for you?',
-    type: 'textarea',
-    placeholder: 'Be as detailed as possible',
-    required: true,
-  },
-  {
-    id: 'investment',
-    prompt:
-      'If accepted, are you willing and financially able to invest in high-level coaching to transform your health, leadership, and life?',
+    prompt: 'If we worked together, what would success look like for you?',
     type: 'single',
     required: true,
     options: [
-      { id: 'A', label: "Yes, I'm ready to invest in myself" },
-      { id: 'B', label: 'I would need a flexible payment option' },
-      { id: 'C', label: "I'm not in a position to invest right now" },
+      { id: 'A', label: 'I feel confident and proud of how I look' },
+      { id: 'B', label: 'I have steady energy and focus for work and family' },
+      { id: 'C', label: 'I finally have discipline and habits I can stick to' },
+      { id: 'D', label: 'I show up with more confidence at work and in relationships' },
+      { id: 'E', label: 'I lose significant weight and keep it off' },
+      { id: 'F', label: 'I completely reinvent how I show up in my life' },
+    ],
+  },
+  {
+    id: 'investment',
+    prompt: 'If results were guaranteed, how prepared are you to work with a coach?',
+    type: 'single',
+    required: true,
+    options: [
+      { id: 'A', label: "I'm ready to get the help I need to hit my goals" },
+      { id: 'B', label: "I'm interested and want to learn more about coaching" },
+      { id: 'C', label: 'I want to stay stuck where I am and am not willing to get help' },
     ],
   },
   {
@@ -131,7 +137,7 @@ export function getDisqualificationReason(data: ApplicationFormData): string | n
     return 'waste_time';
   }
   if (data.investment === DQ_INVESTMENT_OPTION) {
-    return 'not_ready_to_invest';
+    return 'not_willing_for_help';
   }
   return null;
 }
