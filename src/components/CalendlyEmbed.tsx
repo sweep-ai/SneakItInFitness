@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { trackSchedule } from '../lib/metaPixel';
+import { beginScheduleTracking, getStoredApplicantUserData } from '../lib/conversionTracking';
 import './CalendlyEmbed.css';
 
 const CALENDLY_URL =
@@ -61,7 +62,9 @@ export function CalendlyEmbed() {
       if (!isCalendlyMessage(event)) return;
 
       if (event.data.event === 'calendly.event_scheduled') {
-        trackSchedule();
+        // Same event_id is reused on the /post-booking landing so the two fires dedupe.
+        const scheduleEventId = beginScheduleTracking();
+        trackSchedule(getStoredApplicantUserData(), scheduleEventId);
         navigate('/post-booking', { replace: true });
       }
     };

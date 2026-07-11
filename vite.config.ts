@@ -1,59 +1,36 @@
-import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { ServerResponse } from 'node:http';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { handleTrackEventRequest } from './api/_lib/metaCapi';
+import { handleSubmitApplicationRequest } from './api/_lib/submitApplicationHandler';
 
-async function readRequestBody(req: IncomingMessage): Promise<string> {
-  const chunks: Buffer[] = [];
-
-  for await (const chunk of req) {
-    chunks.push(chunk as Buffer);
-  }
-
-  return Buffer.concat(chunks).toString();
-}
-
-function submitApplicationApi(webhookUrl: string | undefined): Plugin {
+function submitApplicationApi(): Plugin {
   return {
     name: 'submit-application-api',
     configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
+      server.middlewares.use((req, res, next) => {
         if (req.url !== '/api/submit-application' || req.method !== 'POST') {
           next();
           return;
         }
 
-        const response = res as ServerResponse;
+        void handleSubmitApplicationRequest(req, res as ServerResponse);
+      });
+    },
+  };
+}
 
-        if (!webhookUrl) {
-          response.statusCode = 500;
-          response.setHeader('Content-Type', 'application/json');
-          response.end(JSON.stringify({ error: 'ZAPIER_WEBHOOK is not configured' }));
+function trackEventApi(): Plugin {
+  return {
+    name: 'track-event-api',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url !== '/api/track-event' || req.method !== 'POST') {
+          next();
           return;
         }
 
-        try {
-          const body = await readRequestBody(req);
-          const zapierResponse = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body,
-          });
-
-          if (!zapierResponse.ok) {
-            response.statusCode = 502;
-            response.setHeader('Content-Type', 'application/json');
-            response.end(JSON.stringify({ error: 'Zapier request failed' }));
-            return;
-          }
-
-          response.statusCode = 200;
-          response.setHeader('Content-Type', 'application/json');
-          response.end(JSON.stringify({ success: true }));
-        } catch {
-          response.statusCode = 500;
-          response.setHeader('Content-Type', 'application/json');
-          response.end(JSON.stringify({ error: 'Submission failed' }));
-        }
+        void handleTrackEventRequest(req, res as ServerResponse);
       });
     },
   };
@@ -61,8 +38,16 @@ function submitApplicationApi(webhookUrl: string | undefined): Plugin {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  // Expose env vars used by the dev-server middleware (loadEnv doesn't set process.env).
+  process.env.META_CAPI_ACCESS_TOKEN = env.META_CAPI_ACCESS_TOKEN;
+  process.env.ZAPIER_WEBHOOK = env.ZAPIER_WEBHOOK;
+  process.env.GHL_INTEGRATION_TOKEN = env.GHL_INTEGRATION_TOKEN;
+  process.env.GHL_LOCATION_ID = env.GHL_LOCATION_ID;
+  if (env.META_CAPI_TEST_EVENT_CODE) {
+    process.env.META_CAPI_TEST_EVENT_CODE = env.META_CAPI_TEST_EVENT_CODE;
+  }
 
   return {
-    plugins: [react(), submitApplicationApi(env.ZAPIER_WEBHOOK)],
+    plugins: [react(), submitApplicationApi(), trackEventApi()],
   };
 });

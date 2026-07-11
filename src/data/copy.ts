@@ -45,8 +45,8 @@ export const founderManifestoLines = [
 ] as const;
 
 export const funnelCopy: FunnelCopy = {
-  headline: 'YOU KNOW SOMETHING NEEDS TO CHANGE',
-  headlineHighlight: 'NEEDS TO CHANGE',
+  headline: 'A fitness system that fits Jewish Life',
+  headlineHighlight: 'Jewish Life',
   subhead:
     "Ready to finally become the person you've always known you could be with a system built around your real Jewish life?",
 };

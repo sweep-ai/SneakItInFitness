@@ -1,0 +1,61 @@
+.sticky-apply-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  padding: 0.75rem var(--space-sm) calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(26, 4, 4, 0) 0%, rgba(26, 4, 4, 0.92) 32%);
+  transform: translateY(120%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.28s ease, opacity 0.28s ease, visibility 0.28s ease;
+  pointer-events: none;
+}
+
+.sticky-apply-bar--visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.sticky-apply-bar-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  min-height: 52px;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 4.5vw, 1.25rem);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.sticky-apply-bar-btn:hover {
+  background: var(--color-accent-hover);
+}
+
+.sticky-apply-bar-btn:active {
+  transform: scale(0.98);
+}
+
+/* Sticky CTA is mobile-only; desktop keeps the inline CTAs. */
+@media (min-width: 768px) {
+  .sticky-apply-bar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-apply-bar {
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+    transform: none;
+  }
+}

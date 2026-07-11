@@ -1,9 +1,23 @@
 /// <reference types="vite/client" />
 
+interface FbqEventOptions {
+  eventID?: string;
+}
+
 interface Fbq {
   (command: 'init', pixelId: string): void;
-  (command: 'track', event: string, params?: Record<string, unknown>): void;
-  (command: 'trackCustom', event: string, params?: Record<string, unknown>): void;
+  (
+    command: 'track',
+    event: string,
+    params?: Record<string, unknown>,
+    options?: FbqEventOptions
+  ): void;
+  (
+    command: 'trackCustom',
+    event: string,
+    params?: Record<string, unknown>,
+    options?: FbqEventOptions
+  ): void;
 }
 
 interface Window {

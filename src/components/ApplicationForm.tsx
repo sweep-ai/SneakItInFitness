@@ -11,6 +11,8 @@ import {
 } from '../data/applicationForm';
 import { socialLinks } from '../data/social';
 import { submitApplication } from '../lib/submitApplication';
+import { trackLead } from '../lib/metaPixel';
+import { beginLeadTracking } from '../lib/conversionTracking';
 import { isValidEmail, isValidPhone } from '../lib/validators';
 import './ApplicationForm.css';
 
@@ -83,6 +85,12 @@ function getStepValidationError(
     case 'contact': {
       const fieldErrors = getContactFieldErrors(data);
       return fieldErrors.email ?? fieldErrors.phone ?? null;
+    }
+    case 'occupationAge': {
+      if (data.occupation.trim().length === 0 || data.age.trim().length === 0) {
+        return 'Please enter both your occupation and age to continue.';
+      }
+      return null;
     }
     default:
       return null;
@@ -163,6 +171,19 @@ export function ApplicationForm() {
     try {
       await submitApplication(formData);
       sessionStorage.setItem(APPLICATION_FORM_STORAGE_KEY, JSON.stringify(formData));
+
+      const [firstName, ...restName] = formData.name.trim().split(/\s+/);
+      // Same event_id is reused on the /booking landing so the two fires dedupe.
+      const leadEventId = beginLeadTracking();
+      trackLead(
+        {
+          email: formData.email,
+          phone: formData.phone,
+          firstName,
+          lastName: restName.join(' ') || undefined,
+        },
+        leadEventId
+      );
 
       if (isDisqualifiedLead(formData)) {
         setShowDqSlide(true);
@@ -317,15 +338,31 @@ export function ApplicationForm() {
             }
           />
         );
-      case 'textarea':
+      case 'occupationAge':
         return (
-          <textarea
-            id={`application-${step.id}`}
-            className="application-form-textarea"
-            value={data.idealOutcome}
-            placeholder={step.placeholder}
-            onChange={(event) => updateField('idealOutcome', event.target.value)}
-          />
+          <div className="application-form-contact-fields">
+            <div className="application-form-contact-field">
+              <input
+                id="application-occupation"
+                className="application-form-input"
+                type="text"
+                value={data.occupation}
+                placeholder="Your occupation"
+                onChange={(event) => updateField('occupation', event.target.value)}
+              />
+            </div>
+            <div className="application-form-contact-field">
+              <input
+                id="application-age"
+                className="application-form-input"
+                type="text"
+                inputMode="numeric"
+                value={data.age}
+                placeholder="Your age"
+                onChange={(event) => updateField('age', event.target.value)}
+              />
+            </div>
+          </div>
         );
       case 'yesno':
         return (
@@ -475,7 +512,14 @@ export function ApplicationForm() {
     >
       <div className="application-form-header">
         <h2 id="application-form-title" className="application-form-title">
-          {showDqSlide ? 'Thanks For Stopping By' : 'Start Your Transformation'}
+          {showDqSlide ? (
+            'Thanks For Stopping By'
+          ) : (
+            <>
+              <span className="application-form-title-emphasis">Apply Here</span> to Start Your
+              Transformation
+            </>
+          )}
         </h2>
         {!showDqSlide && (
           <span className="application-form-progress">

@@ -40,7 +40,8 @@
         s.parentNode.insertBefore(t, s);
       })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '1880087192677392');
-      fbq('track', 'PageView');
+      // PageView is fired from the app (see MetaPixelRouteTracker) with a shared
+      // event_id so it deduplicates against the Conversions API server event.
     </script>
     <!-- End Meta Pixel Code -->
   </head>

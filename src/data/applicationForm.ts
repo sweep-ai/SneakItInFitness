@@ -7,7 +7,7 @@ export interface ApplicationStep {
   id: string;
   prompt: string;
   required?: boolean;
-  type: 'text' | 'yesno' | 'single' | 'multi' | 'textarea' | 'contact';
+  type: 'text' | 'yesno' | 'single' | 'multi' | 'textarea' | 'contact' | 'occupationAge';
   placeholder?: string;
   maxSelections?: number;
   options?: ApplicationOption[];
@@ -68,27 +68,6 @@ export const applicationFormSteps: ApplicationStep[] = [
     ],
   },
   {
-    id: 'instagram',
-    prompt: "What's your Instagram @ so we can review previous conversations or reach out?",
-    type: 'text',
-    placeholder: '@yourhandle',
-    required: true,
-  },
-  {
-    id: 'idealOutcome',
-    prompt: 'If we worked together, what would success look like for you?',
-    type: 'single',
-    required: true,
-    options: [
-      { id: 'A', label: 'I feel confident and proud of how I look' },
-      { id: 'B', label: 'I have steady energy and focus for work and family' },
-      { id: 'C', label: 'I finally have discipline and habits I can stick to' },
-      { id: 'D', label: 'I show up with more confidence at work and in relationships' },
-      { id: 'E', label: 'I lose significant weight and keep it off' },
-      { id: 'F', label: 'I completely reinvent how I show up in my life' },
-    ],
-  },
-  {
     id: 'investment',
     prompt: 'If results were guaranteed, how prepared are you to work with a coach?',
     type: 'single',
@@ -100,23 +79,22 @@ export const applicationFormSteps: ApplicationStep[] = [
     ],
   },
   {
-    id: 'occupation',
-    prompt: 'What is your occupation?',
-    type: 'text',
-    placeholder: 'Your occupation',
-    required: true,
-  },
-  {
-    id: 'age',
-    prompt: 'What is your age?',
-    type: 'text',
-    placeholder: 'Your age',
+    id: 'occupationAge',
+    prompt: 'What is your occupation and age?',
+    type: 'occupationAge',
     required: true,
   },
   {
     id: 'contact',
     prompt: 'Best email and best phone number',
     type: 'contact',
+    required: true,
+  },
+  {
+    id: 'instagram',
+    prompt: "What's your Instagram @ so we can review previous conversations or reach out?",
+    type: 'text',
+    placeholder: '@yourhandle',
     required: true,
   },
 ];
@@ -154,7 +132,6 @@ export interface ApplicationFormData {
   goals: string[];
   seriousness: string;
   instagram: string;
-  idealOutcome: string;
   investment: string;
   occupation: string;
   age: string;
@@ -169,7 +146,6 @@ export const emptyApplicationFormData: ApplicationFormData = {
   goals: [],
   seriousness: '',
   instagram: '',
-  idealOutcome: '',
   investment: '',
   occupation: '',
   age: '',

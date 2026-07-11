@@ -9,6 +9,7 @@ import { ExclusiveProgram } from './ExclusiveProgram';
 import { FounderManifesto } from './FounderManifesto';
 import { SectionTitle } from './SectionTitle';
 import { ScrollingBanner } from './ScrollingBanner';
+import { StickyApplyBar } from './StickyApplyBar';
 import { menTestimonials, womenTestimonials } from '../data/assets';
 import './FunnelShell.css';
 
@@ -73,6 +74,7 @@ export function FunnelShell({
       <div className="container">
         <FinalCTA />
       </div>
+      <StickyApplyBar />
     </main>
   );
 }

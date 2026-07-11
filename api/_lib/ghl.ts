@@ -1,0 +1,140 @@
+import type { ApplicationWebhookPayload } from '../../src/lib/formatApplicationPayload';
+
+export type { ApplicationWebhookPayload };
+
+const GHL_API_BASE = 'https://services.leadconnectorhq.com';
+const GHL_API_VERSION = '2021-07-28';
+
+interface GhlRequestOptions {
+  method: 'GET' | 'POST' | 'PUT';
+  path: string;
+  body?: unknown;
+}
+
+interface GhlUpsertResponse {
+  contact?: {
+    id?: string;
+  };
+}
+
+function getGhlConfig(): { token: string; locationId: string } {
+  const token = process.env.GHL_INTEGRATION_TOKEN?.trim();
+  const locationId = process.env.GHL_LOCATION_ID?.trim();
+
+  if (!token) {
+    throw new Error('GHL_INTEGRATION_TOKEN is not configured');
+  }
+
+  if (!locationId) {
+    throw new Error('GHL_LOCATION_ID is not configured');
+  }
+
+  return { token, locationId };
+}
+
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const trimmed = fullName.trim();
+  if (!trimmed) {
+    return { firstName: 'Applicant', lastName: '' };
+  }
+
+  const parts = trimmed.split(/\s+/);
+  const firstName = parts[0] ?? trimmed;
+  const lastName = parts.slice(1).join(' ');
+
+  return { firstName, lastName };
+}
+
+/** Normalizes phone numbers to E.164 when possible for GHL matching. */
+export function formatPhoneForGhl(phone: string): string {
+  const trimmed = phone.trim();
+  if (!trimmed) return trimmed;
+
+  const digits = trimmed.replace(/\D/g, '');
+  if (!digits) return trimmed;
+
+  if (trimmed.startsWith('+')) {
+    return `+${digits}`;
+  }
+
+  if (digits.length === 10) {
+    return `+1${digits}`;
+  }
+
+  if (digits.length === 11 && digits.startsWith('1')) {
+    return `+${digits}`;
+  }
+
+  return `+${digits}`;
+}
+
+export function buildGhlContactPayload(
+  payload: ApplicationWebhookPayload,
+  locationId: string
+): Record<string, unknown> {
+  const { firstName, lastName } = splitName(payload.name);
+  const phone = formatPhoneForGhl(payload.phone);
+
+  return {
+    locationId,
+    firstName,
+    lastName: lastName || undefined,
+    email: payload.email.trim(),
+    phone,
+    companyName: payload.occupation.trim() || undefined,
+    website: payload.instagram.trim()
+      ? `https://instagram.com/${payload.instagram.trim().replace(/^@/, '')}`
+      : undefined,
+    source: payload.source,
+  };
+}
+
+async function ghlRequest<T>(options: GhlRequestOptions): Promise<T> {
+  const { token } = getGhlConfig();
+  const url = `${GHL_API_BASE}${options.path}`;
+
+  const response = await fetch(url, {
+    method: options.method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Version: GHL_API_VERSION,
+    },
+    body: options.body === undefined ? undefined : JSON.stringify(options.body),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '');
+    throw new Error(`GHL API ${options.method} ${options.path} failed (${response.status}): ${detail}`);
+  }
+
+  if (response.status === 204) {
+    return {} as T;
+  }
+
+  return (await response.json()) as T;
+}
+
+/** Creates or updates a GHL contact from a quiz submission. */
+export async function upsertApplicationContact(payload: ApplicationWebhookPayload): Promise<string> {
+  const { locationId } = getGhlConfig();
+  const contactPayload = buildGhlContactPayload(payload, locationId);
+
+  const result = await ghlRequest<GhlUpsertResponse>({
+    method: 'POST',
+    path: '/contacts/upsert',
+    body: contactPayload,
+  });
+
+  const contactId = result.contact?.id;
+  if (!contactId) {
+    throw new Error('GHL upsert succeeded but no contact id was returned');
+  }
+
+  return contactId;
+}
+
+export function isGhlConfigured(): boolean {
+  return Boolean(process.env.GHL_INTEGRATION_TOKEN?.trim() && process.env.GHL_LOCATION_ID?.trim());
+}

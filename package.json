@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && vite build",
+    "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && npm run verify:payload && npm run verify:ghl && vite build",
     "compress-assets": "node scripts/compress-assets.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:payload": "tsx scripts/verify-application-payload.ts",
+    "verify:ghl": "tsx scripts/verify-ghl-payload.ts",
+    "test:ghl": "tsx scripts/test-ghl-live.ts"
   },
   "dependencies": {
     "react": "^19.2.6",
@@ -15,9 +18,11 @@
     "react-router-dom": "^7.15.1"
   },
   "devDependencies": {
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
+    "tsx": "^4.22.5",
     "typescript": "^6.0.3",
     "vite": "^8.0.13"
   }

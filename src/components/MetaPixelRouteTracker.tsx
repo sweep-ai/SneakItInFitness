@@ -3,8 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { trackPageView } from '../lib/metaPixel';
 
 /**
- * SPA route changes do not reload index.html, so PageView must be sent again
- * on each navigation. The first PageView is fired by the base snippet in index.html.
+ * index.html only initializes the pixel; every PageView (including the first)
+ * is sent from here so it carries a shared event_id and deduplicates against
+ * the server-side Conversions API event.
  */
 export function MetaPixelRouteTracker() {
   const location = useLocation();
@@ -12,11 +13,6 @@ export function MetaPixelRouteTracker() {
 
   useEffect(() => {
     const path = `${location.pathname}${location.search}`;
-
-    if (previousPathRef.current === null) {
-      previousPathRef.current = path;
-      return;
-    }
 
     if (previousPathRef.current === path) return;
 

@@ -1,9 +1,14 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { VSLPlayer } from '../components/VSLPlayer';
 import { PrepChecklist } from '../components/PrepChecklist';
 import { FAQ } from '../components/FAQ';
 import { ConfirmAppointment } from '../components/ConfirmAppointment';
 import { postBookingCopy } from '../data/copy';
+import { trackSchedule } from '../lib/metaPixel';
+import {
+  consumePendingScheduleEventId,
+  getStoredApplicantUserData,
+} from '../lib/conversionTracking';
 import './PostBookingPage.css';
 
 interface PostBookingStepProps {
@@ -24,6 +29,16 @@ function PostBookingStep({ label, prompt, children }: PostBookingStepProps) {
 
 export function PostBookingPage() {
   const { steps } = postBookingCopy;
+
+  useEffect(() => {
+    // Reliable Schedule confirmation: fires only when the booked visitor reaches
+    // /post-booking, reusing the Calendly event_id so Meta dedupes. A direct
+    // visit / refresh has no pending id, so it won't count as a new booking.
+    const scheduleEventId = consumePendingScheduleEventId();
+    if (scheduleEventId) {
+      trackSchedule(getStoredApplicantUserData(), scheduleEventId);
+    }
+  }, []);
 
   return (
     <main className="page-main">
