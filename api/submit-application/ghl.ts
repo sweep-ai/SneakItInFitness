@@ -1,6 +1,29 @@
-import type { ApplicationWebhookPayload } from '../../src/lib/formatApplicationPayload';
-
-export type { ApplicationWebhookPayload };
+export interface ApplicationWebhookPayload {
+  name: string;
+  isJewish: string;
+  situation: string;
+  situationCode: string;
+  situationPrompt: string;
+  goals: string;
+  goalsCodes: string;
+  goalsPrompt: string;
+  seriousness: string;
+  seriousnessCode: string;
+  seriousnessPrompt: string;
+  instagram: string;
+  investment: string;
+  investmentCode: string;
+  investmentPrompt: string;
+  occupation: string;
+  age: string;
+  email: string;
+  phone: string;
+  leadStatus: 'qualified' | 'disqualified';
+  dqReason: string | null;
+  dqReasonLegacy?: string;
+  submittedAt: string;
+  source: string;
+}
 
 const GHL_API_BASE = 'https://services.leadconnectorhq.com';
 const GHL_API_VERSION = '2021-07-28';

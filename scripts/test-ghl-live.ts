@@ -1,6 +1,6 @@
 import { formatApplicationPayload } from '../src/lib/formatApplicationPayload';
 import { emptyApplicationFormData } from '../src/data/applicationForm';
-import { upsertApplicationContact } from '../api/_lib/ghl';
+import { upsertApplicationContact } from '../api/submit-application/ghl';
 import { loadLocalEnv } from './loadLocalEnv';
 
 loadLocalEnv();

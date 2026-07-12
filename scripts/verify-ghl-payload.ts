@@ -1,6 +1,6 @@
 import { formatApplicationPayload } from '../src/lib/formatApplicationPayload';
 import { emptyApplicationFormData } from '../src/data/applicationForm';
-import { buildGhlContactPayload, formatPhoneForGhl } from '../api/_lib/ghl';
+import { buildGhlContactPayload, formatPhoneForGhl } from '../api/submit-application/ghl';
 
 const base = {
   ...emptyApplicationFormData,

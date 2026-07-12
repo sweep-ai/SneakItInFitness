@@ -1,8 +1,8 @@
 import type { ServerResponse } from 'node:http';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
-import { handleTrackEventRequest } from './api/_lib/metaCapi';
-import { handleSubmitApplicationRequest } from './api/_lib/submitApplicationHandler';
+import { handleTrackEventRequest } from './api/track-event/metaCapi.js';
+import { handleSubmitApplicationRequest } from './api/submit-application/handler.js';
 
 function submitApplicationApi(): Plugin {
   return {

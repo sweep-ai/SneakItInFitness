@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { isGhlConfigured, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl';
+import { isGhlConfigured, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl.js';
 
 async function readRequestBody(req: IncomingMessage): Promise<string> {
   const chunks: Buffer[] = [];
@@ -29,10 +29,7 @@ async function forwardToZapier(webhookUrl: string, body: string): Promise<void> 
   }
 }
 
-/**
- * Shared handler for `/api/submit-application`, used by the Vercel serverless
- * function and the Vite dev-server middleware.
- */
+/** Shared handler for `/api/submit-application`. */
 export async function handleSubmitApplicationRequest(
   req: IncomingMessage,
   res: ServerResponse
