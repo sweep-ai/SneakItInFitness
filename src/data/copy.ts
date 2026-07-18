@@ -57,8 +57,11 @@ export const bookingCopy = {
 };
 
 export const postBookingCopy = {
-  congratsLabel: 'Congrats',
   headline: "You're Almost There...",
+  subheader: {
+    highlight: 'MANDATORY',
+    rest: ': complete the steps below to lock in your call',
+  },
   phoneNumber: '+1 310-561-5995',
   steps: {
     intro: {
@@ -69,13 +72,13 @@ export const postBookingCopy = {
       label: 'Step 2 of 5',
       prompt: 'Watch The Breakdown Video Before Continuing',
     },
-    faq: {
-      label: 'Step 3 of 5',
-      prompt: 'Review These Common Questions Before Continuing',
-    },
     confirm: {
-      label: 'Step 4 of 5',
+      label: 'Step 3 of 5',
       prompt: 'Confirm Your Appointment In Your Calendar',
+    },
+    faq: {
+      label: 'Step 4 of 5',
+      prompt: 'Review These Common Questions Before Continuing',
     },
     prep: {
       label: 'Step 5 of 5',

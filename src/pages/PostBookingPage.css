@@ -1,5 +1,5 @@
 .post-booking-intro {
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
   padding-top: var(--space-sm);
   text-align: center;
 }
@@ -12,10 +12,31 @@
   line-height: 1.05;
   text-transform: uppercase;
   color: var(--color-fg);
+  margin: 0;
 }
 
-.post-booking-congrats {
+.post-booking-subheader {
+  margin: var(--space-md) auto 0;
+  max-width: 32rem;
+  font-size: clamp(0.875rem, 3vw, 1rem);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+}
+
+.post-booking-mandatory {
   color: var(--color-accent);
+  font-weight: 700;
+}
+
+.post-booking-preface {
+  margin-top: var(--space-md);
+}
+
+.post-booking-preface .vsl-section {
+  margin-top: 0;
 }
 
 .post-booking-callout {

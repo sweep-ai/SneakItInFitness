@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FunnelVideoGender, VideoPlacement } from '../data/videos';
-import { funnelVideosByGender, postBookingVideo } from '../data/videos';
+import { funnelVideosByGender, postBookingPrefaceVideo, postBookingVideo } from '../data/videos';
 import './VSLPlayer.css';
 
 function PlayButton() {
@@ -50,7 +50,11 @@ export function VSLPlayer({
   sectionLabel,
 }: VSLPlayerProps) {
   const config =
-    placement === 'postBooking' ? postBookingVideo : funnelVideosByGender[gender];
+    placement === 'postBookingPreface'
+      ? postBookingPrefaceVideo
+      : placement === 'postBooking'
+        ? postBookingVideo
+        : funnelVideosByGender[gender];
   const label = sectionLabel ?? config.sectionLabel;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(

@@ -11,6 +11,7 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const VSL_SOURCE = join(ROOT, 'assets/ARi SOKOL revision.mp4');
 const VSL_OUTPUT = join(ROOT, 'assets/VSL.mp4');
 const VSL_POSTER = join(ROOT, 'assets/VSL-poster.jpg');
+const POST_BOOKING_PREFACE = join(ROOT, 'assets/IMG_6248.mp4');
 const TESTIMONIALS = join(ROOT, 'assets/testimonials');
 const POSTERS = join(ROOT, 'assets/testimonial-posters');
 const MEN = join(ROOT, 'assets/men');
@@ -61,6 +62,15 @@ if (existsSync(VSL_SOURCE)) {
   compressVsl(VSL_SOURCE, VSL_OUTPUT);
   compressPoster(VSL_OUTPUT, VSL_POSTER);
   console.log(`  VSL.mp4: ${before}MB -> ${sizeMb(VSL_OUTPUT)}MB`);
+}
+
+if (existsSync(POST_BOOKING_PREFACE)) {
+  console.log('Compressing post-booking preface video...');
+  const before = sizeMb(POST_BOOKING_PREFACE);
+  const temp = join(ROOT, 'assets/.tmp-IMG_6248.mp4');
+  compressVideo(POST_BOOKING_PREFACE, temp);
+  run(`mv "${temp}" "${POST_BOOKING_PREFACE}"`);
+  console.log(`  IMG_6248.mp4: ${before}MB -> ${sizeMb(POST_BOOKING_PREFACE)}MB`);
 }
 
 console.log('Compressing testimonial videos...');

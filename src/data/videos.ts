@@ -1,8 +1,9 @@
 import vslPoster from '../../assets/VSL-poster.jpg';
 import vslVideo from '../../assets/VSL.mp4';
+import postBookingPrefaceVideoSrc from '../../assets/IMG_6248.mp4';
 import type { FunnelGender } from './copy';
 
-export type VideoPlacement = 'funnel' | 'postBooking';
+export type VideoPlacement = 'funnel' | 'postBooking' | 'postBookingPreface';
 
 export interface VideoConfig {
   provider: 'youtube' | 'loom' | 'file';
@@ -51,7 +52,16 @@ export const postBookingVideo: VideoConfig = {
   sectionLabel: null,
 };
 
+/** Post-booking intro — plays before the numbered steps. */
+export const postBookingPrefaceVideo: VideoConfig = {
+  provider: 'file',
+  src: postBookingPrefaceVideoSrc,
+  title: 'Post-booking welcome video',
+  sectionLabel: null,
+};
+
 export const videosByPlacement: Record<VideoPlacement, VideoConfig> = {
   funnel: maleFunnelVideo,
   postBooking: postBookingVideo,
+  postBookingPreface: postBookingPrefaceVideo,
 };
