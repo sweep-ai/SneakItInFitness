@@ -7,18 +7,17 @@ const base = {
   name: 'Jane Doe',
   isJewish: 'yes' as const,
   situation: 'B',
-  goals: ['A', 'B', 'C'],
-  seriousness: 'A',
+  goal: 'A',
+  readiness: 'B',
   instagram: '@jane',
-  investment: 'B',
   occupation: 'Engineer',
-  age: '34',
   email: 'jane@example.com',
   phone: '(555) 123-4567',
 };
 
 const payload = formatApplicationPayload(base);
 const contact = buildGhlContactPayload(payload, 'test-location-id');
+const tags = contact.tags as string[];
 
 const checks: Array<[string, boolean]> = [
   ['first name split', contact.firstName === 'Jane'],
@@ -29,6 +28,11 @@ const checks: Array<[string, boolean]> = [
   ['instagram mapped to website', contact.website === 'https://instagram.com/jane'],
   ['location id included', contact.locationId === 'test-location-id'],
   ['source preserved', contact.source === 'sneakit-application-form'],
+  ['qualified tag applied', tags.includes('Qualified Lead')],
+  ['jewish tag applied', tags.includes('Jewish Yes')],
+  ['situation tag applied', tags.includes('Situation B')],
+  ['goal tag applied', tags.includes('Goal A')],
+  ['readiness tag applied', tags.includes('Readiness B')],
   ['no custom fields', !('customFields' in contact)],
 ];
 

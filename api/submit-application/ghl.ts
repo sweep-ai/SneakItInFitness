@@ -1,28 +1,36 @@
+export interface ApplicationChoiceAnswer {
+  prompt: string;
+  code: string;
+  label: string;
+}
+
 export interface ApplicationWebhookPayload {
   name: string;
-  isJewish: string;
-  situation: string;
-  situationCode: string;
-  situationPrompt: string;
-  goals: string;
-  goalsCodes: string;
-  goalsPrompt: string;
-  seriousness: string;
-  seriousnessCode: string;
-  seriousnessPrompt: string;
-  instagram: string;
-  investment: string;
-  investmentCode: string;
-  investmentPrompt: string;
-  occupation: string;
-  age: string;
   email: string;
   phone: string;
+  instagram: string;
+  isJewish: string;
+  occupation: string;
+  situation: ApplicationChoiceAnswer;
+  goal: ApplicationChoiceAnswer;
+  readiness: ApplicationChoiceAnswer;
   leadStatus: 'qualified' | 'disqualified';
   dqReason: string | null;
-  dqReasonLegacy?: string;
   submittedAt: string;
   source: string;
+  answers: {
+    isJewish: string;
+    situationPrompt: string;
+    situationCode: string;
+    situation: string;
+    goalPrompt: string;
+    goalCode: string;
+    goal: string;
+    readinessPrompt: string;
+    readinessCode: string;
+    readiness: string;
+    occupation: string;
+  };
 }
 
 const GHL_API_BASE = 'https://services.leadconnectorhq.com';
@@ -91,12 +99,26 @@ export function formatPhoneForGhl(phone: string): string {
   return `+${digits}`;
 }
 
+function normalizeInstagramHandle(instagram: string): string {
+  return instagram.trim().replace(/^@/, '');
+}
+
 export function buildGhlContactPayload(
   payload: ApplicationWebhookPayload,
   locationId: string
 ): Record<string, unknown> {
   const { firstName, lastName } = splitName(payload.name);
   const phone = formatPhoneForGhl(payload.phone);
+  const instagramHandle = normalizeInstagramHandle(payload.instagram);
+
+  const tags = [
+    'SneakIt Application',
+    payload.leadStatus === 'qualified' ? 'Qualified Lead' : 'Disqualified Lead',
+    `Jewish ${payload.isJewish}`,
+    `Situation ${payload.situation.code}`,
+    `Goal ${payload.goal.code}`,
+    `Readiness ${payload.readiness.code}`,
+  ];
 
   return {
     locationId,
@@ -105,10 +127,9 @@ export function buildGhlContactPayload(
     email: payload.email.trim(),
     phone,
     companyName: payload.occupation.trim() || undefined,
-    website: payload.instagram.trim()
-      ? `https://instagram.com/${payload.instagram.trim().replace(/^@/, '')}`
-      : undefined,
+    website: instagramHandle ? `https://instagram.com/${instagramHandle}` : undefined,
     source: payload.source,
+    tags,
   };
 }
 

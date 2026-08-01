@@ -1,4 +1,4 @@
-import { ariHeaderSrc, heroBackgroundPhotos } from '../data/assets';
+import { heroBackgroundPhotos } from '../data/assets';
 import './PageHero.css';
 
 interface PageHeroProps {
@@ -28,6 +28,9 @@ export function PageHero({ headline, headlineHighlight, subhead }: PageHeroProps
               <>
                 {headline.slice(0, headline.indexOf(headlineHighlight))}
                 <span className="page-hero-headline-emphasis">{headlineHighlight}</span>
+                {headline.slice(
+                  headline.indexOf(headlineHighlight) + headlineHighlight.length
+                )}
               </>
             ) : (
               headline
@@ -35,16 +38,6 @@ export function PageHero({ headline, headlineHighlight, subhead }: PageHeroProps
           </h1>
           <p className="page-hero-subhead">{subhead}</p>
         </div>
-
-        <img
-          src={ariHeaderSrc}
-          alt=""
-          className="page-hero-figure"
-          width={480}
-          height={640}
-          fetchPriority="high"
-          decoding="async"
-        />
       </div>
     </header>
   );

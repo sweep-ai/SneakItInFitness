@@ -3,7 +3,6 @@ export type FunnelGender = 'male' | 'female';
 export interface FunnelCopy {
   headline: string;
   headlineHighlight?: string;
-  subhead: string;
 }
 
 export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
@@ -12,13 +11,9 @@ export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
   return 'Jewish adults';
 }
 
-function titleCaseWords(value: string): string {
-  return value.replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
-export function getVslSectionLabel(gender?: FunnelGender | 'neutral'): string {
-  const audience = titleCaseWords(getIcpAudienceLabel(gender));
-  return `Discover The Simple System Transforming ${audience} In Less Than 4 Hrs/Week Without Sacrificing Their Career And Culture`;
+export function getFunnelSubhead(gender?: FunnelGender | 'neutral'): string {
+  const audience = getIcpAudienceLabel(gender);
+  return `Watch below to discover the simple system transforming ${audience} in under 4 hrs/week without sacrificing their career or culture ↓`;
 }
 
 export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutral'): string {
@@ -45,10 +40,8 @@ export const founderManifestoLines = [
 ] as const;
 
 export const funnelCopy: FunnelCopy = {
-  headline: 'A fitness system that fits Jewish Life',
-  headlineHighlight: 'Jewish Life',
-  subhead:
-    "Ready to finally become the person you've always known you could be with a system built around your real Jewish life?",
+  headline: 'Helping Jews get in the best shape of their life',
+  headlineHighlight: 'Jews',
 };
 
 export const bookingCopy = {

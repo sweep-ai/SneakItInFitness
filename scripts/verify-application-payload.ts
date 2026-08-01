@@ -6,72 +6,70 @@ const base = {
   name: 'Jane Doe',
   isJewish: 'yes' as const,
   situation: 'B',
-  goals: ['A', 'B', 'C'],
-  seriousness: 'A',
+  goal: 'A',
+  readiness: 'B',
   instagram: '@jane',
-  investment: 'B',
   occupation: 'Engineer',
-  age: '34',
   email: 'jane@example.com',
   phone: '+1 555 123 4567',
 };
 
-const qualified = formatApplicationPayload({ ...base, investment: 'A' });
-const interested = formatApplicationPayload({ ...base, investment: 'B' });
-const dqInvest = formatApplicationPayload({ ...base, investment: 'C' });
-const dqSerious = formatApplicationPayload({ ...base, seriousness: 'D' });
+const qualified = formatApplicationPayload({ ...base, readiness: 'A' });
+const interested = formatApplicationPayload({ ...base, readiness: 'B' });
+const dqReadiness = formatApplicationPayload({ ...base, readiness: 'C' });
 
 const requiredKeys = [
   'name',
-  'isJewish',
-  'situation',
-  'situationCode',
-  'situationPrompt',
-  'goals',
-  'goalsCodes',
-  'goalsPrompt',
-  'seriousness',
-  'seriousnessCode',
-  'seriousnessPrompt',
-  'instagram',
-  'investment',
-  'investmentCode',
-  'investmentPrompt',
-  'occupation',
-  'age',
   'email',
   'phone',
+  'instagram',
+  'isJewish',
+  'occupation',
+  'situation',
+  'goal',
+  'readiness',
   'leadStatus',
   'dqReason',
   'submittedAt',
   'source',
+  'answers',
 ] as const;
 
 const checks: Array<[string, boolean]> = [
-  ['qualified investment A', qualified.leadStatus === 'qualified' && qualified.dqReason === null],
+  ['qualified readiness A', qualified.leadStatus === 'qualified' && qualified.dqReason === null],
   [
-    'interested investment B',
+    'interested readiness B',
     interested.leadStatus === 'qualified' && interested.dqReason === null,
   ],
   [
-    'dq investment C',
-    dqInvest.leadStatus === 'disqualified' &&
-      dqInvest.dqReason === 'not_willing_for_help' &&
-      dqInvest.dqReasonLegacy === 'not_ready_to_invest',
+    'dq readiness C',
+    dqReadiness.leadStatus === 'disqualified' &&
+      dqReadiness.dqReason === 'gathering_information',
   ],
   [
-    'dq seriousness D',
-    dqSerious.leadStatus === 'disqualified' && dqSerious.dqReason === 'waste_time',
+    'nested choice answers mapped',
+    qualified.goal.code === 'A' &&
+      qualified.goal.label.includes('Lose 25+') &&
+      qualified.readiness.label.includes('ready to move'),
   ],
   [
-    'investment maps to new labels',
-    qualified.investment.includes('ready to get the help') &&
-      interested.investment.includes('learn more about coaching'),
+    'flat answers mirror nested fields',
+    qualified.answers.goalCode === qualified.goal.code &&
+      qualified.answers.goal === qualified.goal.label &&
+      qualified.answers.readinessCode === qualified.readiness.code,
+  ],
+  [
+    'age removed from payload',
+    !('age' in qualified) && !('age' in qualified.answers),
+  ],
+  [
+    'old seriousness/investment fields removed',
+    !('seriousness' in qualified) && !('investment' in qualified),
   ],
   [
     'question prompts included',
-    qualified.investmentPrompt.includes('results were guaranteed') &&
-      qualified.situationPrompt.includes('best describes your situation'),
+    qualified.readiness.prompt.includes('dream body') &&
+      qualified.situation.prompt.includes('best describes your situation'),
   ],
   ['required webhook keys present', requiredKeys.every((key) => key in qualified)],
 ];

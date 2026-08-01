@@ -18,20 +18,18 @@ import './ApplicationForm.css';
 
 const AUTO_ADVANCE_DELAY_MS = 500;
 
-function getStepValue(data: ApplicationFormData, step: ApplicationStep): string | string[] {
-  if (step.id === 'contact') {
-    return [data.email, data.phone];
-  }
-  return data[step.id as keyof ApplicationFormData] as string | string[];
-}
+type ContactFieldKey = 'name' | 'email' | 'phone' | 'instagram';
 
-function getContactFieldErrors(data: ApplicationFormData): {
-  email?: string;
-  phone?: string;
-} {
-  const errors: { email?: string; phone?: string } = {};
+function getContactFieldErrors(data: ApplicationFormData): Partial<Record<ContactFieldKey, string>> {
+  const errors: Partial<Record<ContactFieldKey, string>> = {};
+  const name = data.name.trim();
   const email = data.email.trim();
   const phone = data.phone.trim();
+  const instagram = data.instagram.trim();
+
+  if (!name) {
+    errors.name = 'Please enter your full name.';
+  }
 
   if (!email) {
     errors.email = 'Please enter your email address.';
@@ -43,6 +41,10 @@ function getContactFieldErrors(data: ApplicationFormData): {
     errors.phone = 'Please enter your phone number.';
   } else if (!isValidPhone(phone)) {
     errors.phone = 'Please enter a valid phone number.';
+  }
+
+  if (!instagram) {
+    errors.instagram = 'Please enter your Instagram @.';
   }
 
   return errors;
@@ -57,8 +59,7 @@ function getStepValidationError(
   }
 
   switch (step.type) {
-    case 'text':
-    case 'textarea': {
+    case 'text': {
       const value = data[step.id as keyof ApplicationFormData] as string;
       if (value.trim().length === 0) {
         return 'Please complete this question to continue.';
@@ -77,20 +78,9 @@ function getStepValidationError(
       }
       return null;
     }
-    case 'multi':
-      if (data.goals.length !== (step.maxSelections ?? 1)) {
-        return `Choose exactly ${step.maxSelections} options to continue.`;
-      }
-      return null;
-    case 'contact': {
+    case 'contactDetails': {
       const fieldErrors = getContactFieldErrors(data);
-      return fieldErrors.email ?? fieldErrors.phone ?? null;
-    }
-    case 'occupationAge': {
-      if (data.occupation.trim().length === 0 || data.age.trim().length === 0) {
-        return 'Please enter both your occupation and age to continue.';
-      }
-      return null;
+      return fieldErrors.name ?? fieldErrors.email ?? fieldErrors.phone ?? fieldErrors.instagram ?? null;
     }
     default:
       return null;
@@ -102,7 +92,7 @@ function isStepValid(data: ApplicationFormData, step: ApplicationStep): boolean 
 }
 
 function isChoiceStep(step: ApplicationStep): boolean {
-  return step.type === 'yesno' || step.type === 'single' || step.type === 'multi';
+  return step.type === 'yesno' || step.type === 'single';
 }
 
 function OptionCheckmark() {
@@ -128,7 +118,7 @@ export function ApplicationForm() {
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back'>('forward');
   const [data, setData] = useState<ApplicationFormData>(emptyApplicationFormData);
   const [error, setError] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; phone?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<ContactFieldKey, string>>>({});
   const [confirmedOption, setConfirmedOption] = useState<string | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -159,7 +149,7 @@ export function ApplicationForm() {
   const updateField = <K extends keyof ApplicationFormData>(key: K, value: ApplicationFormData[K]) => {
     setData((current) => ({ ...current, [key]: value }));
     setError('');
-    if (key === 'email' || key === 'phone') {
+    if (key === 'name' || key === 'email' || key === 'phone' || key === 'instagram') {
       setFieldErrors((current) => ({ ...current, [key]: undefined }));
     }
   };
@@ -247,39 +237,10 @@ export function ApplicationForm() {
     scheduleAutoAdvance(optionId, nextData);
   };
 
-  const handleGoalToggle = (goalId: string) => {
-    if (isAdvancing) {
-      return;
-    }
-
-    const selected = data.goals.includes(goalId);
-    if (selected) {
-      setData((current) => ({
-        ...current,
-        goals: current.goals.filter((id) => id !== goalId),
-      }));
-      setError('');
-      return;
-    }
-
-    if (data.goals.length >= (step.maxSelections ?? 3)) {
-      return;
-    }
-
-    const nextGoals = [...data.goals, goalId];
-    const nextData = { ...data, goals: nextGoals };
-    setData(nextData);
-    setError('');
-
-    if (nextGoals.length === (step.maxSelections ?? 3)) {
-      scheduleAutoAdvance(goalId, nextData);
-    }
-  };
-
   const handleNext = () => {
-    if (step.type === 'contact') {
+    if (step.type === 'contactDetails') {
       const contactErrors = getContactFieldErrors(data);
-      if (contactErrors.email || contactErrors.phone) {
+      if (Object.keys(contactErrors).length > 0) {
         setFieldErrors(contactErrors);
         return;
       }
@@ -323,6 +284,37 @@ export function ApplicationForm() {
     return classes.join(' ');
   };
 
+  const renderContactField = (
+    key: ContactFieldKey,
+    inputProps: {
+      id: string;
+      type: string;
+      placeholder: string;
+    }
+  ) => (
+    <div className="application-form-contact-field">
+      <input
+        id={inputProps.id}
+        className={`application-form-input${
+          fieldErrors[key] ? ' application-form-input--error' : ''
+        }`}
+        type={inputProps.type}
+        value={data[key]}
+        placeholder={inputProps.placeholder}
+        required
+        aria-required="true"
+        aria-invalid={fieldErrors[key] ? true : undefined}
+        aria-describedby={fieldErrors[key] ? `${inputProps.id}-error` : undefined}
+        onChange={(event) => updateField(key, event.target.value)}
+      />
+      {fieldErrors[key] && (
+        <p id={`${inputProps.id}-error`} className="application-form-field-error" role="alert">
+          {fieldErrors[key]}
+        </p>
+      )}
+    </div>
+  );
+
   const renderField = () => {
     switch (step.type) {
       case 'text':
@@ -337,32 +329,6 @@ export function ApplicationForm() {
               updateField(step.id as keyof ApplicationFormData, event.target.value)
             }
           />
-        );
-      case 'occupationAge':
-        return (
-          <div className="application-form-contact-fields">
-            <div className="application-form-contact-field">
-              <input
-                id="application-occupation"
-                className="application-form-input"
-                type="text"
-                value={data.occupation}
-                placeholder="Your occupation"
-                onChange={(event) => updateField('occupation', event.target.value)}
-              />
-            </div>
-            <div className="application-form-contact-field">
-              <input
-                id="application-age"
-                className="application-form-input"
-                type="text"
-                inputMode="numeric"
-                value={data.age}
-                placeholder="Your age"
-                onChange={(event) => updateField('age', event.target.value)}
-              />
-            </div>
-          </div>
         );
       case 'yesno':
         return (
@@ -391,7 +357,7 @@ export function ApplicationForm() {
         return (
           <div className="application-form-options">
             {step.options?.map((option) => {
-              const selected = getStepValue(data, step) === option.id;
+              const selected = data[step.id as keyof ApplicationFormData] === option.id;
               const confirmed = confirmedOption === option.id;
               return (
                 <button
@@ -410,93 +376,29 @@ export function ApplicationForm() {
             })}
           </div>
         );
-      case 'multi':
-        return (
-          <>
-            <p className="application-form-hint">
-              Choose {step.maxSelections} ({data.goals.length}/{step.maxSelections} selected)
-            </p>
-            <div className="application-form-options" role="group" aria-label={step.prompt}>
-              {step.options?.map((option) => {
-                const selected = data.goals.includes(option.id);
-                const confirmed = confirmedOption === option.id;
-                const maxed = !selected && data.goals.length >= (step.maxSelections ?? 3);
-                return (
-                  <button
-                    key={option.id}
-                    type="button"
-                    aria-pressed={selected}
-                    className={`${getOptionClassName(option.id, selected)}${
-                      maxed ? ' application-form-option--disabled' : ''
-                    }`}
-                    onClick={() => handleGoalToggle(option.id)}
-                    disabled={maxed || (isAdvancing && !confirmed)}
-                  >
-                    {confirmed ? (
-                      <OptionCheckmark />
-                    ) : (
-                      <span className="application-form-option-key">{option.id}</span>
-                    )}
-                    <span className="application-form-option-label">{option.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        );
-      case 'contact':
+      case 'contactDetails':
         return (
           <div className="application-form-contact-fields">
-            <div className="application-form-contact-field">
-              <input
-                id="application-email"
-                className={`application-form-input${
-                  fieldErrors.email ? ' application-form-input--error' : ''
-                }`}
-                type="email"
-                value={data.email}
-                placeholder="Best email"
-                required
-                aria-required="true"
-                aria-invalid={fieldErrors.email ? true : undefined}
-                aria-describedby={fieldErrors.email ? 'application-email-error' : undefined}
-                onChange={(event) => updateField('email', event.target.value)}
-              />
-              {fieldErrors.email && (
-                <p
-                  id="application-email-error"
-                  className="application-form-field-error"
-                  role="alert"
-                >
-                  {fieldErrors.email}
-                </p>
-              )}
-            </div>
-            <div className="application-form-contact-field">
-              <input
-                id="application-phone"
-                className={`application-form-input${
-                  fieldErrors.phone ? ' application-form-input--error' : ''
-                }`}
-                type="tel"
-                value={data.phone}
-                placeholder="Best phone number"
-                required
-                aria-required="true"
-                aria-invalid={fieldErrors.phone ? true : undefined}
-                aria-describedby={fieldErrors.phone ? 'application-phone-error' : undefined}
-                onChange={(event) => updateField('phone', event.target.value)}
-              />
-              {fieldErrors.phone && (
-                <p
-                  id="application-phone-error"
-                  className="application-form-field-error"
-                  role="alert"
-                >
-                  {fieldErrors.phone}
-                </p>
-              )}
-            </div>
+            {renderContactField('name', {
+              id: 'application-name',
+              type: 'text',
+              placeholder: 'Full name',
+            })}
+            {renderContactField('email', {
+              id: 'application-email',
+              type: 'email',
+              placeholder: 'Best email',
+            })}
+            {renderContactField('phone', {
+              id: 'application-phone',
+              type: 'tel',
+              placeholder: 'Best phone number',
+            })}
+            {renderContactField('instagram', {
+              id: 'application-instagram',
+              type: 'text',
+              placeholder: '@instagramhandle',
+            })}
           </div>
         );
       default:

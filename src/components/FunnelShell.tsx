@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { FunnelGender } from '../data/copy';
-import { funnelCopy, testimonialSectionTitle, getVslSectionLabel } from '../data/copy';
+import { funnelCopy, testimonialSectionTitle, getFunnelSubhead } from '../data/copy';
 import { PageHero } from './PageHero';
 import { VSLPlayer } from './VSLPlayer';
 import { ApplicationForm } from './ApplicationForm';
@@ -59,10 +59,10 @@ export function FunnelShell({
       <PageHero
         headline={funnelCopy.headline}
         headlineHighlight={funnelCopy.headlineHighlight}
-        subhead={funnelCopy.subhead}
+        subhead={getFunnelSubhead(icpGender)}
       />
       <div className="container">
-        <VSLPlayer gender={icpGender} sectionLabel={getVslSectionLabel(icpGender)} />
+        <VSLPlayer gender={icpGender} />
       </div>
       <div className="container">
         <ApplicationForm />

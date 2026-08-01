@@ -5,7 +5,43 @@ import {
   type ApplicationFormData,
 } from '../data/applicationForm';
 
-const SINGLE_CHOICE_STEP_IDS = ['situation', 'seriousness', 'investment'] as const;
+const CHOICE_STEP_IDS = ['situation', 'goal', 'readiness'] as const;
+
+export interface ApplicationChoiceAnswer {
+  prompt: string;
+  code: string;
+  label: string;
+}
+
+export interface ApplicationWebhookPayload {
+  name: string;
+  email: string;
+  phone: string;
+  instagram: string;
+  isJewish: string;
+  occupation: string;
+  situation: ApplicationChoiceAnswer;
+  goal: ApplicationChoiceAnswer;
+  readiness: ApplicationChoiceAnswer;
+  leadStatus: 'qualified' | 'disqualified';
+  dqReason: string | null;
+  submittedAt: string;
+  source: string;
+  /** Flat Zapier-friendly fields (prompt/code/label per question). */
+  answers: {
+    isJewish: string;
+    situationPrompt: string;
+    situationCode: string;
+    situation: string;
+    goalPrompt: string;
+    goalCode: string;
+    goal: string;
+    readinessPrompt: string;
+    readinessCode: string;
+    readiness: string;
+    occupation: string;
+  };
+}
 
 function getStep(stepId: string) {
   return applicationFormSteps.find((item) => item.id === stepId);
@@ -20,70 +56,54 @@ function getStepPrompt(stepId: string): string {
   return getStep(stepId)?.prompt ?? '';
 }
 
-function formatSingleChoiceFields(data: ApplicationFormData) {
-  return Object.fromEntries(
-    SINGLE_CHOICE_STEP_IDS.flatMap((stepId) => {
-      const code = data[stepId];
-      return [
-        [stepId, getOptionLabel(stepId, code)],
-        [`${stepId}Code`, code],
-        [`${stepId}Prompt`, getStepPrompt(stepId)],
-      ];
-    }),
-  ) as Record<
-    `${(typeof SINGLE_CHOICE_STEP_IDS)[number]}` | `${(typeof SINGLE_CHOICE_STEP_IDS)[number]}Code` | `${(typeof SINGLE_CHOICE_STEP_IDS)[number]}Prompt`,
-    string
-  >;
+function formatChoiceAnswer(
+  stepId: (typeof CHOICE_STEP_IDS)[number],
+  code: string
+): ApplicationChoiceAnswer {
+  return {
+    prompt: getStepPrompt(stepId),
+    code,
+    label: getOptionLabel(stepId, code),
+  };
 }
 
-export interface ApplicationWebhookPayload {
-  name: string;
-  isJewish: string;
-  situation: string;
-  situationCode: string;
-  situationPrompt: string;
-  goals: string;
-  goalsCodes: string;
-  goalsPrompt: string;
-  seriousness: string;
-  seriousnessCode: string;
-  seriousnessPrompt: string;
-  instagram: string;
-  investment: string;
-  investmentCode: string;
-  investmentPrompt: string;
-  occupation: string;
-  age: string;
-  email: string;
-  phone: string;
-  leadStatus: 'qualified' | 'disqualified';
-  dqReason: string | null;
-  dqReasonLegacy?: string;
-  submittedAt: string;
-  source: string;
-}
-
+/** Formats quiz answers for Zapier + GHL from the application form state. */
 export function formatApplicationPayload(data: ApplicationFormData): ApplicationWebhookPayload {
   const disqualified = isDisqualifiedLead(data);
   const dqReason = getDisqualificationReason(data);
 
+  const situation = formatChoiceAnswer('situation', data.situation);
+  const goal = formatChoiceAnswer('goal', data.goal);
+  const readiness = formatChoiceAnswer('readiness', data.readiness);
+  const isJewish = data.isJewish === 'yes' ? 'Yes' : 'No';
+  const occupation = data.occupation.trim();
+
   return {
     name: data.name.trim(),
-    isJewish: data.isJewish === 'yes' ? 'Yes' : 'No',
-    ...formatSingleChoiceFields(data),
-    goals: data.goals.map((goalId) => getOptionLabel('goals', goalId)).join(' | '),
-    goalsCodes: data.goals.join(', '),
-    goalsPrompt: getStepPrompt('goals'),
-    instagram: data.instagram.trim(),
-    occupation: data.occupation.trim(),
-    age: data.age.trim(),
     email: data.email.trim(),
     phone: data.phone.trim(),
+    instagram: data.instagram.trim(),
+    isJewish,
+    occupation,
+    situation,
+    goal,
+    readiness,
     leadStatus: disqualified ? 'disqualified' : 'qualified',
     dqReason,
-    // Legacy Zapier filters may still reference the old investment DQ reason code.
-    ...(dqReason === 'not_willing_for_help' ? { dqReasonLegacy: 'not_ready_to_invest' } : {}),
     submittedAt: new Date().toISOString(),
     source: 'sneakit-application-form',
+    answers: {
+      isJewish,
+      situationPrompt: situation.prompt,
+      situationCode: situation.code,
+      situation: situation.label,
+      goalPrompt: goal.prompt,
+      goalCode: goal.code,
+      goal: goal.label,
+      readinessPrompt: readiness.prompt,
+      readinessCode: readiness.code,
+      readiness: readiness.label,
+      occupation,
+    },
   };
 }
