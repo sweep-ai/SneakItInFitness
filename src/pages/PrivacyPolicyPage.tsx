@@ -90,6 +90,18 @@ export function PrivacyPolicyPage() {
                 )
               </li>
               <li>
+                <strong>Microsoft Clarity</strong> for session recordings, heatmaps, and funnel
+                analytics (
+                <a
+                  href="https://privacy.microsoft.com/privacystatement"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Microsoft Privacy Statement
+                </a>
+                )
+              </li>
+              <li>
                 <strong>Vercel</strong> (or similar hosting) to deliver the website securely
               </li>
             </ul>
