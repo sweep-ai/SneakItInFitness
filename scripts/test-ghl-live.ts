@@ -16,6 +16,7 @@ async function main() {
     readiness: 'A',
     instagram: '@sneakit_api_test',
     occupation: 'API Integration Test',
+    age: '30',
     email: `sneakit-api-test-${stamp}@example.com`,
     phone: `+1555${String(stamp).slice(-7)}`,
   });

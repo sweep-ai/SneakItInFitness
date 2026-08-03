@@ -20,6 +20,7 @@ export interface ApplicationWebhookPayload {
   instagram: string;
   isJewish: string;
   occupation: string;
+  age: string;
   situation: ApplicationChoiceAnswer;
   goal: ApplicationChoiceAnswer;
   readiness: ApplicationChoiceAnswer;
@@ -40,6 +41,7 @@ export interface ApplicationWebhookPayload {
     readinessCode: string;
     readiness: string;
     occupation: string;
+    age: string;
   };
 }
 
@@ -77,6 +79,7 @@ export function formatApplicationPayload(data: ApplicationFormData): Application
   const readiness = formatChoiceAnswer('readiness', data.readiness);
   const isJewish = data.isJewish === 'yes' ? 'Yes' : 'No';
   const occupation = data.occupation.trim();
+  const age = data.age.trim();
 
   return {
     name: data.name.trim(),
@@ -85,6 +88,7 @@ export function formatApplicationPayload(data: ApplicationFormData): Application
     instagram: data.instagram.trim(),
     isJewish,
     occupation,
+    age,
     situation,
     goal,
     readiness,
@@ -104,6 +108,7 @@ export function formatApplicationPayload(data: ApplicationFormData): Application
       readinessCode: readiness.code,
       readiness: readiness.label,
       occupation,
+      age,
     },
   };
 }

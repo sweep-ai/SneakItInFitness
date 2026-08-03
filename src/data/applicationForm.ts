@@ -7,7 +7,7 @@ export interface ApplicationStep {
   id: string;
   prompt: string;
   required?: boolean;
-  type: 'text' | 'yesno' | 'single' | 'contactDetails';
+  type: 'text' | 'yesno' | 'single' | 'contactDetails' | 'occupationAge';
   placeholder?: string;
   options?: ApplicationOption[];
 }
@@ -57,10 +57,9 @@ export const applicationFormSteps: ApplicationStep[] = [
     ],
   },
   {
-    id: 'occupation',
-    prompt: 'What is your occupation?',
-    type: 'text',
-    placeholder: 'Your occupation',
+    id: 'occupationAge',
+    prompt: 'What is your occupation and age?',
+    type: 'occupationAge',
     required: true,
   },
   {
@@ -102,6 +101,7 @@ export interface ApplicationFormData {
   goal: string;
   readiness: string;
   occupation: string;
+  age: string;
 }
 
 export const emptyApplicationFormData: ApplicationFormData = {
@@ -114,4 +114,5 @@ export const emptyApplicationFormData: ApplicationFormData = {
   goal: '',
   readiness: '',
   occupation: '',
+  age: '',
 };

@@ -11,6 +11,7 @@ export interface ApplicationWebhookPayload {
   instagram: string;
   isJewish: string;
   occupation: string;
+  age: string;
   situation: ApplicationChoiceAnswer;
   goal: ApplicationChoiceAnswer;
   readiness: ApplicationChoiceAnswer;
@@ -30,6 +31,7 @@ export interface ApplicationWebhookPayload {
     readinessCode: string;
     readiness: string;
     occupation: string;
+    age: string;
   };
 }
 
@@ -118,6 +120,7 @@ export function buildGhlContactPayload(
     `Situation ${payload.situation.code}`,
     `Goal ${payload.goal.code}`,
     `Readiness ${payload.readiness.code}`,
+    ...(payload.age.trim() ? [`Age ${payload.age.trim()}`] : []),
   ];
 
   return {

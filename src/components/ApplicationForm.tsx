@@ -82,6 +82,12 @@ function getStepValidationError(
       const fieldErrors = getContactFieldErrors(data);
       return fieldErrors.name ?? fieldErrors.email ?? fieldErrors.phone ?? fieldErrors.instagram ?? null;
     }
+    case 'occupationAge': {
+      if (data.occupation.trim().length === 0 || data.age.trim().length === 0) {
+        return 'Please enter both your occupation and age to continue.';
+      }
+      return null;
+    }
     default:
       return null;
   }
@@ -329,6 +335,32 @@ export function ApplicationForm() {
               updateField(step.id as keyof ApplicationFormData, event.target.value)
             }
           />
+        );
+      case 'occupationAge':
+        return (
+          <div className="application-form-contact-fields">
+            <div className="application-form-contact-field">
+              <input
+                id="application-occupation"
+                className="application-form-input"
+                type="text"
+                value={data.occupation}
+                placeholder="Your occupation"
+                onChange={(event) => updateField('occupation', event.target.value)}
+              />
+            </div>
+            <div className="application-form-contact-field">
+              <input
+                id="application-age"
+                className="application-form-input"
+                type="text"
+                inputMode="numeric"
+                value={data.age}
+                placeholder="Your age"
+                onChange={(event) => updateField('age', event.target.value)}
+              />
+            </div>
+          </div>
         );
       case 'yesno':
         return (

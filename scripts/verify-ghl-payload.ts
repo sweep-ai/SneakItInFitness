@@ -11,6 +11,7 @@ const base = {
   readiness: 'B',
   instagram: '@jane',
   occupation: 'Engineer',
+  age: '34',
   email: 'jane@example.com',
   phone: '(555) 123-4567',
 };
@@ -33,6 +34,7 @@ const checks: Array<[string, boolean]> = [
   ['situation tag applied', tags.includes('Situation B')],
   ['goal tag applied', tags.includes('Goal A')],
   ['readiness tag applied', tags.includes('Readiness B')],
+  ['age tag applied', tags.includes('Age 34')],
   ['no custom fields', !('customFields' in contact)],
 ];
 

@@ -10,6 +10,7 @@ const base = {
   readiness: 'B',
   instagram: '@jane',
   occupation: 'Engineer',
+  age: '34',
   email: 'jane@example.com',
   phone: '+1 555 123 4567',
 };
@@ -25,6 +26,7 @@ const requiredKeys = [
   'instagram',
   'isJewish',
   'occupation',
+  'age',
   'situation',
   'goal',
   'readiness',
@@ -58,10 +60,7 @@ const checks: Array<[string, boolean]> = [
       qualified.answers.goal === qualified.goal.label &&
       qualified.answers.readinessCode === qualified.readiness.code,
   ],
-  [
-    'age removed from payload',
-    !('age' in qualified) && !('age' in qualified.answers),
-  ],
+  ['age included in payload', qualified.age === '34' && qualified.answers.age === '34'],
   [
     'old seriousness/investment fields removed',
     !('seriousness' in qualified) && !('investment' in qualified),
