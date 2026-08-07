@@ -4,8 +4,7 @@ import { trackSchedule } from '../lib/metaPixel';
 import { beginScheduleTracking, getStoredApplicantUserData } from '../lib/conversionTracking';
 import './CalendlyEmbed.css';
 
-const CALENDLY_URL =
-  'https://calendly.com/swolekol/1-on-1-strategy-call-clone?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=d70000';
+const CALENDLY_URL = 'https://calendly.com/d/dv5r-hq7-g2w/1-on-1-fitness-strategy-call';
 
 const EMBED_SCRIPT_ID = 'calendly-widget-script';
 const EMBED_SCRIPT_SRC = 'https://assets.calendly.com/assets/external/widget.js';
