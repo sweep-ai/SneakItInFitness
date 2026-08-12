@@ -1,13 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { trackSchedule } from '../lib/metaPixel';
 import { beginScheduleTracking, getStoredApplicantUserData } from '../lib/conversionTracking';
+import {
+  CALENDLY_EMBED_SCRIPT_ID,
+  CALENDLY_EMBED_SCRIPT_SRC,
+  CALENDLY_EVENT_URL,
+  getCalendlyEmbedUrl,
+  getCalendlyPrefillFromStorage,
+  warmCalendlyAssets,
+} from '../lib/calendly';
 import './CalendlyEmbed.css';
 
-const CALENDLY_URL = 'https://calendly.com/d/dv5r-hq7-g2w/1-on-1-fitness-strategy-call';
-
-const EMBED_SCRIPT_ID = 'calendly-widget-script';
-const EMBED_SCRIPT_SRC = 'https://assets.calendly.com/assets/external/widget.js';
+/** If Calendly hasn't painted by then, surface an escape hatch. */
+const SLOW_LOAD_FALLBACK_MS = 7000;
 
 declare global {
   interface Window {
@@ -15,6 +21,12 @@ declare global {
       initInlineWidget: (options: {
         url: string;
         parentElement: HTMLElement;
+        prefill?: {
+          name?: string;
+          email?: string;
+          firstName?: string;
+          lastName?: string;
+        };
       }) => void;
     };
   }
@@ -32,22 +44,36 @@ function isCalendlyMessage(event: MessageEvent): boolean {
 }
 
 function loadCalendlyScript(onReady: () => void) {
-  if (window.Calendly) {
+  let settled = false;
+  const ready = () => {
+    if (settled || !window.Calendly) return;
+    settled = true;
     onReady();
+  };
+
+  if (window.Calendly) {
+    ready();
     return;
   }
 
-  const existing = document.getElementById(EMBED_SCRIPT_ID) as HTMLScriptElement | null;
+  const existing = document.getElementById(CALENDLY_EMBED_SCRIPT_ID) as HTMLScriptElement | null;
   if (existing) {
-    existing.addEventListener('load', onReady, { once: true });
+    existing.addEventListener('load', ready, { once: true });
+    // Warm prefetch may have finished before this listener was attached.
+    if (existing.dataset.loaded === '1' || window.Calendly) {
+      ready();
+    }
     return;
   }
 
   const script = document.createElement('script');
-  script.id = EMBED_SCRIPT_ID;
-  script.src = EMBED_SCRIPT_SRC;
+  script.id = CALENDLY_EMBED_SCRIPT_ID;
+  script.src = CALENDLY_EMBED_SCRIPT_SRC;
   script.async = true;
-  script.onload = onReady;
+  script.onload = () => {
+    script.dataset.loaded = '1';
+    ready();
+  };
   document.body.appendChild(script);
 }
 
@@ -55,12 +81,33 @@ export function CalendlyEmbed() {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetInitializedRef = useRef(false);
   const navigate = useNavigate();
+  const [isReady, setIsReady] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
+    warmCalendlyAssets();
+
+    const slowTimer = window.setTimeout(() => {
+      setShowFallback(true);
+    }, SLOW_LOAD_FALLBACK_MS);
+
     const handleCalendlyMessage = (event: MessageEvent) => {
       if (!isCalendlyMessage(event)) return;
 
-      if (event.data.event === 'calendly.event_scheduled') {
+      const calendlyEvent = (event.data as { event: string }).event;
+
+      // First paint of the event type UI — hide skeleton.
+      if (
+        calendlyEvent === 'calendly.event_type_viewed' ||
+        calendlyEvent === 'calendly.date_and_time_selected' ||
+        calendlyEvent === 'calendly.event_scheduled'
+      ) {
+        setIsReady(true);
+        setShowFallback(false);
+        window.clearTimeout(slowTimer);
+      }
+
+      if (calendlyEvent === 'calendly.event_scheduled') {
         // Same event_id is reused on the /post-booking landing so the two fires dedupe.
         const scheduleEventId = beginScheduleTracking();
         trackSchedule(getStoredApplicantUserData(), scheduleEventId);
@@ -77,8 +124,9 @@ export function CalendlyEmbed() {
       widgetInitializedRef.current = true;
       container.innerHTML = '';
       window.Calendly.initInlineWidget({
-        url: CALENDLY_URL,
+        url: getCalendlyEmbedUrl(),
         parentElement: container,
+        prefill: getCalendlyPrefillFromStorage(),
       });
     };
 
@@ -86,6 +134,7 @@ export function CalendlyEmbed() {
 
     return () => {
       window.removeEventListener('message', handleCalendlyMessage);
+      window.clearTimeout(slowTimer);
       widgetInitializedRef.current = false;
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
@@ -94,11 +143,29 @@ export function CalendlyEmbed() {
   }, [navigate]);
 
   return (
-    <div
-      ref={containerRef}
-      className="calendly-embed"
-      data-url={CALENDLY_URL}
-      aria-label="Schedule your strategy call"
-    />
+    <div className="calendly-embed-shell">
+      <div
+        className={`calendly-embed${isReady ? ' calendly-embed--ready' : ''}`}
+        aria-busy={!isReady}
+        aria-label="Schedule your strategy call"
+      >
+        {!isReady && (
+          <div className="calendly-embed-skeleton" aria-hidden="true">
+            <div className="calendly-embed-skeleton-pulse" />
+            <p className="calendly-embed-skeleton-label">Loading available times…</p>
+          </div>
+        )}
+        <div ref={containerRef} className="calendly-embed-frame" data-url={getCalendlyEmbedUrl()} />
+      </div>
+
+      {showFallback && !isReady && (
+        <p className="calendly-embed-fallback">
+          Taking a while?{' '}
+          <a href={CALENDLY_EVENT_URL} target="_blank" rel="noopener noreferrer">
+            Open the calendar in a new tab
+          </a>
+        </p>
+      )}
+    </div>
   );
 }

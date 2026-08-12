@@ -13,8 +13,12 @@ import { socialLinks } from '../data/social';
 import { submitApplication } from '../lib/submitApplication';
 import { trackLead } from '../lib/metaPixel';
 import { beginLeadTracking } from '../lib/conversionTracking';
+import { warmCalendlyAssets } from '../lib/calendly';
 import { isValidEmail, isValidPhone } from '../lib/validators';
 import './ApplicationForm.css';
+
+/** Start warming Calendly once the lead is clearly in the quiz (reduces /booking wait). */
+const CALENDLY_WARM_STEP_INDEX = 2;
 
 const AUTO_ADVANCE_DELAY_MS = 500;
 
@@ -145,6 +149,12 @@ export function ApplicationForm() {
     };
   }, []);
 
+  useEffect(() => {
+    if (stepIndex >= CALENDLY_WARM_STEP_INDEX) {
+      warmCalendlyAssets();
+    }
+  }, [stepIndex]);
+
   const clearAdvanceTimeout = () => {
     if (advanceTimeoutRef.current) {
       window.clearTimeout(advanceTimeoutRef.current);
@@ -163,6 +173,8 @@ export function ApplicationForm() {
   const completeApplication = async (formData: ApplicationFormData) => {
     setIsSubmitting(true);
     setError('');
+    // Warm during the submit network wait so /booking can init instantly.
+    warmCalendlyAssets();
 
     try {
       await submitApplication(formData);
