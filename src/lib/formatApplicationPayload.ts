@@ -4,6 +4,7 @@ import {
   getDisqualificationReason,
   type ApplicationFormData,
 } from '../data/applicationForm';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 const CHOICE_STEP_IDS = ['situation', 'goal', 'readiness'] as const;
 
@@ -58,6 +59,19 @@ function getStepPrompt(stepId: string): string {
   return getStep(stepId)?.prompt ?? '';
 }
 
+/** Always send Zapier/CRM a clean E.164 phone (e.g. +13105615995). */
+function formatPhoneForPayload(phone: string): string {
+  const trimmed = phone.trim();
+  if (!trimmed) return trimmed;
+
+  const parsed = parsePhoneNumberFromString(trimmed, 'US');
+  if (parsed?.number) {
+    return parsed.number;
+  }
+
+  return trimmed;
+}
+
 function formatChoiceAnswer(
   stepId: (typeof CHOICE_STEP_IDS)[number],
   code: string
@@ -84,7 +98,7 @@ export function formatApplicationPayload(data: ApplicationFormData): Application
   return {
     name: data.name.trim(),
     email: data.email.trim(),
-    phone: data.phone.trim(),
+    phone: formatPhoneForPayload(data.phone),
     instagram: data.instagram.trim(),
     isJewish,
     occupation,

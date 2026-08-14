@@ -18,7 +18,7 @@ async function main() {
     occupation: 'API Integration Test',
     age: '30',
     email: `sneakit-api-test-${stamp}@example.com`,
-    phone: `+1555${String(stamp).slice(-7)}`,
+    phone: `+1310561${String(stamp).slice(-4)}`,
   });
 
   console.log('Submitting test contact to GHL...');

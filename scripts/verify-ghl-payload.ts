@@ -13,7 +13,7 @@ const base = {
   occupation: 'Engineer',
   age: '34',
   email: 'jane@example.com',
-  phone: '(555) 123-4567',
+  phone: '310-561-5995',
 };
 
 const payload = formatApplicationPayload(base);
@@ -24,7 +24,7 @@ const checks: Array<[string, boolean]> = [
   ['first name split', contact.firstName === 'Jane'],
   ['last name split', contact.lastName === 'Doe'],
   ['email preserved', contact.email === 'jane@example.com'],
-  ['phone normalized to E.164', formatPhoneForGhl(base.phone) === '+15551234567'],
+  ['phone normalized to E.164', formatPhoneForGhl(base.phone) === '+13105615995'],
   ['occupation mapped to company', contact.companyName === 'Engineer'],
   ['instagram mapped to website', contact.website === 'https://instagram.com/jane'],
   ['location id included', contact.locationId === 'test-location-id'],

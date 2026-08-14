@@ -13,8 +13,10 @@
     "test:ghl": "tsx scripts/test-ghl-live.ts"
   },
   "dependencies": {
+    "libphonenumber-js": "^1.13.11",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-phone-number-input": "^3.4.17",
     "react-router-dom": "^7.15.1"
   },
   "devDependencies": {

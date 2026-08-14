@@ -1,0 +1,51 @@
+.application-form .PhoneInput {
+  --PhoneInput-color--focus: var(--color-accent);
+  --PhoneInputCountrySelectArrow-color: rgba(255, 255, 255, 0.75);
+  --PhoneInputCountrySelectArrow-color--focus: var(--color-accent);
+  --PhoneInputCountryFlag-borderColor: rgba(255, 255, 255, 0.25);
+  --PhoneInputCountryFlag-borderColor--focus: var(--color-accent);
+  --PhoneInputCountryFlag-height: 1.15em;
+  gap: 0.5rem;
+}
+
+.application-phone-input {
+  width: 100%;
+  padding: 0.35rem 0.5rem 0.35rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.application-phone-input:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(215, 0, 0, 0.2);
+}
+
+.application-phone-input--error,
+.application-phone-input--error:focus-within {
+  border-color: var(--color-accent);
+}
+
+.application-form .PhoneInputCountry {
+  margin-right: 0;
+  padding-right: 0.5rem;
+  align-self: stretch;
+  border-right: 1px solid var(--color-border);
+}
+
+.application-form .PhoneInputCountrySelect {
+  color: var(--color-fg);
+}
+
+.application-form .PhoneInputInput.application-form-input {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0.55rem 0.5rem 0.55rem 0.25rem;
+}
+
+.application-form .PhoneInputInput.application-form-input:focus {
+  box-shadow: none;
+  border: 0;
+}

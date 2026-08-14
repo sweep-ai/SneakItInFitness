@@ -1,5 +1,6 @@
 import { formatApplicationPayload } from '../src/lib/formatApplicationPayload';
 import { emptyApplicationFormData } from '../src/data/applicationForm';
+import { isValidPhone } from '../src/lib/validators';
 
 const base = {
   ...emptyApplicationFormData,
@@ -12,7 +13,7 @@ const base = {
   occupation: 'Engineer',
   age: '34',
   email: 'jane@example.com',
-  phone: '+1 555 123 4567',
+  phone: '+1 310 561 5995',
 };
 
 const qualified = formatApplicationPayload({ ...base, readiness: 'A' });
@@ -71,6 +72,21 @@ const checks: Array<[string, boolean]> = [
       qualified.situation.prompt.includes('best describes your situation'),
   ],
   ['required webhook keys present', requiredKeys.every((key) => key in qualified)],
+  ['zapier phone is E.164', qualified.phone === '+13105615995'],
+  [
+    'zapier phone normalizes spaced E.164',
+    formatApplicationPayload({ ...base, phone: '+1 (310) 561-5995' }).phone === '+13105615995',
+  ],
+  [
+    'zapier phone normalizes national US digits',
+    formatApplicationPayload({ ...base, phone: '3105615995' }).phone === '+13105615995',
+  ],
+  ['phone remains top-level zapier field', typeof qualified.phone === 'string' && !('phone' in qualified.answers)],
+  ['real US number accepted', isValidPhone('+13105615995')],
+  ['country code required', !isValidPhone('3105615995')],
+  ['555 movie number rejected', !isValidPhone('+15555555555')],
+  ['555 exchange rejected', !isValidPhone('+12125551212')],
+  ['sequential fake rejected', !isValidPhone('+11234567890')],
 ];
 
 let failed = 0;

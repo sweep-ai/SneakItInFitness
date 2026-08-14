@@ -22,8 +22,10 @@ export function getCalendlyEmbedUrl(): string {
   url.searchParams.set('hide_gdpr_banner', '1');
   url.searchParams.set('hide_event_type_details', '1');
   url.searchParams.set('hide_landing_page_details', '1');
-  url.searchParams.set('background_color', '000000');
-  url.searchParams.set('text_color', 'ffffff');
+  // Calendly applies text_color to input values as well as labels. Dark text on
+  // a light widget keeps typed names/emails readable (white-on-white otherwise).
+  url.searchParams.set('background_color', 'ffffff');
+  url.searchParams.set('text_color', '000000');
   url.searchParams.set('primary_color', 'd70000');
   return url.toString();
 }

@@ -1,3 +1,5 @@
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+
 export interface ApplicationChoiceAnswer {
   prompt: string;
   code: string;
@@ -82,6 +84,11 @@ function splitName(fullName: string): { firstName: string; lastName: string } {
 export function formatPhoneForGhl(phone: string): string {
   const trimmed = phone.trim();
   if (!trimmed) return trimmed;
+
+  const parsed = parsePhoneNumberFromString(trimmed, 'US');
+  if (parsed?.number) {
+    return parsed.number;
+  }
 
   const digits = trimmed.replace(/\D/g, '');
   if (!digits) return trimmed;

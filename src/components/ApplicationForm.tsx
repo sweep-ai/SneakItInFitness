@@ -14,7 +14,8 @@ import { submitApplication } from '../lib/submitApplication';
 import { trackLead } from '../lib/metaPixel';
 import { beginLeadTracking } from '../lib/conversionTracking';
 import { warmCalendlyAssets } from '../lib/calendly';
-import { isValidEmail, isValidPhone } from '../lib/validators';
+import { getPhoneValidationError, isValidEmail } from '../lib/validators';
+import { PhoneField } from './PhoneField';
 import './ApplicationForm.css';
 
 /** Start warming Calendly once the lead is clearly in the quiz (reduces /booking wait). */
@@ -41,10 +42,9 @@ function getContactFieldErrors(data: ApplicationFormData): Partial<Record<Contac
     errors.email = 'Please enter a valid email address.';
   }
 
-  if (!phone) {
-    errors.phone = 'Please enter your phone number.';
-  } else if (!isValidPhone(phone)) {
-    errors.phone = 'Please enter a valid phone number.';
+  const phoneError = getPhoneValidationError(phone);
+  if (phoneError) {
+    errors.phone = phoneError;
   }
 
   if (!instagram) {
@@ -433,11 +433,12 @@ export function ApplicationForm() {
               type: 'email',
               placeholder: 'Best email',
             })}
-            {renderContactField('phone', {
-              id: 'application-phone',
-              type: 'tel',
-              placeholder: 'Best phone number',
-            })}
+            <PhoneField
+              id="application-phone"
+              value={data.phone}
+              error={fieldErrors.phone}
+              onChange={(value) => updateField('phone', value)}
+            />
             {renderContactField('instagram', {
               id: 'application-instagram',
               type: 'text',
