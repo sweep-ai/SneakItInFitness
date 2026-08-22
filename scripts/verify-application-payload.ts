@@ -53,7 +53,7 @@ const checks: Array<[string, boolean]> = [
     'nested choice answers mapped',
     qualified.goal.code === 'A' &&
       qualified.goal.label.includes('Lose 25+') &&
-      qualified.readiness.label.includes('ready to move'),
+      qualified.readiness.label.includes('in a position to invest'),
   ],
   [
     'flat answers mirror nested fields',
@@ -68,7 +68,7 @@ const checks: Array<[string, boolean]> = [
   ],
   [
     'question prompts included',
-    qualified.readiness.prompt.includes('dream body') &&
+    qualified.readiness.prompt.includes('financial investment') &&
       qualified.situation.prompt.includes('best describes your situation'),
   ],
   ['required webhook keys present', requiredKeys.every((key) => key in qualified)],
