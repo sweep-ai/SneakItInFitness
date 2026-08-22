@@ -47,13 +47,13 @@ export const applicationFormSteps: ApplicationStep[] = [
   {
     id: 'readiness',
     prompt:
-      'If we showed you exactly how to build your dream body in the next 30 to 60 days, are you ready to invest into yourself and coaching guidance?!',
+      'Obviously coaching is a financial investment. If everything was a perfect fit and you were 100% confident that this is the right solution for you, are you in a position to invest into your healthiest quality of life?',
     type: 'single',
     required: true,
     options: [
-      { id: 'A', label: 'Yes, ready to move if it is the right fit' },
+      { id: 'A', label: 'Yes, I am in a position to invest in my success' },
       { id: 'B', label: 'Seriously considering it, need to understand more first' },
-      { id: 'C', label: 'Not right now, just gathering information' },
+      { id: 'C', label: 'Not in a position to invest in my success right now' },
     ],
   },
   {
