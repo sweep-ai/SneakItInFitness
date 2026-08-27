@@ -64,7 +64,7 @@ export const applicationFormSteps: ApplicationStep[] = [
   },
   {
     id: 'contactDetails',
-    prompt: "Let's get your contact details",
+    prompt: "Let's get your contact details (Instagram or Facebook)",
     type: 'contactDetails',
     required: true,
   },

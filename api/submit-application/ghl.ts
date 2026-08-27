@@ -108,8 +108,26 @@ export function formatPhoneForGhl(phone: string): string {
   return `+${digits}`;
 }
 
-function normalizeInstagramHandle(instagram: string): string {
-  return instagram.trim().replace(/^@/, '');
+function normalizeSocialProfile(value: string): string | undefined {
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  const handle = trimmed.replace(/^@/, '');
+  if (!handle) return undefined;
+
+  if (/facebook\.com/i.test(handle) || /^fb\.me\//i.test(handle)) {
+    return `https://${handle.replace(/^\/+/, '')}`;
+  }
+
+  if (/instagram\.com/i.test(handle)) {
+    return `https://${handle.replace(/^\/+/, '')}`;
+  }
+
+  return `https://instagram.com/${handle}`;
 }
 
 export function buildGhlContactPayload(
@@ -118,7 +136,7 @@ export function buildGhlContactPayload(
 ): Record<string, unknown> {
   const { firstName, lastName } = splitName(payload.name);
   const phone = formatPhoneForGhl(payload.phone);
-  const instagramHandle = normalizeInstagramHandle(payload.instagram);
+  const socialUrl = normalizeSocialProfile(payload.instagram);
 
   const tags = [
     'SneakIt Application',
@@ -137,7 +155,7 @@ export function buildGhlContactPayload(
     email: payload.email.trim(),
     phone,
     companyName: payload.occupation.trim() || undefined,
-    website: instagramHandle ? `https://instagram.com/${instagramHandle}` : undefined,
+    website: socialUrl,
     source: payload.source,
     tags,
   };

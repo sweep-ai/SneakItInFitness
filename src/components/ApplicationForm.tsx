@@ -48,7 +48,7 @@ function getContactFieldErrors(data: ApplicationFormData): Partial<Record<Contac
   }
 
   if (!instagram) {
-    errors.instagram = 'Please enter your Instagram @.';
+    errors.instagram = 'Please enter your Instagram or Facebook.';
   }
 
   return errors;
@@ -442,7 +442,7 @@ export function ApplicationForm() {
             {renderContactField('instagram', {
               id: 'application-instagram',
               type: 'text',
-              placeholder: '@instagramhandle',
+              placeholder: 'Instagram or Facebook',
             })}
           </div>
         );

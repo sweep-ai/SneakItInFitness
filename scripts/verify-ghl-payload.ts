@@ -27,6 +27,13 @@ const checks: Array<[string, boolean]> = [
   ['phone normalized to E.164', formatPhoneForGhl(base.phone) === '+13105615995'],
   ['occupation mapped to company', contact.companyName === 'Engineer'],
   ['instagram mapped to website', contact.website === 'https://instagram.com/jane'],
+  [
+    'facebook url mapped to website',
+    buildGhlContactPayload(
+      { ...payload, instagram: 'https://facebook.com/jane.doe' },
+      'test-location-id'
+    ).website === 'https://facebook.com/jane.doe',
+  ],
   ['location id included', contact.locationId === 'test-location-id'],
   ['source preserved', contact.source === 'sneakit-application-form'],
   ['qualified tag applied', tags.includes('Qualified Lead')],
