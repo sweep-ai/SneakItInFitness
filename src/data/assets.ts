@@ -7,8 +7,10 @@ import drewVideo from '../../assets/testimonials/Drew.mp4';
 import elliottVideo from '../../assets/testimonials/Elliott.mp4';
 import harrisVideo from '../../assets/testimonials/Harris.mp4';
 import isaiahVideo from '../../assets/testimonials/Isaiah.mp4';
+import jonathanVideo from '../../assets/testimonials/Jonathan.mp4';
 import joshVideo from '../../assets/testimonials/Josh.mp4';
 import mattVideo from '../../assets/testimonials/Matt.mp4';
+import rabbiMattVideo from '../../assets/testimonials/RabbiMatt.mp4';
 import ronVideo from '../../assets/testimonials/Ron.mp4';
 import samVideo from '../../assets/testimonials/Sam.mp4';
 
@@ -18,13 +20,16 @@ import avivaPoster from '../../assets/testimonial-posters/Aviva.jpg';
 import chrissyPoster from '../../assets/testimonial-posters/Chrissy.jpg';
 import drewPoster from '../../assets/testimonial-posters/Drew.jpg';
 import elliottPoster from '../../assets/testimonial-posters/Elliott.jpg';
+import gracePoster from '../../assets/testimonial-posters/Grace.jpg';
 import harrisPoster from '../../assets/testimonial-posters/Harris.jpg';
 import heatherPoster from '../../assets/testimonial-posters/Heather.jpg';
 import isaiahPoster from '../../assets/testimonial-posters/Isaiah.jpg';
+import jonathanPoster from '../../assets/testimonial-posters/Jonathan.jpg';
 import joshPoster from '../../assets/testimonial-posters/Josh.jpg';
 import kristaPoster from '../../assets/testimonial-posters/Krista.jpg';
 import mattPoster from '../../assets/testimonial-posters/Matt.jpg';
 import mrsSokolPoster from '../../assets/testimonial-posters/MrsSokol.jpg';
+import rabbiMattPoster from '../../assets/testimonial-posters/RabbiMatt.jpg';
 import ronPoster from '../../assets/testimonial-posters/Ron.jpg';
 import samPoster from '../../assets/testimonial-posters/Sam.jpg';
 import vaishaliPoster from '../../assets/testimonial-posters/Vaishali.jpg';
@@ -39,6 +44,7 @@ import ajaVideo from '../../assets/testimonials/Aja.mp4';
 import alyssVideo from '../../assets/testimonials/Alyss.mp4';
 import avivaVideo from '../../assets/testimonials/Aviva.mp4';
 import chrissyVideo from '../../assets/testimonials/Chrissy.mp4';
+import graceVideo from '../../assets/testimonials/Grace.mp4';
 import heatherVideo from '../../assets/testimonials/Heather.mp4';
 import kristaVideo from '../../assets/testimonials/Krista.mp4';
 import mrsSokolVideo from '../../assets/testimonials/MrsSokol.mp4';
@@ -80,6 +86,8 @@ export const menClientStories: ClientStoryVideo[] = [
   { src: ronVideo, poster: ronPoster, name: 'Ron', stat: '-23 lbs in 6 weeks' },
   { src: mattVideo, poster: mattPoster, name: 'Matt', stat: '-20 lbs in 10 weeks' },
   { src: elliottVideo, poster: elliottPoster, name: 'Elliott', stat: 'Life Transformation in 4 weeks' },
+  { src: rabbiMattVideo, poster: rabbiMattPoster, name: 'Rabbi Matt', stat: '-20 lbs in 3 months' },
+  { src: jonathanVideo, poster: jonathanPoster, name: 'Jonathan', stat: '-20 lbs in 60 days' },
 ];
 
 export const womenTestimonials: Testimonial[] = [
@@ -100,6 +108,7 @@ export const womenClientStories: ClientStoryVideo[] = [
   { src: heatherVideo, poster: heatherPoster, name: 'Heather', stat: '-20 lbs in 3 months' },
   { src: chrissyVideo, poster: chrissyPoster, name: 'Chrissy', stat: '6 month full body transformation' },
   { src: avivaVideo, poster: avivaPoster, name: 'Aviva', stat: '-12 lbs in 5 weeks' },
+  { src: graceVideo, poster: gracePoster, name: 'Grace', stat: '-20 lbs in 60 days' },
 ];
 
 function interleave<T>(first: T[], second: T[]): T[] {
