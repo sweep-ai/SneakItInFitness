@@ -138,14 +138,10 @@ export function buildGhlContactPayload(
   const phone = formatPhoneForGhl(payload.phone);
   const socialUrl = normalizeSocialProfile(payload.instagram);
 
+  // Only allowlist tags — do not send quiz-answer custom tags.
   const tags = [
     'SneakIt Application',
     payload.leadStatus === 'qualified' ? 'Qualified Lead' : 'Disqualified Lead',
-    `Jewish ${payload.isJewish}`,
-    `Situation ${payload.situation.code}`,
-    `Goal ${payload.goal.code}`,
-    `Readiness ${payload.readiness.code}`,
-    ...(payload.age.trim() ? [`Age ${payload.age.trim()}`] : []),
   ];
 
   return {

@@ -36,12 +36,23 @@ const checks: Array<[string, boolean]> = [
   ],
   ['location id included', contact.locationId === 'test-location-id'],
   ['source preserved', contact.source === 'sneakit-application-form'],
+  ['sneakit application tag applied', tags.includes('SneakIt Application')],
   ['qualified tag applied', tags.includes('Qualified Lead')],
-  ['jewish tag applied', tags.includes('Jewish Yes')],
-  ['situation tag applied', tags.includes('Situation B')],
-  ['goal tag applied', tags.includes('Goal A')],
-  ['readiness tag applied', tags.includes('Readiness B')],
-  ['age tag applied', tags.includes('Age 34')],
+  [
+    'only allowlisted tags sent',
+    tags.every((tag) =>
+      ['SneakIt Application', 'Warm Lead', 'Qualified Lead', 'Disqualified Lead'].includes(tag)
+    ) && tags.length === 2,
+  ],
+  [
+    'disqualified tag applied when dq',
+    (
+      buildGhlContactPayload(
+        { ...payload, leadStatus: 'disqualified' },
+        'test-location-id'
+      ).tags as string[]
+    ).includes('Disqualified Lead'),
+  ],
   ['no custom fields', !('customFields' in contact)],
 ];
 
