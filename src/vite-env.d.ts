@@ -20,9 +20,16 @@ interface Fbq {
   ): void;
 }
 
+interface WhopPixel {
+  track: (...args: unknown[]) => void;
+  setScope: (...args: unknown[]) => void;
+  scope: (...args: unknown[]) => { track: (...args: unknown[]) => void };
+}
+
 interface Window {
   fbq?: Fbq;
   _fbq?: Fbq;
+  whop?: WhopPixel;
 }
 
 declare module '*.png' {

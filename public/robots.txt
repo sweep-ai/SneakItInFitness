@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /post-booking
 
-Sitemap: https://sneakitinfitness.com/sitemap.xml
+Sitemap: https://sneak-it-in-fitness.vercel.app/sitemap.xml

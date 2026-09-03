@@ -15,7 +15,7 @@ function siteOrigin() {
   if (vercel) {
     return `https://${vercel.replace(/\/$/, '')}`;
   }
-  return 'https://sneakitinfitness.com';
+  return 'https://sneak-it-in-fitness.vercel.app';
 }
 
 const origin = siteOrigin();

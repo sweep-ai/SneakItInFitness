@@ -15,6 +15,31 @@ function fbqAvailable(): boolean {
   return typeof window !== 'undefined' && typeof window.fbq === 'function';
 }
 
+function trackWhop(eventName: string, params?: Record<string, unknown>): void {
+  if (typeof window === 'undefined' || typeof window.whop?.track !== 'function') return;
+  if (params) {
+    window.whop.track(eventName, params);
+    return;
+  }
+  window.whop.track(eventName);
+}
+
+function toWhopUserParams(
+  userData?: PixelUserData,
+  eventId?: string
+): Record<string, unknown> | undefined {
+  const params: Record<string, unknown> = {};
+  if (eventId) params.event_id = eventId;
+  if (userData?.email) params.email = userData.email;
+  if (userData?.phone) params.phone = userData.phone;
+  if (userData?.firstName) params.first_name = userData.firstName;
+  if (userData?.lastName) params.last_name = userData.lastName;
+  if (userData?.firstName || userData?.lastName) {
+    params.name = [userData.firstName, userData.lastName].filter(Boolean).join(' ');
+  }
+  return Object.keys(params).length > 0 ? params : undefined;
+}
+
 /** Generates a unique id shared by the browser and server event for deduplication. */
 export function generateEventId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -44,6 +69,12 @@ function trackEvent(eventName: string, userData?: PixelUserData, eventId?: strin
   }
 
   sendServerEvent(eventName, resolvedEventId, eventSourceUrl, userData);
+
+  if (eventName === 'Lead') {
+    trackWhop('lead', toWhopUserParams(userData, resolvedEventId));
+  } else if (eventName === 'Schedule') {
+    trackWhop('schedule', toWhopUserParams(userData, resolvedEventId));
+  }
 }
 
 function sendServerEvent(

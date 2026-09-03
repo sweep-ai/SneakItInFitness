@@ -62,7 +62,7 @@ npm run compress-assets
 
 1. `VITE_SITE_URL` (e.g. `https://www.yourdomain.com`)
 2. `VERCEL_URL` on Vercel deploys
-3. `https://sneakitinfitness.com` as fallback
+3. `https://sneak-it-in-fitness.vercel.app` as fallback
 
 Submit `https://<your-domain>/sitemap.xml` in Google Search Console.
 
