@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { MetaPixelRouteTracker } from './components/MetaPixelRouteTracker';
+import { captureUtmFromUrl } from './lib/utm';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
 const MalePage = lazy(() => import('./pages/MalePage').then((m) => ({ default: m.MalePage })));
@@ -48,10 +49,21 @@ function ScrollToTop() {
   return null;
 }
 
+function UtmCapture() {
+  const location = useLocation();
+
+  useEffect(() => {
+    captureUtmFromUrl(location.search);
+  }, [location.search]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <UtmCapture />
       <MetaPixelRouteTracker />
       <Routes>
         <Route element={<Layout />}>

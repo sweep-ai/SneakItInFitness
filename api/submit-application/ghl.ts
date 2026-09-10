@@ -21,6 +21,12 @@ export interface ApplicationWebhookPayload {
   dqReason: string | null;
   submittedAt: string;
   source: string;
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_content: string;
+  utm_term: string;
+  utm_id: string;
   answers: {
     isJewish: string;
     situationPrompt: string;

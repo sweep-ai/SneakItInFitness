@@ -5,6 +5,7 @@ import {
   type ApplicationFormData,
 } from '../data/applicationForm';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { getStoredUtmParams, type UtmParams } from './utm';
 
 const CHOICE_STEP_IDS = ['situation', 'goal', 'readiness'] as const;
 
@@ -29,6 +30,13 @@ export interface ApplicationWebhookPayload {
   dqReason: string | null;
   submittedAt: string;
   source: string;
+  /** Meta Ads UTM params captured from the landing URL (empty strings when absent). */
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_content: string;
+  utm_term: string;
+  utm_id: string;
   /** Flat Zapier-friendly fields (prompt/code/label per question). */
   answers: {
     isJewish: string;
@@ -83,8 +91,22 @@ function formatChoiceAnswer(
   };
 }
 
+function flattenUtm(utm: UtmParams) {
+  return {
+    utm_source: utm.utm_source ?? '',
+    utm_medium: utm.utm_medium ?? '',
+    utm_campaign: utm.utm_campaign ?? '',
+    utm_content: utm.utm_content ?? '',
+    utm_term: utm.utm_term ?? '',
+    utm_id: utm.utm_id ?? '',
+  };
+}
+
 /** Formats quiz answers for Zapier + GHL from the application form state. */
-export function formatApplicationPayload(data: ApplicationFormData): ApplicationWebhookPayload {
+export function formatApplicationPayload(
+  data: ApplicationFormData,
+  utm: UtmParams = getStoredUtmParams()
+): ApplicationWebhookPayload {
   const disqualified = isDisqualifiedLead(data);
   const dqReason = getDisqualificationReason(data);
 
@@ -110,6 +132,7 @@ export function formatApplicationPayload(data: ApplicationFormData): Application
     dqReason,
     submittedAt: new Date().toISOString(),
     source: 'sneakit-application-form',
+    ...flattenUtm(utm),
     answers: {
       isJewish,
       situationPrompt: situation.prompt,

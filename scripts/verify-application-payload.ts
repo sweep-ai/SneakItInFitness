@@ -16,7 +16,17 @@ const base = {
   phone: '+1 310 561 5995',
 };
 
-const qualified = formatApplicationPayload({ ...base, readiness: 'A' });
+const qualified = formatApplicationPayload(
+  { ...base, readiness: 'A' },
+  {
+    utm_source: 'SneakIt_Prospecting_Q1',
+    utm_medium: 'Jewish_Men_25-45',
+    utm_campaign: 'VSL_Hook_A',
+    utm_content: '120212345678901234',
+    utm_term: '120212345678901111',
+    utm_id: '120212345678900001',
+  }
+);
 const interested = formatApplicationPayload({ ...base, readiness: 'B' });
 const dqReadiness = formatApplicationPayload({ ...base, readiness: 'C' });
 
@@ -35,6 +45,12 @@ const requiredKeys = [
   'dqReason',
   'submittedAt',
   'source',
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+  'utm_id',
   'answers',
 ] as const;
 
@@ -72,6 +88,19 @@ const checks: Array<[string, boolean]> = [
       qualified.situation.prompt.includes('best describes your situation'),
   ],
   ['required webhook keys present', requiredKeys.every((key) => key in qualified)],
+  [
+    'utm fields mapped',
+    qualified.utm_source === 'SneakIt_Prospecting_Q1' &&
+      qualified.utm_medium === 'Jewish_Men_25-45' &&
+      qualified.utm_campaign === 'VSL_Hook_A' &&
+      qualified.utm_content === '120212345678901234' &&
+      qualified.utm_term === '120212345678901111' &&
+      qualified.utm_id === '120212345678900001',
+  ],
+  [
+    'utm defaults empty when absent',
+    interested.utm_source === '' && interested.utm_id === '',
+  ],
   ['zapier phone is E.164', qualified.phone === '+13105615995'],
   [
     'zapier phone normalizes spaced E.164',
