@@ -21,6 +21,8 @@ export function BookingPage() {
     }
   }, []);
 
+  const { education } = bookingCopy;
+
   return (
     <main className="page-main">
       <div className="container">
@@ -30,7 +32,26 @@ export function BookingPage() {
             <span className="booking-page-title">{bookingCopy.headline}</span>
           </h1>
         </header>
-        <CalendlyEmbed />
+
+        <section className="booking-education" aria-labelledby="booking-education-title">
+          <h2 id="booking-education-title" className="booking-education-headline">
+            {education.headline}
+          </h2>
+          <p className="booking-education-subhead">{education.subhead}</p>
+          <ul className="booking-education-points">
+            {education.points.map((point) => (
+              <li key={point}>{point}</li>
+            ))}
+          </ul>
+          <p className="booking-education-note">{education.note}</p>
+          <a href="#booking-calendar" className="booking-education-cta">
+            {education.cta}
+          </a>
+        </section>
+
+        <div id="booking-calendar">
+          <CalendlyEmbed />
+        </div>
       </div>
       <section className="booking-banners" aria-label="Client transformations">
         <ScrollingBanner testimonials={menTestimonials} direction="left" />

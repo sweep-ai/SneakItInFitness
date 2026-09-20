@@ -1,3 +1,36 @@
+.pre-form-social-proof {
+  margin-top: var(--space-md);
+  padding-bottom: var(--space-sm);
+}
+
+.pre-form-scroll-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.pre-form-scroll-btn {
+  display: inline-block;
+  padding: 0.65rem 1.75rem;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+}
+
+.pre-form-scroll-btn:hover,
+.pre-form-scroll-btn:focus-visible {
+  background: var(--color-accent);
+  color: #fff;
+  outline: none;
+}
+
 .testimonial-section {
   margin-top: var(--space-xl);
   padding-bottom: var(--space-md);

@@ -8,6 +8,7 @@ const base = {
   isJewish: 'yes' as const,
   situation: 'B',
   goal: 'A',
+  openToCoaching: 'yes' as const,
   readiness: 'B',
   instagram: '@jane',
   occupation: 'Engineer',

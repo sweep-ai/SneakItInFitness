@@ -8,6 +8,7 @@ const base = {
   isJewish: 'yes' as const,
   situation: 'B',
   goal: 'A',
+  openToCoaching: 'yes' as const,
   readiness: 'B',
   instagram: '@jane',
   occupation: 'Engineer',
@@ -40,6 +41,7 @@ const requiredKeys = [
   'age',
   'situation',
   'goal',
+  'openToCoaching',
   'readiness',
   'leadStatus',
   'dqReason',
@@ -64,6 +66,21 @@ const checks: Array<[string, boolean]> = [
     'dq readiness C',
     dqReadiness.leadStatus === 'disqualified' &&
       dqReadiness.dqReason === 'gathering_information',
+  ],
+  [
+    'dq openToCoaching no',
+    (() => {
+      const dq = formatApplicationPayload({ ...base, openToCoaching: 'no' });
+      return dq.leadStatus === 'disqualified' && dq.dqReason === 'not_open_to_coaching';
+    })(),
+  ],
+  [
+    'openToCoaching mapped',
+    qualified.openToCoaching.code === 'yes' &&
+      qualified.openToCoaching.label.includes("I'm open to expert coaching help") &&
+      qualified.answers.openToCoaching.includes("I'm open to expert coaching help") &&
+      qualified.answers.openToCoachingCode === 'yes' &&
+      qualified.openToCoaching.prompt.includes('ONLINE fitness program'),
   ],
   [
     'nested choice answers mapped',

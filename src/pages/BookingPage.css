@@ -25,3 +25,85 @@
   font-style: italic;
   margin-bottom: 0.25rem;
 }
+
+.booking-education {
+  margin: 0 auto var(--space-lg);
+  max-width: 38rem;
+  padding: var(--space-md);
+  border: 1px solid rgba(215, 0, 0, 0.35);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  text-align: center;
+}
+
+.booking-education-headline {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  margin: 0 0 0.4rem;
+}
+
+.booking-education-subhead,
+.booking-education-note {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.booking-education-subhead {
+  margin-bottom: var(--space-md);
+}
+
+.booking-education-points {
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.booking-education-points li {
+  position: relative;
+  padding: 0.45rem 0 0.45rem 1.4rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-fg);
+  line-height: 1.4;
+}
+
+.booking-education-points li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+.booking-education-note {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-md);
+}
+
+.booking-education-cta {
+  display: inline-block;
+  padding: 0.65rem 1.75rem;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.booking-education-cta:hover,
+.booking-education-cta:focus-visible {
+  background: var(--color-accent);
+  color: #fff;
+  outline: none;
+}
+
+#booking-calendar {
+  scroll-margin-top: var(--space-md);
+}

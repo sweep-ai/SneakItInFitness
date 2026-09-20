@@ -13,6 +13,7 @@ async function main() {
     isJewish: 'yes',
     situation: 'A',
     goal: 'B',
+    openToCoaching: 'yes',
     readiness: 'A',
     instagram: '@sneakit_api_test',
     occupation: 'API Integration Test',

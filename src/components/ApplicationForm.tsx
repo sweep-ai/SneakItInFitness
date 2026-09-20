@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   applicationFormSteps,
   applicationDqCopy,
+  getDisqualificationReason,
   APPLICATION_FORM_STORAGE_KEY,
   emptyApplicationFormData,
   isDisqualifiedLead,
@@ -70,11 +71,13 @@ function getStepValidationError(
       }
       return null;
     }
-    case 'yesno':
-      if (data.isJewish !== 'yes' && data.isJewish !== 'no') {
+    case 'yesno': {
+      const value = data[step.id as keyof ApplicationFormData];
+      if (value !== 'yes' && value !== 'no') {
         return 'Please complete this question to continue.';
       }
       return null;
+    }
     case 'single': {
       const value = data[step.id as keyof ApplicationFormData] as string;
       if (value.length === 0) {
@@ -133,6 +136,7 @@ export function ApplicationForm() {
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDqSlide, setShowDqSlide] = useState(false);
+  const [dqReason, setDqReason] = useState<string | null>(null);
 
   const step = applicationFormSteps[stepIndex];
   const isLastStep = stepIndex === applicationFormSteps.length - 1;
@@ -194,6 +198,7 @@ export function ApplicationForm() {
       );
 
       if (isDisqualifiedLead(formData)) {
+        setDqReason(getDisqualificationReason(formData));
         setShowDqSlide(true);
       } else {
         navigate('/booking');
@@ -240,7 +245,7 @@ export function ApplicationForm() {
       return;
     }
 
-    const nextData = { ...data, isJewish: value };
+    const nextData = { ...data, [step.id]: value } as ApplicationFormData;
     setData(nextData);
     scheduleAutoAdvance(value, nextData);
   };
@@ -378,8 +383,11 @@ export function ApplicationForm() {
         return (
           <div className="application-form-yesno" role="group" aria-label={step.prompt}>
             {(['yes', 'no'] as const).map((value) => {
-              const selected = data.isJewish === value;
+              const selected = data[step.id as keyof ApplicationFormData] === value;
               const confirmed = confirmedOption === value;
+              const label =
+                step.options?.find((option) => option.id === value)?.label ??
+                (value === 'yes' ? 'Yes' : 'No');
               return (
                 <button
                   key={value}
@@ -389,9 +397,7 @@ export function ApplicationForm() {
                   onClick={() => handleYesNoSelect(value)}
                 >
                   {confirmed && <OptionCheckmark />}
-                  <span className="application-form-option-label">
-                    {value === 'yes' ? 'Yes' : 'No'}
-                  </span>
+                  <span className="application-form-option-label">{label}</span>
                 </button>
               );
             })}
@@ -469,9 +475,14 @@ export function ApplicationForm() {
           )}
         </h2>
         {!showDqSlide && (
-          <span className="application-form-progress">
-            {stepIndex + 1} / {applicationFormSteps.length}
-          </span>
+          <>
+            <p className="application-form-subtitle">
+              Online 1:1 coaching · Built for Jewish adults · 2 min
+            </p>
+            <span className="application-form-progress">
+              {stepIndex + 1} / {applicationFormSteps.length}
+            </span>
+          </>
         )}
       </div>
 
@@ -489,8 +500,18 @@ export function ApplicationForm() {
       <div className="application-form-step-panel">
         {showDqSlide ? (
           <div className="application-form-step-content application-form-dq">
-            <p className="application-form-dq-headline">{applicationDqCopy.headline}</p>
-            <p className="application-form-dq-subhead">{applicationDqCopy.subhead}</p>
+            {(() => {
+              const copy =
+                dqReason === 'just_browsing'
+                  ? applicationDqCopy.just_browsing
+                  : applicationDqCopy.default;
+              return (
+                <>
+                  <p className="application-form-dq-headline">{copy.headline}</p>
+                  <p className="application-form-dq-subhead">{copy.subhead}</p>
+                </>
+              );
+            })()}
             <div className="application-form-resources">
               {socialLinks.map((link) => (
                 <a

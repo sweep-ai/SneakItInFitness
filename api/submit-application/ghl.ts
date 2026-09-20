@@ -16,6 +16,7 @@ export interface ApplicationWebhookPayload {
   age: string;
   situation: ApplicationChoiceAnswer;
   goal: ApplicationChoiceAnswer;
+  openToCoaching: ApplicationChoiceAnswer;
   readiness: ApplicationChoiceAnswer;
   leadStatus: 'qualified' | 'disqualified';
   dqReason: string | null;
@@ -35,6 +36,9 @@ export interface ApplicationWebhookPayload {
     goalPrompt: string;
     goalCode: string;
     goal: string;
+    openToCoachingPrompt: string;
+    openToCoachingCode: string;
+    openToCoaching: string;
     readinessPrompt: string;
     readinessCode: string;
     readiness: string;

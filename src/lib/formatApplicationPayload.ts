@@ -25,6 +25,8 @@ export interface ApplicationWebhookPayload {
   age: string;
   situation: ApplicationChoiceAnswer;
   goal: ApplicationChoiceAnswer;
+  /** Yes/No answer for openness to online 1:1 coaching. */
+  openToCoaching: ApplicationChoiceAnswer;
   readiness: ApplicationChoiceAnswer;
   leadStatus: 'qualified' | 'disqualified';
   dqReason: string | null;
@@ -46,6 +48,9 @@ export interface ApplicationWebhookPayload {
     goalPrompt: string;
     goalCode: string;
     goal: string;
+    openToCoachingPrompt: string;
+    openToCoachingCode: string;
+    openToCoaching: string;
     readinessPrompt: string;
     readinessCode: string;
     readiness: string;
@@ -91,6 +96,21 @@ function formatChoiceAnswer(
   };
 }
 
+function formatYesNoAnswer(
+  stepId: 'openToCoaching',
+  value: '' | 'yes' | 'no'
+): ApplicationChoiceAnswer {
+  const code = value === 'yes' || value === 'no' ? value : '';
+  const stepLabel = code
+    ? getStep(stepId)?.options?.find((option) => option.id === code)?.label
+    : undefined;
+  return {
+    prompt: getStepPrompt(stepId),
+    code,
+    label: stepLabel ?? (code === 'yes' ? 'Yes' : code === 'no' ? 'No' : ''),
+  };
+}
+
 function flattenUtm(utm: UtmParams) {
   return {
     utm_source: utm.utm_source ?? '',
@@ -112,6 +132,7 @@ export function formatApplicationPayload(
 
   const situation = formatChoiceAnswer('situation', data.situation);
   const goal = formatChoiceAnswer('goal', data.goal);
+  const openToCoaching = formatYesNoAnswer('openToCoaching', data.openToCoaching);
   const readiness = formatChoiceAnswer('readiness', data.readiness);
   const isJewish = data.isJewish === 'yes' ? 'Yes' : 'No';
   const occupation = data.occupation.trim();
@@ -127,6 +148,7 @@ export function formatApplicationPayload(
     age,
     situation,
     goal,
+    openToCoaching,
     readiness,
     leadStatus: disqualified ? 'disqualified' : 'qualified',
     dqReason,
@@ -141,6 +163,9 @@ export function formatApplicationPayload(
       goalPrompt: goal.prompt,
       goalCode: goal.code,
       goal: goal.label,
+      openToCoachingPrompt: openToCoaching.prompt,
+      openToCoachingCode: openToCoaching.code,
+      openToCoaching: openToCoaching.label,
       readinessPrompt: readiness.prompt,
       readinessCode: readiness.code,
       readiness: readiness.label,

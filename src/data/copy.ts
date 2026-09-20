@@ -47,6 +47,17 @@ export const funnelCopy: FunnelCopy = {
 export const bookingCopy = {
   congratsLabel: 'Congrats You Qualified!',
   headline: 'Book Your Free Consultation',
+  education: {
+    headline: 'But before you book...',
+    subhead: 'Here is what the strategy call covers',
+    points: [
+      'Your goals, schedule, and past fitness experience',
+      'Whether online 1:1 coaching is actually the right fit',
+      'A system you can use to improve your health and wellbeing starting today',
+    ],
+    note: 'The call is complimentary and lasts about 60 minutes. We\'re excited to help you achieve your goals.',
+    cta: 'Choose a time ↓',
+  },
 };
 
 export const postBookingCopy = {
@@ -79,8 +90,6 @@ export const postBookingCopy = {
     },
   },
 };
-
-export const testimonialSectionTitle = 'Take their word for it';
 
 export const finalCtaCopy = {
   headline: 'Ready to stop restarting?',
