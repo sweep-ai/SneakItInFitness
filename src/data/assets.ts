@@ -69,7 +69,6 @@ export interface Testimonial {
 }
 
 export const menTestimonials: Testimonial[] = [
-  { src: tylerPoster, name: 'Tyler', stat: 'Lost 8 lbs in 8 months' },
   { src: harrisBanner, name: 'Harris', stat: '-50 lbs in 8 months' },
   { src: sam, name: 'Sam', stat: '-30 lbs in 3 months' },
   { src: david, name: 'David', stat: '-45 lbs in 6 months' },
@@ -83,7 +82,7 @@ export interface ClientStoryVideo {
 }
 
 export const menClientStories: ClientStoryVideo[] = [
-  { src: tylerVideo, poster: tylerPoster, name: 'Tyler', stat: 'Lost 8 lbs in 8 months' },
+  { src: tylerVideo, poster: tylerPoster, name: 'Tyler', stat: 'Lost 80 lbs in 8 months' },
   { src: harrisVideo, poster: harrisPoster, name: 'Harris', stat: '-50 lbs in 8 months' },
   { src: samVideo, poster: samPoster, name: 'Sam', stat: '-30 lbs in 3 months' },
   { src: joshVideo, poster: joshPoster, name: 'Josh', stat: '-20 lbs in 3 months' },
