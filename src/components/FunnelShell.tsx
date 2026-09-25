@@ -50,6 +50,7 @@ export function FunnelShell({
       <PageHero
         headline={funnelCopy.headline}
         headlineHighlight={funnelCopy.headlineHighlight}
+        headlineUnderline={funnelCopy.headlineUnderline}
         subhead={getFunnelSubhead(icpGender)}
       />
       <div className="container">

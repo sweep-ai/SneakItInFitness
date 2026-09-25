@@ -2,7 +2,8 @@ export type FunnelGender = 'male' | 'female';
 
 export interface FunnelCopy {
   headline: string;
-  headlineHighlight?: string;
+  headlineHighlight?: string | string[];
+  headlineUnderline?: string | string[];
 }
 
 export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
@@ -40,8 +41,9 @@ export const founderManifestoLines = [
 ] as const;
 
 export const funnelCopy: FunnelCopy = {
-  headline: 'Helping Jews get in the best shape of their life',
-  headlineHighlight: 'Jews',
+  headline: 'Helping \nJews Lose 20+ lbs\n  and Keep It Off This Time',
+  headlineHighlight: ['Jews Lose 20+ lbs'],
+  headlineUnderline: ['Keep It Off For Good'],
 };
 
 export const bookingCopy = {

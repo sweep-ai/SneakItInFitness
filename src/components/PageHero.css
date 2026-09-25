@@ -70,6 +70,13 @@
   letter-spacing: 0.04em;
 }
 
+.page-hero-headline-underline {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.12em;
+}
+
 .page-hero-subhead {
   margin: var(--space-md) auto 0;
   max-width: 34rem;

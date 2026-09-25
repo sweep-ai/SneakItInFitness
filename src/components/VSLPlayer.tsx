@@ -190,7 +190,24 @@ export function VSLPlayer({
                 onClick={handleUnmute}
                 aria-label="Unmute video"
               >
-                Tap to unmute
+                <span className="vsl-player-unmute-card">
+                  <svg
+                    className="vsl-player-unmute-icon"
+                    viewBox="0 0 64 64"
+                    width="56"
+                    height="56"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M8 24v16h10l14 12V12L18 24H8zm36.4 4.6a8 8 0 0 1 0 6.8l-3.5-2a4 4 0 0 0 0-2.8l3.5-2zm6.3-8.3a20 20 0 0 1 0 23.4l-3.6-2.1a16 16 0 0 0 0-19.2l3.6-2.1z"
+                    />
+                  </svg>
+                  <span className="vsl-player-unmute-copy">
+                    <span>Your Video Is Playing</span>
+                    <span>Click To Unmute</span>
+                  </span>
+                </span>
               </button>
             )}
           </>
