@@ -92,6 +92,9 @@ export const DQ_OPEN_TO_COACHING_OPTION = 'no';
 /** Bottom readiness answer disqualifies the lead. */
 export const DQ_READINESS_OPTION = 'C';
 
+/** Webhook/GHL reason for the financial-investment DQ. */
+export const FINANCIAL_DQ_REASON = 'gathering_information';
+
 export function isDisqualifiedLead(data: ApplicationFormData): boolean {
   return (
     data.situation === DQ_SITUATION_OPTION ||
@@ -103,8 +106,12 @@ export function isDisqualifiedLead(data: ApplicationFormData): boolean {
 export function getDisqualificationReason(data: ApplicationFormData): string | null {
   if (data.situation === DQ_SITUATION_OPTION) return 'just_browsing';
   if (data.openToCoaching === DQ_OPEN_TO_COACHING_OPTION) return 'not_open_to_coaching';
-  if (data.readiness === DQ_READINESS_OPTION) return 'gathering_information';
+  if (data.readiness === DQ_READINESS_OPTION) return FINANCIAL_DQ_REASON;
   return null;
+}
+
+export function isFinancialDisqualification(data: ApplicationFormData): boolean {
+  return data.readiness === DQ_READINESS_OPTION;
 }
 
 export const applicationDqCopy: Record<'default' | 'just_browsing', { headline: string; subhead: string }> = {

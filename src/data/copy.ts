@@ -14,7 +14,7 @@ export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
 
 export function getFunnelSubhead(gender?: FunnelGender | 'neutral'): string {
   const audience = getIcpAudienceLabel(gender);
-  return `Watch below to discover the simple system transforming ${audience} in under 4 hrs/week without sacrificing their career or culture ↓`;
+  return `A professionally guided program built on your llife, not a template. No living in the gym, excessive cardio, no giving up family meals↓`;
 }
 
 export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutral'): string {

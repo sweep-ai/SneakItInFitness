@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { isGhlConfigured, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl.js';
+import { isGhlConfigured, shouldCreateGhlContact, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl.js';
 
 async function readRequestBody(req: IncomingMessage): Promise<string> {
   const chunks: Buffer[] = [];
@@ -76,7 +76,7 @@ export async function handleSubmitApplicationRequest(
     tasks.push(forwardToZapier(webhook, rawBody));
   }
 
-  if (ghlEnabled) {
+  if (ghlEnabled && shouldCreateGhlContact(payload)) {
     tasks.push(upsertApplicationContact(payload).then(() => undefined));
   }
 

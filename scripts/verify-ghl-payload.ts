@@ -1,6 +1,6 @@
 import { formatApplicationPayload } from '../src/lib/formatApplicationPayload';
 import { emptyApplicationFormData } from '../src/data/applicationForm';
-import { buildGhlContactPayload, formatPhoneForGhl } from '../api/submit-application/ghl';
+import { buildGhlContactPayload, formatPhoneForGhl, shouldCreateGhlContact } from '../api/submit-application/ghl';
 
 const base = {
   ...emptyApplicationFormData,
@@ -55,6 +55,24 @@ const checks: Array<[string, boolean]> = [
     ).includes('Disqualified Lead'),
   ],
   ['no custom fields', !('customFields' in contact)],
+  ['ghl created for qualified lead', shouldCreateGhlContact(payload) === true],
+  [
+    'ghl skipped for financial dq',
+    shouldCreateGhlContact({
+      ...payload,
+      leadStatus: 'disqualified',
+      dqReason: 'gathering_information',
+      readiness: { ...payload.readiness, code: 'C' },
+    }) === false,
+  ],
+  [
+    'ghl still created for non-financial dq',
+    shouldCreateGhlContact({
+      ...payload,
+      leadStatus: 'disqualified',
+      dqReason: 'not_open_to_coaching',
+    }) === true,
+  ],
 ];
 
 let failed = 0;

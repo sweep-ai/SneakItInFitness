@@ -194,6 +194,11 @@ async function ghlRequest<T>(options: GhlRequestOptions): Promise<T> {
   return (await response.json()) as T;
 }
 
+/** Financial DQs (cannot invest) must not become GHL contacts. Other DQs still upsert. */
+export function shouldCreateGhlContact(payload: ApplicationWebhookPayload): boolean {
+  return payload.readiness?.code !== 'C' && payload.dqReason !== 'gathering_information';
+}
+
 /** Creates or updates a GHL contact from a quiz submission. */
 export async function upsertApplicationContact(payload: ApplicationWebhookPayload): Promise<string> {
   const { locationId } = getGhlConfig();
