@@ -67,7 +67,7 @@ export const postBookingCopy = {
     highlight: 'MANDATORY',
     rest: ': complete the steps below to lock in your call',
   },
-  phoneNumber: '+1 310-561-5995',
+  phoneNumber: '+1 512-431-3145',
   smsConfirm: {
     body: "Hi, I'm locking in my call",
     button: 'Confirm Your Call',
@@ -75,7 +75,7 @@ export const postBookingCopy = {
   steps: {
     intro: {
       label: 'Step 1 of 5',
-      prompt: 'Click the button below to confirm your call',
+      prompt: 'Click the button below, it will send us a text to confirm your call',
     },
     video: {
       label: 'Step 2 of 5',
