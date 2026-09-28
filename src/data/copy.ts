@@ -12,8 +12,7 @@ export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
   return 'Jewish adults';
 }
 
-export function getFunnelSubhead(gender?: FunnelGender | 'neutral'): string {
-  const audience = getIcpAudienceLabel(gender);
+export function getFunnelSubhead(_gender?: FunnelGender | 'neutral'): string {
   return `A professionally guided program built on your llife, not a template. No living in the gym, excessive cardio, no giving up family meals↓`;
 }
 
