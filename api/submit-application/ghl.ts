@@ -194,9 +194,22 @@ async function ghlRequest<T>(options: GhlRequestOptions): Promise<T> {
   return (await response.json()) as T;
 }
 
+/** Financial DQs (cannot invest) skip GHL, Zapier, Pixel, and CAPI. */
+export function isFinancialDisqualificationPayload(payload: ApplicationWebhookPayload): boolean {
+  return payload.readiness?.code === 'C' || payload.dqReason === 'gathering_information';
+}
+
 /** Financial DQs (cannot invest) must not become GHL contacts. Other DQs still upsert. */
 export function shouldCreateGhlContact(payload: ApplicationWebhookPayload): boolean {
-  return payload.readiness?.code !== 'C' && payload.dqReason !== 'gathering_information';
+  return !isFinancialDisqualificationPayload(payload);
+}
+
+export function shouldForwardToZapier(payload: ApplicationWebhookPayload): boolean {
+  return payload.leadStatus === 'qualified';
+}
+
+export function shouldForwardToGoogleSheet(payload: ApplicationWebhookPayload): boolean {
+  return payload.leadStatus === 'disqualified';
 }
 
 /** Creates or updates a GHL contact from a quiz submission. */

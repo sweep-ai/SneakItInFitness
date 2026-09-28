@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { isGhlConfigured, shouldCreateGhlContact, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl.js';
+import { isGhlConfigured, shouldCreateGhlContact, shouldForwardToGoogleSheet, shouldForwardToZapier, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl.js';
+import { formatLeadsTabRow } from './sheetLead.js';
 
 async function readRequestBody(req: IncomingMessage): Promise<string> {
   const chunks: Buffer[] = [];
@@ -17,15 +18,20 @@ function sendJson(res: ServerResponse, statusCode: number, body: unknown): void 
   res.end(JSON.stringify(body));
 }
 
-async function forwardToZapier(webhookUrl: string, body: string): Promise<void> {
+async function forwardJsonWebhook(webhookUrl: string, body: string, label: string): Promise<void> {
+  const isAppsScript = webhookUrl.includes('script.google.com');
   const response = await fetch(webhookUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,
+    redirect: isAppsScript ? 'manual' : 'follow',
   });
 
-  if (!response.ok) {
-    throw new Error(`Zapier request failed (${response.status})`);
+  const ok =
+    response.ok ||
+    (isAppsScript && (response.status === 302 || response.status === 303));
+  if (!ok) {
+    throw new Error(`${label} request failed (${response.status})`);
   }
 }
 
@@ -40,11 +46,12 @@ export async function handleSubmitApplicationRequest(
   }
 
   const webhook = process.env.ZAPIER_WEBHOOK?.trim();
+  const sheetWebhook = process.env.GOOGLE_SHEET_WEBHOOK?.trim();
   const ghlEnabled = isGhlConfigured();
 
-  if (!webhook && !ghlEnabled) {
+  if (!webhook && !ghlEnabled && !sheetWebhook) {
     sendJson(res, 500, {
-      error: 'No submission destination configured (ZAPIER_WEBHOOK or GHL credentials)',
+      error: 'No submission destination configured (ZAPIER_WEBHOOK, GOOGLE_SHEET_WEBHOOK, or GHL credentials)',
     });
     return;
   }
@@ -72,8 +79,18 @@ export async function handleSubmitApplicationRequest(
 
   const tasks: Array<Promise<void>> = [];
 
-  if (webhook) {
-    tasks.push(forwardToZapier(webhook, rawBody));
+  if (webhook && shouldForwardToZapier(payload)) {
+    tasks.push(forwardJsonWebhook(webhook, rawBody, 'Zapier'));
+  }
+
+  if (sheetWebhook && shouldForwardToGoogleSheet(payload)) {
+    tasks.push(
+      forwardJsonWebhook(
+        sheetWebhook,
+        JSON.stringify({ values: formatLeadsTabRow(payload) }),
+        'Google Sheet',
+      ),
+    );
   }
 
   if (ghlEnabled && shouldCreateGhlContact(payload)) {

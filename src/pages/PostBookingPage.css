@@ -39,6 +39,54 @@
   margin-top: 0;
 }
 
+.post-booking-sms-btn {
+  display: block;
+  width: 100%;
+  max-width: 34rem;
+  margin: var(--space-md) auto 0;
+  padding: 1.15rem 1.75rem;
+  min-height: 56px;
+  box-sizing: border-box;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 5vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-accent);
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px var(--color-accent), 0 10px 32px rgba(215, 0, 0, 0.45);
+  animation: post-booking-sms-pulse 2.2s ease-in-out infinite;
+}
+
+.post-booking-sms-btn:hover,
+.post-booking-sms-btn:focus-visible {
+  color: #fff;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 3px #fff, 0 12px 36px rgba(215, 0, 0, 0.55);
+  outline: none;
+  animation: none;
+}
+
+@keyframes post-booking-sms-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--color-accent), 0 10px 32px rgba(215, 0, 0, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(215, 0, 0, 0.35), 0 14px 40px rgba(215, 0, 0, 0.65);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-booking-sms-btn {
+    animation: none;
+  }
+}
+
 .post-booking-callout {
   margin: var(--space-md) auto 0;
   max-width: 34rem;

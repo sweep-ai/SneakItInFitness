@@ -7,6 +7,7 @@ import {
   APPLICATION_FORM_STORAGE_KEY,
   emptyApplicationFormData,
   isDisqualifiedLead,
+  isFinancialDisqualification,
   type ApplicationFormData,
   type ApplicationStep,
 } from '../data/applicationForm';
@@ -184,18 +185,21 @@ export function ApplicationForm() {
       await submitApplication(formData);
       sessionStorage.setItem(APPLICATION_FORM_STORAGE_KEY, JSON.stringify(formData));
 
-      const [firstName, ...restName] = formData.name.trim().split(/\s+/);
-      // Same event_id is reused on the /booking landing so the two fires dedupe.
-      const leadEventId = beginLeadTracking();
-      trackLead(
-        {
-          email: formData.email,
-          phone: formData.phone,
-          firstName,
-          lastName: restName.join(' ') || undefined,
-        },
-        leadEventId
-      );
+      const financialDq = isFinancialDisqualification(formData);
+      if (!financialDq) {
+        const [firstName, ...restName] = formData.name.trim().split(/\s+/);
+        // Same event_id is reused on the /booking landing so the two fires dedupe.
+        const leadEventId = beginLeadTracking();
+        trackLead(
+          {
+            email: formData.email,
+            phone: formData.phone,
+            firstName,
+            lastName: restName.join(' ') || undefined,
+          },
+          leadEventId
+        );
+      }
 
       if (isDisqualifiedLead(formData)) {
         setDqReason(getDisqualificationReason(formData));

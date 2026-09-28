@@ -56,15 +56,12 @@ export function PostBookingPage() {
         </section>
 
         <PostBookingStep label={steps.intro.label} prompt={steps.intro.prompt}>
-          <p className="post-booking-callout">
-            You&apos;re going to{' '}
-            <span className="post-booking-underline">receive a call</span> from{' '}
-            <a href={`tel:${postBookingCopy.phoneNumber.replace(/\D/g, '')}`} className="post-booking-phone">
-              {postBookingCopy.phoneNumber}
-            </a>{' '}
-            within the <span className="post-booking-underline">next 24 hours</span> to{' '}
-            <span className="post-booking-underline">confirm your call</span>
-          </p>
+          <a
+            className="post-booking-sms-btn"
+            href={`sms:+${postBookingCopy.phoneNumber.replace(/\D/g, '')}&body=${encodeURIComponent(postBookingCopy.smsConfirm.body)}`}
+          >
+            {postBookingCopy.smsConfirm.button}
+          </a>
         </PostBookingStep>
 
         <PostBookingStep label={steps.video.label} prompt={steps.video.prompt}>

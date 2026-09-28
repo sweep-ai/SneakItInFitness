@@ -1,6 +1,7 @@
 import { formatApplicationPayload } from '../src/lib/formatApplicationPayload';
 import { emptyApplicationFormData } from '../src/data/applicationForm';
-import { buildGhlContactPayload, formatPhoneForGhl, shouldCreateGhlContact } from '../api/submit-application/ghl';
+import { buildGhlContactPayload, formatPhoneForGhl, shouldCreateGhlContact, shouldForwardToGoogleSheet, shouldForwardToZapier } from '../api/submit-application/ghl';
+import { formatLeadsTabRow, LEADS_TAB_HEADERS } from '../api/submit-application/sheetLead';
 
 const base = {
   ...emptyApplicationFormData,
@@ -72,6 +73,60 @@ const checks: Array<[string, boolean]> = [
       leadStatus: 'disqualified',
       dqReason: 'not_open_to_coaching',
     }) === true,
+  ],
+  [
+    'zapier skipped for financial dq',
+    shouldForwardToZapier({
+      ...payload,
+      leadStatus: 'disqualified',
+      dqReason: 'gathering_information',
+      readiness: { ...payload.readiness, code: 'C' },
+    }) === false,
+  ],
+  [
+    'zapier skipped for non-financial dq',
+    shouldForwardToZapier({
+      ...payload,
+      leadStatus: 'disqualified',
+      dqReason: 'not_open_to_coaching',
+    }) === false,
+  ],
+  ['zapier kept for qualified lead', shouldForwardToZapier(payload) === true],
+  [
+    'sheet used for dq leads',
+    shouldForwardToGoogleSheet({
+      ...payload,
+      leadStatus: 'disqualified',
+      dqReason: 'just_browsing',
+    }) === true,
+  ],
+  ['sheet skipped for qualified lead', shouldForwardToGoogleSheet(payload) === false],
+  ['leads tab has 15 columns', LEADS_TAB_HEADERS.length === 15],
+  [
+    'leads tab column order',
+    LEADS_TAB_HEADERS.join('|') ===
+      'Date|Name|Jewish|Problem|Goal|Committed?|Instagram|Occupation|Email|Number|Recieving Help|No Show?|UTM Campaign|UTM Set|UTM Ad',
+  ],
+  [
+    'leads tab row mapped',
+    (() => {
+      const row = formatLeadsTabRow({
+        ...payload,
+        utm_source: 'Campaign Name',
+        utm_medium: 'Adset Name',
+        utm_campaign: 'Ad Name',
+      });
+      return (
+        row[1] === 'Jane Doe' &&
+        row[2] === 'Yes' &&
+        row[6] === '@jane' &&
+        row[8] === 'jane@example.com' &&
+        row[11] === '' &&
+        row[12] === 'Campaign Name' &&
+        row[13] === 'Adset Name' &&
+        row[14] === 'Ad Name'
+      );
+    })(),
   ],
 ];
 
