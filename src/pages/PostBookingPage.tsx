@@ -3,7 +3,9 @@ import { VSLPlayer } from '../components/VSLPlayer';
 import { PrepChecklist } from '../components/PrepChecklist';
 import { FAQ } from '../components/FAQ';
 import { ConfirmAppointment } from '../components/ConfirmAppointment';
+import { RealClientStories } from '../components/RealClientStories';
 import { postBookingCopy } from '../data/copy';
+import { allClientStories } from '../data/assets';
 import { trackSchedule } from '../lib/metaPixel';
 import {
   consumePendingScheduleEventId,
@@ -78,6 +80,7 @@ export function PostBookingPage() {
 
         <PostBookingStep label={steps.prep.label} prompt={steps.prep.prompt}>
           <PrepChecklist hideTitle />
+          <RealClientStories stories={allClientStories} />
         </PostBookingStep>
       </div>
     </main>

@@ -164,6 +164,11 @@
   text-align: left;
 }
 
+.post-booking-step-section .client-stories-section {
+  margin-top: var(--space-md);
+  text-align: left;
+}
+
 .post-booking-step-section .post-booking-callout {
   margin-top: 0;
 }
