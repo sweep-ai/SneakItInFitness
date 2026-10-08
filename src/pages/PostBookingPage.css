@@ -44,10 +44,27 @@
 }
 
 .post-booking-preface .vsl-player {
-  width: min(100%, calc(min(38vh, 280px) * 9 / 16));
+  width: min(100%, calc(min(46vh, 340px) * 9 / 16));
   aspect-ratio: 9 / 16;
-  max-height: min(38vh, 280px);
+  max-height: min(46vh, 340px);
   margin-inline: auto;
+}
+
+.post-booking-preface .vsl-player-unmute-card {
+  aspect-ratio: auto;
+  max-height: none;
+  width: auto;
+  gap: 0.4rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.post-booking-preface .vsl-player-unmute-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.post-booking-preface .vsl-player-unmute-copy {
+  font-size: clamp(0.7rem, 3.2vw, 0.95rem);
 }
 
 .post-booking-sms-btn {

@@ -70,17 +70,8 @@ export function VSLPlayer({
 
     try {
       await video.play();
-      video.muted = false;
-      setIsMuted(false);
-      await video.play();
     } catch {
-      video.muted = true;
-      setIsMuted(true);
-      try {
-        await video.play();
-      } catch {
-        setPlaying(false);
-      }
+      // Keep the muted player + unmute overlay visible while the file buffers.
     }
   };
 
