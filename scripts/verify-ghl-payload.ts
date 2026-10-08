@@ -93,6 +93,15 @@ const checks: Array<[string, boolean]> = [
   ],
   ['zapier kept for qualified lead', shouldForwardToZapier(payload) === true],
   [
+    'zapier skipped if readiness C even when marked qualified',
+    shouldForwardToZapier({
+      ...payload,
+      leadStatus: 'qualified',
+      dqReason: null,
+      readiness: { ...payload.readiness, code: 'C' },
+    }) === false,
+  ],
+  [
     'sheet used for dq leads',
     shouldForwardToGoogleSheet({
       ...payload,

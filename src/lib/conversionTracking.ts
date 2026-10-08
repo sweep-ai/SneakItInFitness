@@ -1,4 +1,8 @@
-import { APPLICATION_FORM_STORAGE_KEY } from '../data/applicationForm';
+import {
+  APPLICATION_FORM_STORAGE_KEY,
+  isFinancialDisqualification,
+  type ApplicationFormData,
+} from '../data/applicationForm';
 import { generateEventId, type PixelUserData } from './metaPixel';
 
 /**
@@ -41,7 +45,8 @@ export function getStoredApplicantUserData(): PixelUserData | undefined {
   if (!raw) return undefined;
 
   try {
-    const data = JSON.parse(raw) as { name?: string; email?: string; phone?: string };
+    const data = JSON.parse(raw) as ApplicationFormData;
+    if (isFinancialDisqualification(data)) return undefined;
     const [firstName, ...restName] = (data.name ?? '').trim().split(/\s+/);
     return {
       email: data.email,
@@ -51,6 +56,17 @@ export function getStoredApplicantUserData(): PixelUserData | undefined {
     };
   } catch {
     return undefined;
+  }
+}
+
+/** True when stored application is a cannot-invest DQ. */
+export function storedApplicantIsFinancialDq(): boolean {
+  const raw = safeGet(APPLICATION_FORM_STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    return isFinancialDisqualification(JSON.parse(raw) as ApplicationFormData);
+  } catch {
+    return false;
   }
 }
 

@@ -14,15 +14,16 @@ import {
 import './PostBookingPage.css';
 
 interface PostBookingStepProps {
-  label: string;
+  label?: string;
   prompt: string;
+  className?: string;
   children: ReactNode;
 }
 
-function PostBookingStep({ label, prompt, children }: PostBookingStepProps) {
+function PostBookingStep({ label, prompt, className, children }: PostBookingStepProps) {
   return (
-    <section className="post-booking-step-section">
-      <p className="post-booking-step">{label}</p>
+    <section className={`post-booking-step-section${className ? ` ${className}` : ''}`}>
+      {label ? <p className="post-booking-step">{label}</p> : null}
       <p className="post-booking-step-prompt">{prompt}</p>
       {children}
     </section>
@@ -51,13 +52,17 @@ export function PostBookingPage() {
             <span className="post-booking-mandatory">{postBookingCopy.subheader.highlight}</span>
             {postBookingCopy.subheader.rest}
           </p>
+          <p className="post-booking-step">{steps.intro.label}</p>
         </header>
 
         <section className="post-booking-preface" aria-label="Welcome video">
           <VSLPlayer placement="postBookingPreface" />
         </section>
 
-        <PostBookingStep label={steps.intro.label} prompt={steps.intro.prompt}>
+        <PostBookingStep
+          className="post-booking-step-section--above-fold"
+          prompt={steps.intro.prompt}
+        >
           <a
             className="post-booking-sms-btn"
             href={`sms:+${postBookingCopy.phoneNumber.replace(/\D/g, '')}&body=${encodeURIComponent(postBookingCopy.smsConfirm.body)}`}

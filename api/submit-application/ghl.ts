@@ -205,6 +205,7 @@ export function shouldCreateGhlContact(payload: ApplicationWebhookPayload): bool
 }
 
 export function shouldForwardToZapier(payload: ApplicationWebhookPayload): boolean {
+  if (isFinancialDisqualificationPayload(payload)) return false;
   return payload.leadStatus === 'qualified';
 }
 

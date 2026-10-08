@@ -1,6 +1,7 @@
 import vslPoster from '../../assets/VSL-poster.jpg';
 import vslVideo from '../../assets/VSL.mp4';
-import postBookingPrefaceVideoSrc from '../../assets/IMG_6248.mp4';
+import postBookingPrefaceVideoSrc from '../../assets/post-booking-welcome.mp4';
+import postBookingPrefacePoster from '../../assets/post-booking-welcome-poster.jpg';
 import type { FunnelGender } from './copy';
 
 export type VideoPlacement = 'funnel' | 'postBooking' | 'postBookingPreface';
@@ -56,6 +57,7 @@ export const postBookingVideo: VideoConfig = {
 export const postBookingPrefaceVideo: VideoConfig = {
   provider: 'file',
   src: postBookingPrefaceVideoSrc,
+  poster: postBookingPrefacePoster,
   title: 'Post-booking welcome video',
   sectionLabel: null,
 };

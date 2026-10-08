@@ -7,6 +7,7 @@ import { trackLead } from '../lib/metaPixel';
 import {
   consumePendingLeadEventId,
   getStoredApplicantUserData,
+  storedApplicantIsFinancialDq,
 } from '../lib/conversionTracking';
 import '../components/FunnelShell.css';
 import './BookingPage.css';
@@ -16,7 +17,7 @@ export function BookingPage() {
     // Reliable Lead confirmation: only fires when the visitor actually reaches
     // /booking after submitting, reusing the submit event_id so Meta dedupes.
     const leadEventId = consumePendingLeadEventId();
-    if (leadEventId) {
+    if (leadEventId && !storedApplicantIsFinancialDq()) {
       trackLead(getStoredApplicantUserData(), leadEventId);
     }
   }, []);

@@ -1,12 +1,16 @@
 .post-booking-intro {
-  margin-bottom: var(--space-md);
-  padding-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+  padding-top: var(--space-xs);
   text-align: center;
+  gap: var(--space-sm);
 }
 
 .post-booking-headline {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 8vw, 3.25rem);
+  font-size: clamp(1.35rem, 5.5vw, 2.25rem);
   font-weight: 400;
   letter-spacing: 0.03em;
   line-height: 1.05;
@@ -16,7 +20,7 @@
 }
 
 .post-booking-subheader {
-  margin: var(--space-md) auto 0;
+  margin: 0 auto;
   max-width: 32rem;
   font-size: clamp(0.875rem, 3vw, 1rem);
   font-weight: 600;
@@ -32,18 +36,25 @@
 }
 
 .post-booking-preface {
-  margin-top: var(--space-md);
+  margin-top: var(--space-xs);
 }
 
 .post-booking-preface .vsl-section {
   margin-top: 0;
 }
 
+.post-booking-preface .vsl-player {
+  width: min(100%, calc(min(38vh, 280px) * 9 / 16));
+  aspect-ratio: 9 / 16;
+  max-height: min(38vh, 280px);
+  margin-inline: auto;
+}
+
 .post-booking-sms-btn {
   display: block;
   width: 100%;
   max-width: 34rem;
-  margin: var(--space-md) auto 0;
+  margin: var(--space-xs) auto 0;
   padding: 1.15rem 1.75rem;
   min-height: 56px;
   box-sizing: border-box;
@@ -130,6 +141,22 @@
 .post-booking-step-section {
   margin-top: var(--space-lg);
   text-align: center;
+}
+
+.post-booking-step-section--above-fold {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--space-sm);
+  gap: var(--space-md);
+}
+
+.post-booking-step-section--above-fold .post-booking-step-prompt {
+  margin: 0 auto;
+}
+
+.post-booking-step-section--above-fold .post-booking-sms-btn {
+  margin-top: 0;
 }
 
 .post-booking-step-section + .post-booking-step-section {
