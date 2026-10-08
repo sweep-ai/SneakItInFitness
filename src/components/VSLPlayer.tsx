@@ -64,14 +64,23 @@ export function VSLPlayer({
   );
   const [isMuted, setIsMuted] = useState(true);
 
-  const attemptAutoplay = async (video: HTMLVideoElement) => {
+  const primeMutedAutoplay = (video: HTMLVideoElement) => {
+    video.defaultMuted = true;
     video.muted = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+  };
+
+  const attemptAutoplay = async (video: HTMLVideoElement) => {
+    primeMutedAutoplay(video);
     setIsMuted(true);
 
     try {
       await video.play();
     } catch {
-      // Keep the muted player + unmute overlay visible while the file buffers.
+      // Overlay stays up; canplay / loadedmetadata retry muted autoplay.
     }
   };
 
@@ -116,6 +125,7 @@ export function VSLPlayer({
     }
 
     video.muted = false;
+    video.removeAttribute('muted');
     setIsMuted(false);
     void video.play();
   };
@@ -131,7 +141,12 @@ export function VSLPlayer({
       {label && <h2 className="vsl-section-label">{label}</h2>}
       <div className="vsl-player">
         {config.provider === 'loom' && config.loomEmbedUrl && (
-          <iframe src={config.loomEmbedUrl} title={config.title} allowFullScreen />
+          <iframe
+            src={config.loomEmbedUrl}
+            title={config.title}
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
         )}
         {config.provider === 'youtube' && youtubeId && playing && embedSrc && (
           <iframe
@@ -161,7 +176,10 @@ export function VSLPlayer({
         {config.provider === 'file' && config.src && playing && (
           <>
             <video
-              ref={videoRef}
+              ref={(el) => {
+                videoRef.current = el;
+                if (el && isMuted) primeMutedAutoplay(el);
+              }}
               className="vsl-player-video"
               src={config.src}
               poster={config.poster}
@@ -171,6 +189,7 @@ export function VSLPlayer({
               muted={isMuted}
               playsInline
               preload="auto"
+              onLoadedMetadata={handleVideoReady}
               onLoadedData={handleVideoReady}
               onCanPlay={handleVideoReady}
             />

@@ -17,7 +17,15 @@ export interface VideoConfig {
 }
 
 function loomEmbedUrl(shareId: string): string {
-  return `https://www.loom.com/embed/${shareId}`;
+  const params = new URLSearchParams({
+    hide_owner: 'true',
+    hide_share: 'true',
+    hide_title: 'true',
+    hideEmbedTopBar: 'true',
+    autoplay: '1',
+    muted: '1',
+  });
+  return `https://www.loom.com/embed/${shareId}?${params.toString()}`;
 }
 
 const funnelVslConfig: VideoConfig = {
