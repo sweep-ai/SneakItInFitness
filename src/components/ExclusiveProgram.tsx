@@ -19,7 +19,7 @@ export function ExclusiveProgram({ icpGender }: ExclusiveProgramProps) {
       <div className="exclusive-program-bg" aria-hidden="true">
         <div className="exclusive-program-photo-grid">
           {gridPhotos.map((src, index) => (
-            <img key={`${src}-${index}`} src={src} alt="" loading="lazy" />
+            <img key={`${src}-${index}`} src={src} alt="" loading="lazy" decoding="async" />
           ))}
         </div>
         <div className="exclusive-program-overlay" />

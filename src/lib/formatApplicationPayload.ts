@@ -134,7 +134,7 @@ export function formatApplicationPayload(
   const goal = formatChoiceAnswer('goal', data.goal);
   const openToCoaching = formatYesNoAnswer('openToCoaching', data.openToCoaching);
   const readiness = formatChoiceAnswer('readiness', data.readiness);
-  const isJewish = data.isJewish === 'yes' ? 'Yes' : 'No';
+  const isJewish = getOptionLabel('isJewish', data.isJewish);
   const occupation = data.occupation.trim();
   const age = data.age.trim();
 

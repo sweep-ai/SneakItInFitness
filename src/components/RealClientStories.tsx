@@ -6,15 +6,17 @@ import './RealClientStories.css';
 interface RealClientStoriesProps {
   stories: ClientStoryVideo[];
   title?: string;
+  hideTitle?: boolean;
 }
 
 export function RealClientStories({
   stories,
   title = 'Real Client Stories',
+  hideTitle = false,
 }: RealClientStoriesProps) {
   return (
     <section className="client-stories-section section" aria-label={title}>
-      <SectionTitle>{title}</SectionTitle>
+      {!hideTitle && <SectionTitle>{title}</SectionTitle>}
       <div className="client-stories-list">
         {stories.map((story) => (
           <article key={story.name} className="client-story-card">

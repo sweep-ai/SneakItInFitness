@@ -7,7 +7,7 @@ export function HomePage() {
     <FunnelShell
       bannerMode="both"
       icpGender="neutral"
-      afterBanner={<RealClientStories stories={allClientStories} />}
+      afterBanner={<RealClientStories stories={allClientStories} hideTitle />}
     />
   );
 }

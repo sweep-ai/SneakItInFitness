@@ -18,7 +18,14 @@ export function ScrollingBanner({
         {track.map((item, i) => (
           <article key={`${item.name}-${i}`} className="scrolling-banner-card">
             <div className="scrolling-banner-image">
-              <img src={item.src} alt={`${item.name} transformation`} loading="lazy" />
+              <img
+                src={item.src}
+                alt={`${item.name} transformation`}
+                loading="lazy"
+                decoding="async"
+                width={204}
+                height={240}
+              />
             </div>
             <div className="scrolling-banner-caption">
               <p className="scrolling-banner-name">{item.name}</p>

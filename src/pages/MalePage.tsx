@@ -7,7 +7,7 @@ export function MalePage() {
     <FunnelShell
       bannerMode="men"
       icpGender="male"
-      afterBanner={<RealClientStories stories={menClientStories} />}
+      afterBanner={<RealClientStories stories={menClientStories} hideTitle />}
     />
   );
 }

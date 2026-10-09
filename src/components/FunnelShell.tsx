@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { FunnelGender } from '../data/copy';
-import { funnelCopy, getFunnelSubhead } from '../data/copy';
+import { eligibilityTitle, funnelCopy, getFunnelSubhead, transformationsCopy } from '../data/copy';
 import { PageHero } from './PageHero';
 import { VSLPlayer } from './VSLPlayer';
 import { ApplicationForm } from './ApplicationForm';
@@ -41,9 +41,8 @@ export function FunnelShell({
       </>
     );
 
-  const testimonialSection = afterBanner ? (
-    <div className="container">{afterBanner}</div>
-  ) : null;
+  const highlight = transformationsCopy.headlineHighlight;
+  const headlineParts = transformationsCopy.headline.split(highlight);
 
   return (
     <main className="page-main">
@@ -55,20 +54,21 @@ export function FunnelShell({
       />
       <div className="container">
         <VSLPlayer gender={icpGender} />
-        <div className="pre-form-scroll-cta">
-          <a href="#application-form" className="pre-form-scroll-btn">
-            Apply After Watching ↓
-          </a>
-        </div>
-      </div>
-      <div className="pre-form-social-proof">
-        <div className="testimonial-banners">{scrollingBanners}</div>
-      </div>
-      <div className="container">
+        <h2 className="funnel-eligibility-title">{eligibilityTitle}</h2>
         <ApplicationForm />
         {children}
       </div>
-      {testimonialSection}
+      <section className="funnel-transformations" aria-labelledby="funnel-transformations-heading">
+        <p className="funnel-transformations-eyebrow">{transformationsCopy.eyebrow}</p>
+        <h2 id="funnel-transformations-heading" className="funnel-transformations-headline">
+          {headlineParts[0]}
+          <span className="funnel-transformations-highlight">{highlight}</span>
+          {headlineParts[1]}
+        </h2>
+        <p className="funnel-transformations-subhead">{transformationsCopy.subhead}</p>
+        <div className="testimonial-banners">{scrollingBanners}</div>
+        {afterBanner ? <div className="container">{afterBanner}</div> : null}
+      </section>
       <ExclusiveProgram icpGender={icpGender} />
       <FounderManifesto />
       <div className="container">

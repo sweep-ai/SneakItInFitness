@@ -18,6 +18,10 @@ export const applicationFormSteps: ApplicationStep[] = [
     prompt: 'Are you Jewish?',
     type: 'yesno',
     required: true,
+    options: [
+      { id: 'yes', label: 'Yes' },
+      { id: 'no', label: "No - But I'm a supporter of the tribe" },
+    ],
   },
   {
     id: 'situation',

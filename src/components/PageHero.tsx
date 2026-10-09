@@ -107,7 +107,7 @@ export function PageHero({ headline, headlineHighlight, headlineUnderline, subhe
       <div className="page-hero-bg" aria-hidden="true">
         <div className="page-hero-photo-grid">
           {gridPhotos.map((src, index) => (
-            <img key={`${src}-${index}`} src={src} alt="" loading="lazy" />
+            <img key={`${src}-${index}`} src={src} alt="" loading="lazy" decoding="async" />
           ))}
         </div>
         <div className="page-hero-overlay" />

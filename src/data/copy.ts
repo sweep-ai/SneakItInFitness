@@ -13,7 +13,7 @@ export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
 }
 
 export function getFunnelSubhead(_gender?: FunnelGender | 'neutral'): string {
-  return `A professionally guided program built on your llife, not a template. No living in the gym, excessive cardio, no giving up family meals↓`;
+  return `A professionally guided program built on your llife, not a template. No living in the gym, no excessive cardio, no giving up family meals↓`;
 }
 
 export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutral'): string {
@@ -43,6 +43,15 @@ export const funnelCopy: FunnelCopy = {
   headline: 'Helping \nJews Lose 20+ lbs\n  and Keep It Off This Time',
   headlineHighlight: ['Jews Lose 20+ lbs'],
   headlineUnderline: ['Keep It Off For Good'],
+};
+
+export const eligibilityTitle = 'Check Eligibility In 60 Seconds';
+
+export const transformationsCopy = {
+  eyebrow: 'Real Transformations',
+  headline: 'Jewish Adults Who Transformed Their Lives',
+  headlineHighlight: 'Transformed Their Lives',
+  subhead: 'Real stories from people who took control of their health and fitness.',
 };
 
 export const bookingCopy = {

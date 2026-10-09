@@ -11,7 +11,12 @@ export function TestimonialGallery({ testimonials }: TestimonialGalleryProps) {
       {testimonials.map((item) => (
         <article key={item.name} className="testimonial-gallery-card">
           <div className="testimonial-gallery-image">
-            <img src={item.src} alt={`${item.name} transformation`} loading="lazy" />
+            <img
+                src={item.src}
+                alt={`${item.name} transformation`}
+                loading="lazy"
+                decoding="async"
+              />
           </div>
           <div className="testimonial-gallery-caption">
             <p className="testimonial-gallery-name">{item.name}</p>
