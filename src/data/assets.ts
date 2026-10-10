@@ -6,7 +6,7 @@ import tylerBanner from '../../assets/men/Tyler.jpg';
 import isaiahBanner from '../../assets/men/Isaiah.jpg';
 import elliotBanner from '../../assets/men/Elliot.jpg';
 import mattBanner from '../../assets/men/Matt.jpg';
-import chelseaBanner from '../../assets/women/Chelsea.jpg';
+import chelsieBanner from '../../assets/women/Chelsie.jpg';
 import erinBanner from '../../assets/women/Erin.jpg';
 import harrisBanner from '../../assets/testimonial-posters/Harris.jpg';
 
@@ -81,11 +81,11 @@ export const menTestimonials: Testimonial[] = [
   { src: sam, name: 'Sam', stat: 'Lost 30 lbs in 3 months' },
   { src: david, name: 'David', stat: 'Lost 45 lbs in 6 months' },
   { src: drewBanner, name: 'Drew', stat: 'Lost 150 lbs in 18 months' },
-  { src: connorBanner, name: 'Tyler', stat: 'Lost 20 lbs in 3 months' },
-  { src: tylerBanner, name: 'Matt', stat: 'Lost 80 lbs in 8 months' },
+  { src: connorBanner, name: 'Tyler', stat: 'Lost 80 lbs in 8 months' },
+  { src: tylerBanner, name: 'Matt', stat: 'Lost 20 lbs in 3 months' },
   { src: isaiahBanner, name: 'Isaiah', stat: 'Lost 50 lbs in 6 months' },
-  { src: elliotBanner, name: 'Connor', stat: 'Body recomposition in 3 months' },
-  { src: mattBanner, name: 'Elliott', stat: 'Lost 20 lbs in 3 months' },
+  { src: elliotBanner, name: 'Connor', stat: 'Lost 20 lbs in 3 months' },
+  { src: mattBanner, name: 'Elliott', stat: 'Body recomposition in 3 months' },
 ];
 
 export interface ClientStoryVideo {
@@ -96,42 +96,42 @@ export interface ClientStoryVideo {
 }
 
 export const menClientStories: ClientStoryVideo[] = [
-  { src: tylerVideo, poster: tylerPoster, name: 'Matt', stat: 'Lost 80 lbs in 8 months' },
-  { src: harrisVideo, poster: harrisPoster, name: 'Harris', stat: '-50 lbs in 8 months' },
-  { src: samVideo, poster: samPoster, name: 'Sam', stat: '-30 lbs in 3 months' },
-  { src: joshVideo, poster: joshPoster, name: 'Josh', stat: '-20 lbs in 3 months' },
-  { src: isaiahVideo, poster: isaiahPoster, name: 'Isaiah', stat: '-40 lbs in 4 months' },
-  { src: ronVideo, poster: ronPoster, name: 'Ron', stat: '-23 lbs in 6 weeks' },
-  { src: mattVideo, poster: mattPoster, name: 'Elliott', stat: '-20 lbs in 10 weeks' },
-  { src: elliottVideo, poster: elliottPoster, name: 'Connor', stat: 'Life Transformation in 4 weeks' },
-  { src: rabbiMattVideo, poster: rabbiMattPoster, name: 'Rabbi Matt', stat: '-20 lbs in 3 months' },
-  { src: jonathanVideo, poster: jonathanPoster, name: 'Jonathan', stat: '-20 lbs in 60 days' },
+  { src: tylerVideo, poster: tylerPoster, name: 'Tyler', stat: 'Lost 80 lbs in 8 months' },
+  { src: harrisVideo, poster: harrisPoster, name: 'Harris', stat: 'Lost 50 lbs in 8 months' },
+  { src: samVideo, poster: samPoster, name: 'Sam', stat: 'Lost 30 lbs in 3 months' },
+  { src: joshVideo, poster: joshPoster, name: 'Josh', stat: 'Lost 20 lbs in 3 months' },
+  { src: isaiahVideo, poster: isaiahPoster, name: 'Isaiah', stat: 'Lost 40 lbs in 4 months' },
+  { src: ronVideo, poster: ronPoster, name: 'Ron', stat: 'Lost 23 lbs in 6 weeks' },
+  { src: mattVideo, poster: mattPoster, name: 'Elliott', stat: 'Life Transformation in 4 weeks' },
+  { src: elliottVideo, poster: elliottPoster, name: 'Connor', stat: 'Lost 20 lbs in 3 months' },
+  { src: rabbiMattVideo, poster: rabbiMattPoster, name: 'Rabbi Matt', stat: 'Lost 20 lbs in 3 months' },
+  { src: jonathanVideo, poster: jonathanPoster, name: 'Jonathan', stat: 'Lost 20 lbs in 60 days' },
   { src: tobyVideo, poster: tobyPoster, name: 'Toby', stat: 'Lost 20 lbs in 5 months' },
 ];
 
 export const womenTestimonials: Testimonial[] = [
-  { src: kara, name: 'Chelsie', stat: 'Lost 45 lbs in 7 months' },
+  { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: kristaPoster, name: 'Krista', stat: 'Lost 55 lbs in 5 months' },
   { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
   { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
   { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
-  { src: chelseaBanner, name: 'Erin', stat: 'Lost 15 lbs in 90 days' },
-  { src: erinBanner, name: 'Kara', stat: 'Lost 15 lbs in 3 months' },
+  { src: chelsieBanner, name: 'Chelsie', stat: 'Lost 15 lbs in 90 days' },
+  { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
 ];
 
 export const womenClientStories: ClientStoryVideo[] = [
-  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: '-60 lbs in 6 months' },
-  { src: ajaVideo, poster: ajaPoster, name: 'Aja', stat: '-60 lbs in 6 months' },
-  { src: mrsSokolVideo, poster: mrsSokolPoster, name: 'Roni (My Mom)', stat: '-50 lbs in 8 months' },
-  { src: alyssVideo, poster: alyssPoster, name: 'Alyss', stat: '-30 lbs in 3 months' },
-  { src: erinVideo, poster: erinPoster, name: 'Kara', stat: 'Lost 15 lbs of fat in 90 days' },
+  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: 'Lost 60 lbs in 6 months' },
+  { src: ajaVideo, poster: ajaPoster, name: 'Aja', stat: 'Lost 60 lbs in 6 months' },
+  { src: mrsSokolVideo, poster: mrsSokolPoster, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
+  { src: alyssVideo, poster: alyssPoster, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
+  { src: erinVideo, poster: erinPoster, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: rivkieVideo, poster: rivkiePoster, name: 'Rivkie', stat: 'Lost 10 lbs in 45 days' },
-  { src: vaishaliVideo, poster: vaishaliPoster, name: 'Vaishali', stat: '-13 lbs in 8 weeks' },
-  { src: heatherVideo, poster: heatherPoster, name: 'Heather', stat: '-20 lbs in 3 months' },
+  { src: vaishaliVideo, poster: vaishaliPoster, name: 'Vaishali', stat: 'Lost 13 lbs in 8 weeks' },
+  { src: heatherVideo, poster: heatherPoster, name: 'Heather', stat: 'Lost 20 lbs in 3 months' },
   { src: chrissyVideo, poster: chrissyPoster, name: 'Chrissy', stat: '6 month full body transformation' },
-  { src: avivaVideo, poster: avivaPoster, name: 'Aviva', stat: '-12 lbs in 5 weeks' },
-  { src: graceVideo, poster: gracePoster, name: 'Grace', stat: '-20 lbs in 60 days' },
+  { src: avivaVideo, poster: avivaPoster, name: 'Aviva', stat: 'Lost 12 lbs in 5 weeks' },
+  { src: graceVideo, poster: gracePoster, name: 'Grace', stat: 'Lost 20 lbs in 60 days' },
 ];
 
 function interleave<T>(first: T[], second: T[]): T[] {

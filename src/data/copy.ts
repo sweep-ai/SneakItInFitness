@@ -40,7 +40,7 @@ export const founderManifestoLines = [
 ] as const;
 
 export const funnelCopy: FunnelCopy = {
-  headline: 'Jewish Adults Lose 20+ LBS GUARANTEED Using A Sustainable System.\nAnd Keep It Off This Time.',
+  headline: 'Jewish Adults Lose\n20+ LBS GUARANTEED\nUsing A Sustainable System.\nAnd Keep It Off This Time.',
   headlineHighlight: ['20+ LBS GUARANTEED'],
   headlineUnderline: ['Keep It Off This Time'],
 };
