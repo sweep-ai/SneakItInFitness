@@ -13,7 +13,7 @@ export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
 }
 
 export function getFunnelSubhead(_gender?: FunnelGender | 'neutral'): string {
-  return `A professionally guided program built on your llife, not a template. No living in the gym, no excessive cardio, no giving up family meals↓`;
+  return `A professionally guided program built on your life, not a template. No living in the gym, excessive cardio, no giving up family meals, sacrificing holidays or our culture↓`;
 }
 
 export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutral'): string {
@@ -40,9 +40,9 @@ export const founderManifestoLines = [
 ] as const;
 
 export const funnelCopy: FunnelCopy = {
-  headline: 'Helping \nJews Lose 20+ lbs\n  and Keep It Off This Time',
-  headlineHighlight: ['Jews Lose 20+ lbs'],
-  headlineUnderline: ['Keep It Off For Good'],
+  headline: 'Jewish Adults Lose 20+ LBS GUARANTEED Using A Sustainable System.\nAnd Keep It Off This Time.',
+  headlineHighlight: ['20+ LBS GUARANTEED'],
+  headlineUnderline: ['Keep It Off This Time'],
 };
 
 export const eligibilityTitle = 'Check Eligibility In 60 Seconds';
