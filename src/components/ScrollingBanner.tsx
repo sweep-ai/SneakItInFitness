@@ -16,7 +16,7 @@ export function ScrollingBanner({
     <div className="scrolling-banner" data-direction={direction}>
       <div className="scrolling-banner-track">
         {track.map((item, i) => (
-          <article key={`${item.name}-${i}`} className="scrolling-banner-card">
+          <article key={`${item.src}-${item.name}-${item.stat}-${i}`} className="scrolling-banner-card">
             <div className="scrolling-banner-image">
               <img
                 src={item.src}

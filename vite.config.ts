@@ -50,5 +50,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), submitApplicationApi(), trackEventApi()],
+    server: {
+      headers: {
+        'Cache-Control': 'no-store',
+      },
+    },
   };
 });

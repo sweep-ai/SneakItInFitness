@@ -6,8 +6,8 @@ import tylerBanner from '../../assets/men/Tyler.jpg';
 import isaiahBanner from '../../assets/men/Isaiah.jpg';
 import elliotBanner from '../../assets/men/Elliot.jpg';
 import mattBanner from '../../assets/men/Matt.jpg';
-import chelsieBanner from '../../assets/women/Chelsie.jpg';
-import erinBanner from '../../assets/women/Erin.jpg';
+import chelseaBanner from '../../assets/women/Chelsea.jpg?v=banner-swap';
+import erinBanner from '../../assets/women/Erin.jpg?v=banner-swap';
 import harrisBanner from '../../assets/testimonial-posters/Harris.jpg';
 
 import elliottVideo from '../../assets/testimonials/Elliott.mp4';
@@ -47,7 +47,7 @@ import vaishaliPoster from '../../assets/testimonial-posters/Vaishali.jpg';
 
 import alyss from '../../assets/women/Alyss.JPG';
 import janie from '../../assets/women/Janie.JPG';
-import kara from '../../assets/women/Kara.JPG';
+import kara from '../../assets/women/Kara.JPG?v=banner-swap';
 import mrsSokol from '../../assets/women/MrsSokol.JPG';
 import nelly from '../../assets/women/Nelly.png';
 
@@ -110,14 +110,14 @@ export const menClientStories: ClientStoryVideo[] = [
 ];
 
 export const womenTestimonials: Testimonial[] = [
+  { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
   { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
+  { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
   { src: kristaPoster, name: 'Krista', stat: 'Lost 55 lbs in 5 months' },
   { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
   { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
   { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
-  { src: chelsieBanner, name: 'Chelsie', stat: 'Lost 15 lbs in 90 days' },
-  { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
 ];
 
 export const womenClientStories: ClientStoryVideo[] = [
@@ -125,7 +125,7 @@ export const womenClientStories: ClientStoryVideo[] = [
   { src: ajaVideo, poster: ajaPoster, name: 'Aja', stat: 'Lost 60 lbs in 6 months' },
   { src: mrsSokolVideo, poster: mrsSokolPoster, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
   { src: alyssVideo, poster: alyssPoster, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
-  { src: erinVideo, poster: erinPoster, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
+  { src: erinVideo, poster: erinPoster, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
   { src: rivkieVideo, poster: rivkiePoster, name: 'Rivkie', stat: 'Lost 10 lbs in 45 days' },
   { src: vaishaliVideo, poster: vaishaliPoster, name: 'Vaishali', stat: 'Lost 13 lbs in 8 weeks' },
   { src: heatherVideo, poster: heatherPoster, name: 'Heather', stat: 'Lost 20 lbs in 3 months' },
@@ -160,3 +160,7 @@ export const heroBackgroundPhotos = [
   ...menTestimonials.map((t) => t.src),
   ...womenTestimonials.map((t) => t.src),
 ];
+
+if (import.meta.hot) {
+  import.meta.hot.invalidate();
+}

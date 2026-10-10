@@ -29,15 +29,17 @@ export function FunnelShell({
     icpGenderProp ??
     (bannerMode === 'men' ? 'male' : bannerMode === 'women' ? 'female' : 'neutral');
 
+  const womenBannerKey = womenTestimonials.map((item) => `${item.name}:${item.stat}`).join('|');
+
   const scrollingBanners =
     bannerMode === 'men' ? (
       <ScrollingBanner testimonials={menTestimonials} direction="left" />
     ) : bannerMode === 'women' ? (
-      <ScrollingBanner testimonials={womenTestimonials} direction="right" />
+      <ScrollingBanner key={womenBannerKey} testimonials={womenTestimonials} direction="right" />
     ) : (
       <>
         <ScrollingBanner testimonials={menTestimonials} direction="left" />
-        <ScrollingBanner testimonials={womenTestimonials} direction="right" />
+        <ScrollingBanner key={womenBannerKey} testimonials={womenTestimonials} direction="right" />
       </>
     );
 
