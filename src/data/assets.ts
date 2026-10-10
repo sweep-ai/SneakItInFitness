@@ -6,8 +6,8 @@ import tylerBanner from '../../assets/men/Tyler.jpg';
 import isaiahBanner from '../../assets/men/Isaiah.jpg';
 import elliotBanner from '../../assets/men/Elliot.jpg';
 import mattBanner from '../../assets/men/Matt.jpg';
-import chelseaBanner from '../../assets/women/Chelsea.jpg?v=banner-swap';
-import erinBanner from '../../assets/women/Erin.jpg?v=banner-swap';
+import chelseaBanner from '../../assets/women/Chelsea.jpg';
+import erinBanner from '../../assets/women/Erin.jpg';
 import harrisBanner from '../../assets/testimonial-posters/Harris.jpg';
 
 import elliottVideo from '../../assets/testimonials/Elliott.mp4';
@@ -47,7 +47,7 @@ import vaishaliPoster from '../../assets/testimonial-posters/Vaishali.jpg';
 
 import alyss from '../../assets/women/Alyss.JPG';
 import janie from '../../assets/women/Janie.JPG';
-import kara from '../../assets/women/Kara.JPG?v=banner-swap';
+import kara from '../../assets/women/Kara.JPG';
 import mrsSokol from '../../assets/women/MrsSokol.JPG';
 import nelly from '../../assets/women/Nelly.png';
 
