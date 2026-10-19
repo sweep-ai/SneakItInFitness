@@ -34,18 +34,15 @@ export function shouldForwardToSmsloop(payload: ApplicationWebhookPayload): bool
   return !isFinancialDisqualificationPayload(payload);
 }
 
-/**
- * Scenario key per lead outcome, set via env vars once the matching key exists
- * in the SMSLoop dashboard. Unset (the default for this deployment) => `scenario`
- * is omitted entirely and the lead uses the default Main prompt.
- */
-function resolveScenario(payload: ApplicationWebhookPayload): string | undefined {
-  const key =
-    payload.leadStatus === 'qualified'
-      ? process.env.SMSLOOP_SCENARIO_QUALIFIED
-      : process.env.SMSLOOP_SCENARIO_DISQUALIFIED;
+/** Quiz opt-in, no call booked yet. Must exist in the SMSLoop dashboard. */
+export const SMSLOOP_NOT_BOOKED_SCENARIO = 'not_booked';
 
-  return key?.trim() || undefined;
+/**
+ * Inbound opt-in scenario. Defaults to `not_booked`. Override with
+ * `SMSLOOP_SCENARIO` if the dashboard key differs.
+ */
+export function resolveInboundScenario(): string {
+  return process.env.SMSLOOP_SCENARIO?.trim() || SMSLOOP_NOT_BOOKED_SCENARIO;
 }
 
 function splitName(fullName: string): { firstName: string | undefined; lastName: string | undefined } {
@@ -77,7 +74,7 @@ export async function sendLeadToSmsloop(payload: ApplicationWebhookPayload): Pro
   }
 
   const { firstName, lastName } = splitName(payload.name ?? '');
-  const scenario = resolveScenario(payload);
+  const scenario = resolveInboundScenario();
 
   // Consent evidence travels with every send, regardless of whether a scenario is set.
   const context: Record<string, string> = { lead_status: payload.leadStatus };
