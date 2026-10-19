@@ -134,6 +134,34 @@ export const womenClientStories: ClientStoryVideo[] = [
   { src: graceVideo, poster: gracePoster, name: 'Grace', stat: 'Lost 20 lbs in 60 days' },
 ];
 
+/** Older-looking women first for the 45+ / menopausal funnel. */
+export const menopauseTestimonials: Testimonial[] = [
+  { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
+  { src: kristaPoster, name: 'Krista', stat: 'Lost 55 lbs in 5 months' },
+  { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
+  { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
+  { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
+  { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
+  { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
+  { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
+];
+
+export const menopauseClientStories: ClientStoryVideo[] = [
+  { src: mrsSokolVideo, poster: mrsSokolPoster, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
+  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: 'Lost 60 lbs in 6 months' },
+  { src: ajaVideo, poster: ajaPoster, name: 'Aja', stat: 'Lost 60 lbs in 6 months' },
+  { src: chrissyVideo, poster: chrissyPoster, name: 'Chrissy', stat: '6 month full body transformation' },
+  { src: erinVideo, poster: erinPoster, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
+  { src: rivkieVideo, poster: rivkiePoster, name: 'Rivkie', stat: 'Lost 10 lbs in 45 days' },
+  { src: vaishaliVideo, poster: vaishaliPoster, name: 'Vaishali', stat: 'Lost 13 lbs in 8 weeks' },
+  { src: heatherVideo, poster: heatherPoster, name: 'Heather', stat: 'Lost 20 lbs in 3 months' },
+  { src: graceVideo, poster: gracePoster, name: 'Grace', stat: 'Lost 20 lbs in 60 days' },
+  { src: alyssVideo, poster: alyssPoster, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
+  { src: avivaVideo, poster: avivaPoster, name: 'Aviva', stat: 'Lost 12 lbs in 5 weeks' },
+];
+
+export const menopauseHeroPhotos = menopauseTestimonials.map((item) => item.src);
+
 function interleave<T>(first: T[], second: T[]): T[] {
   const merged: T[] = [];
   const length = Math.max(first.length, second.length);

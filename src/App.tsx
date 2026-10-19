@@ -1,12 +1,14 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { MetaPixelRouteTracker } from './components/MetaPixelRouteTracker';
 import { captureUtmFromUrl } from './lib/utm';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
 const MalePage = lazy(() => import('./pages/MalePage').then((m) => ({ default: m.MalePage })));
-const FemalePage = lazy(() => import('./pages/FemalePage').then((m) => ({ default: m.FemalePage })));
+const FemalePage = lazy(() =>
+  import('./pages/FemalePage').then((m) => ({ default: m.FemalePage }))
+);
 const PrivacyPolicyPage = lazy(() =>
   import('./pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage }))
 );
@@ -91,6 +93,8 @@ export default function App() {
               </Suspense>
             }
           />
+          <Route path="menopausal" element={<Navigate to="/female" replace />} />
+          <Route path="45" element={<Navigate to="/female" replace />} />
           <Route
             path="booking"
             element={

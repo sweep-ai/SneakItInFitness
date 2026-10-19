@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { isGhlConfigured, shouldCreateGhlContact, shouldForwardToGoogleSheet, shouldForwardToZapier, upsertApplicationContact, type ApplicationWebhookPayload } from './ghl.js';
 import { formatLeadsTabRow } from './sheetLead.js';
+import { isSmsloopConfigured, sendLeadToSmsloop, shouldForwardToSmsloop } from './smsloop.js';
 
 async function readRequestBody(req: IncomingMessage): Promise<string> {
   const chunks: Buffer[] = [];
@@ -48,10 +49,11 @@ export async function handleSubmitApplicationRequest(
   const webhook = process.env.ZAPIER_WEBHOOK?.trim();
   const sheetWebhook = process.env.GOOGLE_SHEET_WEBHOOK?.trim();
   const ghlEnabled = isGhlConfigured();
+  const smsloopEnabled = isSmsloopConfigured();
 
-  if (!webhook && !ghlEnabled && !sheetWebhook) {
+  if (!webhook && !ghlEnabled && !sheetWebhook && !smsloopEnabled) {
     sendJson(res, 500, {
-      error: 'No submission destination configured (ZAPIER_WEBHOOK, GOOGLE_SHEET_WEBHOOK, or GHL credentials)',
+      error: 'No submission destination configured (ZAPIER_WEBHOOK, GOOGLE_SHEET_WEBHOOK, GHL, or SMSLoop credentials)',
     });
     return;
   }
@@ -95,6 +97,10 @@ export async function handleSubmitApplicationRequest(
 
   if (ghlEnabled && shouldCreateGhlContact(payload)) {
     tasks.push(upsertApplicationContact(payload).then(() => undefined));
+  }
+
+  if (smsloopEnabled && shouldForwardToSmsloop(payload)) {
+    tasks.push(sendLeadToSmsloop(payload).then(() => undefined));
   }
 
   try {

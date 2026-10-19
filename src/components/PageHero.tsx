@@ -7,6 +7,7 @@ interface PageHeroProps {
   headlineHighlight?: string | string[];
   headlineUnderline?: string | string[];
   subhead: string;
+  photos?: string[];
 }
 
 function toPhraseList(value?: string | string[]): string[] {
@@ -99,8 +100,15 @@ function renderMarkedHeadline(
   );
 }
 
-export function PageHero({ headline, headlineHighlight, headlineUnderline, subhead }: PageHeroProps) {
-  const gridPhotos = Array.from({ length: 24 }, (_, index) => heroBackgroundPhotos[index % heroBackgroundPhotos.length]);
+export function PageHero({
+  headline,
+  headlineHighlight,
+  headlineUnderline,
+  subhead,
+  photos = heroBackgroundPhotos,
+}: PageHeroProps) {
+  const pool = photos.length > 0 ? photos : heroBackgroundPhotos;
+  const gridPhotos = Array.from({ length: 24 }, (_, index) => pool[index % pool.length]);
 
   return (
     <header className="page-hero">

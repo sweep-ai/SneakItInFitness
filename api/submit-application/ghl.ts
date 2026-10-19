@@ -22,6 +22,8 @@ export interface ApplicationWebhookPayload {
   dqReason: string | null;
   submittedAt: string;
   source: string;
+  smsConsent: boolean;
+  smsConsentTimestamp: string;
   utm_source: string;
   utm_medium: string;
   utm_campaign: string;
@@ -153,6 +155,9 @@ export function buildGhlContactPayload(
     'SneakIt Application',
     payload.leadStatus === 'qualified' ? 'Qualified Lead' : 'Disqualified Lead',
   ];
+  if (payload.smsConsent) {
+    tags.push('SMS Consent Given');
+  }
 
   return {
     locationId,

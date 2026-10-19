@@ -9,3 +9,6 @@ dist
 *.local
 .env
 .env.*
+
+# SMSLoop guide ships with the live secret embedded
+SMSLOOP_LEAD_API.md

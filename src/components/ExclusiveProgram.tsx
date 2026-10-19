@@ -1,18 +1,17 @@
-import type { FunnelGender } from '../data/copy';
+import type { IcpAudience } from '../data/copy';
 import { getExclusiveProgramAudiencePhrase } from '../data/copy';
 import { ariMomSrc, heroBackgroundPhotos } from '../data/assets';
 import { ApplyButton } from './ApplyButton';
 import './ExclusiveProgram.css';
 
 interface ExclusiveProgramProps {
-  icpGender?: FunnelGender | 'neutral';
+  icpGender?: IcpAudience;
+  photos?: string[];
 }
 
-export function ExclusiveProgram({ icpGender }: ExclusiveProgramProps) {
-  const gridPhotos = Array.from(
-    { length: 40 },
-    (_, index) => heroBackgroundPhotos[index % heroBackgroundPhotos.length]
-  );
+export function ExclusiveProgram({ icpGender, photos = heroBackgroundPhotos }: ExclusiveProgramProps) {
+  const pool = photos.length > 0 ? photos : heroBackgroundPhotos;
+  const gridPhotos = Array.from({ length: 40 }, (_, index) => pool[index % pool.length]);
 
   return (
     <section className="exclusive-program" aria-labelledby="exclusive-program-heading">

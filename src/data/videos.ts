@@ -45,11 +45,12 @@ export const femaleFunnelVideo: VideoConfig = funnelVslConfig;
 /** Neutral home page — general-audience hosted VSL. */
 export const neutralFunnelVideo: VideoConfig = funnelVslConfig;
 
-export type FunnelVideoGender = FunnelGender | 'neutral';
+export type FunnelVideoGender = FunnelGender | 'neutral' | 'menopausal';
 
 export const funnelVideosByGender: Record<FunnelVideoGender, VideoConfig> = {
   male: maleFunnelVideo,
   female: femaleFunnelVideo,
+  menopausal: femaleFunnelVideo,
   neutral: neutralFunnelVideo,
 };
 

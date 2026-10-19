@@ -142,6 +142,10 @@ export interface ApplicationFormData {
   readiness: string;
   occupation: string;
   age: string;
+  /** Opt-in only — never required to submit the application (TCPA: not a condition of purchase). */
+  smsConsent: boolean;
+  /** ISO timestamp captured at the moment the box was checked, for consent evidence. */
+  smsConsentTimestamp: string;
 }
 
 export const emptyApplicationFormData: ApplicationFormData = {
@@ -156,4 +160,6 @@ export const emptyApplicationFormData: ApplicationFormData = {
   readiness: '',
   occupation: '',
   age: '',
+  smsConsent: false,
+  smsConsentTimestamp: '',
 };

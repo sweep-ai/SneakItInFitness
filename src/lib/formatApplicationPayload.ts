@@ -32,6 +32,10 @@ export interface ApplicationWebhookPayload {
   dqReason: string | null;
   submittedAt: string;
   source: string;
+  /** Opt-in only — never a condition of applying. */
+  smsConsent: boolean;
+  /** ISO timestamp from the moment the box was checked (empty when not given). */
+  smsConsentTimestamp: string;
   /** Meta Ads UTM params captured from the landing URL (empty strings when absent). */
   utm_source: string;
   utm_medium: string;
@@ -154,6 +158,8 @@ export function formatApplicationPayload(
     dqReason,
     submittedAt: new Date().toISOString(),
     source: 'sneakit-application-form',
+    smsConsent: data.smsConsent,
+    smsConsentTimestamp: data.smsConsentTimestamp,
     ...flattenUtm(utm),
     answers: {
       isJewish,

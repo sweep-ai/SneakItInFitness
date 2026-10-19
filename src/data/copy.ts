@@ -1,4 +1,5 @@
 export type FunnelGender = 'male' | 'female';
+export type IcpAudience = FunnelGender | 'neutral' | 'menopausal';
 
 export interface FunnelCopy {
   headline: string;
@@ -6,19 +7,28 @@ export interface FunnelCopy {
   headlineUnderline?: string | string[];
 }
 
-export function getIcpAudienceLabel(gender?: FunnelGender | 'neutral'): string {
+export function getIcpAudienceLabel(gender?: IcpAudience): string {
   if (gender === 'male') return 'Jewish men';
-  if (gender === 'female') return 'Jewish women';
+  if (gender === 'female' || gender === 'menopausal') return 'Jewish women';
   return 'Jewish adults';
 }
 
-export function getFunnelSubhead(_gender?: FunnelGender | 'neutral'): string {
+export function getFunnelSubhead(gender?: IcpAudience): string {
+  if (gender === 'menopausal') {
+    return [
+      'A professionally guided program built on your life, not a template.',
+      'Helped 100+ middle-aged women — perimenopausal, menopausal, and postmenopausal — lose weight and keep it off sustainably. Without living in the gym or excessive cardio.',
+    ].join('\n');
+  }
   return `A professionally guided program built on your life, not a template. No living in the gym, excessive cardio, no giving up family meals, sacrificing holidays or our culture↓`;
 }
 
-export function getExclusiveProgramAudiencePhrase(gender?: FunnelGender | 'neutral'): string {
+export function getExclusiveProgramAudiencePhrase(gender?: IcpAudience): string {
   if (gender === 'male') {
     return 'Jewish men ready to achieve a body and identity they are proud of';
+  }
+  if (gender === 'menopausal') {
+    return 'Jewish middle-aged women ready to achieve a body and identity they are proud of';
   }
   if (gender === 'female') {
     return 'Jewish women ready to achieve a body and identity they are proud of';
@@ -47,11 +57,25 @@ export const funnelCopy: FunnelCopy = {
 
 export const eligibilityTitle = 'Check Eligibility In 60 Seconds';
 
+export const menopauseFunnelCopy: FunnelCopy = {
+  headline:
+    'Jewish Women Lose\n20+ LBS GUARANTEED\nUsing My Metabolic Menopausal System.\nAnd Keep It Off.',
+  headlineHighlight: ['20+ LBS GUARANTEED'],
+  headlineUnderline: ['Keep It Off'],
+};
+
 export const transformationsCopy = {
   eyebrow: 'Real Transformations',
   headline: 'Jewish Adults Who Transformed Their Lives',
   headlineHighlight: 'Transformed Their Lives',
   subhead: 'Real stories from people who took control of their health and fitness.',
+};
+
+export const menopauseTransformationsCopy = {
+  eyebrow: 'Real Transformations',
+  headline: 'Jewish Middle-Aged Women Who Transformed Their Lives',
+  headlineHighlight: 'Transformed Their Lives',
+  subhead: 'Real stories from women who took control of their health and fitness.',
 };
 
 export const bookingCopy = {

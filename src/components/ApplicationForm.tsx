@@ -175,6 +175,15 @@ export function ApplicationForm() {
     }
   };
 
+  /** Opt-in checkbox — stamps the moment consent was given for the compliance record. */
+  const handleSmsConsentChange = (checked: boolean) => {
+    setData((current) => ({
+      ...current,
+      smsConsent: checked,
+      smsConsentTimestamp: checked ? new Date().toISOString() : '',
+    }));
+  };
+
   const completeApplication = async (formData: ApplicationFormData) => {
     setIsSubmitting(true);
     setError('');
@@ -454,6 +463,19 @@ export function ApplicationForm() {
               type: 'text',
               placeholder: 'Instagram or Facebook',
             })}
+            <label className="application-form-consent" htmlFor="application-sms-consent">
+              <input
+                id="application-sms-consent"
+                type="checkbox"
+                checked={data.smsConsent}
+                onChange={(event) => handleSmsConsentChange(event.target.checked)}
+              />
+              <span>
+                Text me about my application and coaching program at the number above (may
+                include automated messages). Msg &amp; data rates may apply, frequency varies.
+                Reply STOP to unsubscribe, HELP for help. Consent isn&apos;t required to apply.
+              </span>
+            </label>
           </div>
         );
       default:
