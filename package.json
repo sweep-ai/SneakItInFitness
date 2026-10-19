@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && npm run verify:payload && npm run verify:ghl && vite build",
+    "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && npm run verify:payload && npm run verify:ghl && npm run verify:booking && vite build",
     "compress-assets": "node scripts/compress-assets.mjs",
     "preview": "vite preview",
     "verify:payload": "tsx scripts/verify-application-payload.ts",
     "verify:ghl": "tsx scripts/verify-ghl-payload.ts",
+    "verify:booking": "tsx scripts/verify-booking-webhook.ts",
     "test:ghl": "tsx scripts/test-ghl-live.ts"
   },
   "dependencies": {

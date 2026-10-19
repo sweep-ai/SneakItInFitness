@@ -14,6 +14,8 @@ export interface CalendlyPrefill {
   email?: string;
   firstName?: string;
   lastName?: string;
+  /** a1 = first invitee question ("Phone #") so SMSLoop matches the booking to the quiz lead. */
+  customAnswers?: { a1?: string };
 }
 
 /** Embed URL with branding/UX params that reduce chrome and friction. */
@@ -36,10 +38,11 @@ export function getCalendlyPrefillFromStorage(): CalendlyPrefill | undefined {
     const raw = sessionStorage.getItem(APPLICATION_FORM_STORAGE_KEY);
     if (!raw) return undefined;
 
-    const data = JSON.parse(raw) as { name?: string; email?: string };
+    const data = JSON.parse(raw) as { name?: string; email?: string; phone?: string };
     const name = data.name?.trim();
     const email = data.email?.trim();
-    if (!name && !email) return undefined;
+    const phone = data.phone?.trim();
+    if (!name && !email && !phone) return undefined;
 
     const [firstName, ...restName] = (name ?? '').split(/\s+/);
     return {
@@ -47,6 +50,7 @@ export function getCalendlyPrefillFromStorage(): CalendlyPrefill | undefined {
       email: email || undefined,
       firstName: firstName || undefined,
       lastName: restName.join(' ') || undefined,
+      customAnswers: phone ? { a1: phone } : undefined,
     };
   } catch {
     return undefined;

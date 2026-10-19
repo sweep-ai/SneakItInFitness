@@ -26,6 +26,7 @@ declare global {
           email?: string;
           firstName?: string;
           lastName?: string;
+          customAnswers?: { a1?: string };
         };
       }) => void;
     };
