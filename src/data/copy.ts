@@ -16,7 +16,7 @@ export function getIcpAudienceLabel(gender?: IcpAudience): string {
 export function getFunnelSubhead(gender?: IcpAudience): string {
   if (gender === 'menopausal') {
     return [
-      'Helped 100+ middle-aged women, perimenopausal, menopausal, and postmenopausal, lose weight and keep it off sustainably. Without any injectiions, living in the gym or excessive cardio.',
+      'Helped 100+ middle-aged women, perimenopausal, menopausal, and postmenopausal, lose weight and keep it off sustainably. Without any injections, living in the gym or excessive cardio.',
     ].join('\n');
   }
   return `A professionally guided program built on your life, not a template. No living in the gym, excessive cardio, no giving up family meals, sacrificing holidays or our culture↓`;
