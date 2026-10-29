@@ -75,19 +75,28 @@ function calendlyPhone(payload: Json): string | undefined {
   return undefined;
 }
 
-/**
- * Optional allowlist (comma-separated event type URIs). Unset => every event on
- * the subscribed user's calendar is relayed, which is fine while only the
- * strategy call collects a phone number.
- */
-function isRelayedEventType(eventTypeUri: string | undefined): boolean {
-  const allowlist = (process.env.CALENDLY_EVENT_TYPE_URIS ?? '')
-    .split(',')
-    .map((uri) => uri.trim())
-    .filter(Boolean);
+export const STRATEGY_CALL_EVENT_NAME = '1-on-1 Fitness Strategy Call';
+export const DMS_CALL_EVENT_NAME = '1-on-1 Fitness Call DMS';
+export const SMSLOOP_RELAY_EVENT_NAME = STRATEGY_CALL_EVENT_NAME;
 
-  if (allowlist.length === 0) return true;
-  return Boolean(eventTypeUri && allowlist.includes(eventTypeUri));
+const STRATEGY_CALL_EVENT_URI = 'https://api.calendly.com/event_types/14ca303e-07d5-4846-8fe5-64cbfba92ea5';
+const DMS_CALL_EVENT_URI = 'https://api.calendly.com/event_types/236236ba-6a47-460e-88b6-1b5b0e2784b2';
+
+function matchesEvent(eventName: string | undefined, eventTypeUri: string | undefined, name: string, uri: string): boolean {
+  const normalizedName = eventName?.trim().toLowerCase() ?? '';
+  if (normalizedName && normalizedName === name.toLowerCase()) return true;
+  return Boolean(eventTypeUri && eventTypeUri === uri);
+}
+
+/** `booked` for Strategy Call, `dm` for DMS. Other Calendly events are ignored. */
+function resolveBookedScenario(eventName: string | undefined, eventTypeUri: string | undefined): string | undefined {
+  if (matchesEvent(eventName, eventTypeUri, STRATEGY_CALL_EVENT_NAME, STRATEGY_CALL_EVENT_URI)) {
+    return process.env.SMSLOOP_BOOKED_SCENARIO?.trim() || 'booked';
+  }
+  if (matchesEvent(eventName, eventTypeUri, DMS_CALL_EVENT_NAME, DMS_CALL_EVENT_URI)) {
+    return process.env.SMSLOOP_DM_BOOKED_SCENARIO?.trim() || 'dm';
+  }
+  return undefined;
 }
 
 async function postSmsloopEvent(body: Json): Promise<RelayResult> {
@@ -123,13 +132,13 @@ async function postSmsloopEvent(body: Json): Promise<RelayResult> {
   return { status: retry ? 502 : 200, body: { error: 'smsloop_rejected', smsloop_status: response.status } };
 }
 
-function bookedEvent(phone: string, payload: Json): Json {
+function bookedEvent(phone: string, payload: Json, scenario: string): Json {
   const event = payload.scheduled_event ?? {};
 
   return {
     phone,
     event: 'set_scenario',
-    scenario: process.env.SMSLOOP_BOOKED_SCENARIO?.trim() || 'booked',
+    scenario,
     source: 'Calendly',
     ...clean({ name: payload.name, email: payload.email }),
     context: clean({
@@ -168,13 +177,15 @@ export async function relayCalendlyWebhook(raw: string, signature: string | unde
 
   const payload: Json = body.payload ?? {};
   const eventTypeUri: string | undefined = payload.scheduled_event?.event_type;
+  const eventName: string | undefined = payload.scheduled_event?.name;
+  const bookedScenario = resolveBookedScenario(eventName, eventTypeUri);
 
   if (body.event !== 'invitee.created' && body.event !== 'invitee.canceled') {
     return { status: 200, body: { skipped: body.event ?? 'unknown_event' } };
   }
 
-  if (!isRelayedEventType(eventTypeUri)) {
-    return { status: 200, body: { skipped: 'event_type', event_type: eventTypeUri } };
+  if (!bookedScenario) {
+    return { status: 200, body: { skipped: 'event_type', event_type: eventTypeUri, event_name: eventName } };
   }
 
   const rawPhone = calendlyPhone(payload);
@@ -186,7 +197,7 @@ export async function relayCalendlyWebhook(raw: string, signature: string | unde
   const phone = formatPhoneForGhl(rawPhone);
 
   if (body.event === 'invitee.created') {
-    return postSmsloopEvent(bookedEvent(phone, payload));
+    return postSmsloopEvent(bookedEvent(phone, payload, bookedScenario));
   }
 
   // Reschedules fire canceled (rescheduled: true) + created; the created event carries the new time.

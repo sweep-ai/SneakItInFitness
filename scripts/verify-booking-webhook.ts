@@ -8,8 +8,10 @@ process.env.CALENDLY_SIGNING_KEY = SIGNING_KEY;
 process.env.SMSLOOP_URL = 'https://smsloop.invalid';
 process.env.SMSLOOP_SECRET = 'test-secret';
 delete process.env.SMSLOOP_BOOKED_SCENARIO;
+delete process.env.SMSLOOP_DM_BOOKED_SCENARIO;
 delete process.env.SMSLOOP_ON_CANCEL;
 delete process.env.CALENDLY_EVENT_TYPE_URIS;
+delete process.env.CALENDLY_EVENT_NAMES;
 
 // Capture SMSLoop calls instead of hitting the network.
 const sent: Array<Record<string, any>> = [];
@@ -34,7 +36,7 @@ function webhook(event: string, overrides: Record<string, unknown> = {}): string
       scheduled_event: {
         start_time: '2026-10-20T15:00:00.000000Z',
         end_time: '2026-10-20T15:45:00.000000Z',
-        name: '1-on-1 Strategy Call',
+        name: '1-on-1 Fitness Strategy Call',
         event_type: EVENT_TYPE,
       },
       reschedule_url: 'https://calendly.com/reschedulings/abc',
@@ -83,12 +85,27 @@ await relay(canceled, sign(canceled));
 const rebookBody = sent[0];
 delete process.env.SMSLOOP_ON_CANCEL;
 
-process.env.CALENDLY_EVENT_TYPE_URIS = 'https://api.calendly.com/event_types/other';
-const filtered = await relay(created, sign(created));
-const filteredSent = sent.length;
-process.env.CALENDLY_EVENT_TYPE_URIS = `https://api.calendly.com/event_types/other, ${EVENT_TYPE}`;
-const allowed = await relay(created, sign(created));
-delete process.env.CALENDLY_EVENT_TYPE_URIS;
+const dmsRaw = webhook('invitee.created', {
+  scheduled_event: {
+    start_time: '2026-10-20T15:00:00.000000Z',
+    end_time: '2026-10-20T15:45:00.000000Z',
+    name: '1-on-1 Fitness Call DMS',
+    event_type: EVENT_TYPE,
+  },
+});
+const dms = await relay(dmsRaw, sign(dmsRaw));
+const dmsBody = sent[0];
+
+const otherRaw = webhook('invitee.created', {
+  scheduled_event: {
+    start_time: '2026-10-20T15:00:00.000000Z',
+    end_time: '2026-10-20T15:45:00.000000Z',
+    name: 'Mentorship Calls',
+    event_type: 'https://api.calendly.com/event_types/other',
+  },
+});
+const other = await relay(otherRaw, sign(otherRaw));
+const otherSent = sent.length;
 
 smsloopStatus = 422;
 const configError = await relay(created, sign(created));
@@ -120,8 +137,8 @@ const checks: Array<[string, boolean]> = [
       rebookBody?.scenario === 'not_booked' &&
       rebookBody?.context?.cancelled_call === '2026-10-20T15:00:00.000000Z',
   ],
-  ['event type allowlist filters', filtered.body.skipped === 'event_type' && filteredSent === 0],
-  ['event type allowlist passes listed type', allowed.status === 200],
+  ['DMS booking uses dm', dms.status === 200 && dmsBody?.scenario === 'dm'],
+  ['other Calendly events skipped', other.body.skipped === 'event_type' && otherSent === 0],
   ['SMSLoop 4xx not retried', configError.status === 200 && configError.body.error === 'smsloop_rejected'],
   ['SMSLoop 5xx retried', outage.status === 502],
 ];
