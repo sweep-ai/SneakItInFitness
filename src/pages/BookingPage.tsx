@@ -14,8 +14,7 @@ import './BookingPage.css';
 
 export function BookingPage() {
   useEffect(() => {
-    // Reliable Lead confirmation: only fires when the visitor actually reaches
-    // /booking after submitting, reusing the submit event_id so Meta dedupes.
+    // One Lead for a qualified submit. Direct visit / refresh has no pending id.
     const leadEventId = consumePendingLeadEventId();
     if (leadEventId && !storedApplicantIsFinancialDq()) {
       trackLead(getStoredApplicantUserData(), leadEventId);

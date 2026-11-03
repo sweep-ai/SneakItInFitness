@@ -55,9 +55,8 @@ function getCookie(name: string): string | undefined {
 }
 
 /**
- * Fires the same event through the browser pixel and the server Conversions API.
- * Pass an explicit `eventId` to deduplicate against an earlier fire of the same
- * conversion (e.g. firing again when the visitor lands on the destination page).
+ * Fires one conversion once: browser pixel and Conversions API, same event id.
+ * Meta dedupes that pair. Callers must not track the same step from two pages.
  */
 function trackEvent(eventName: string, userData?: PixelUserData, eventId?: string): void {
   const resolvedEventId = eventId ?? generateEventId();
@@ -76,6 +75,11 @@ function trackEvent(eventName: string, userData?: PixelUserData, eventId?: strin
     trackWhop('schedule', toWhopUserParams(userData, resolvedEventId));
   }
 }
+
+/** Meta standard events this site sends. Pixel `eventID` matches CAPI `event_id`. */
+export const META_STANDARD_EVENTS = ['PageView', 'Lead', 'Schedule', 'CompleteRegistration'] as const;
+
+export type MetaStandardEvent = (typeof META_STANDARD_EVENTS)[number];
 
 function sendServerEvent(
   eventName: string,
@@ -96,14 +100,26 @@ function sendServerEvent(
     },
   };
 
-  // Fire-and-forget: tracking must never block or break the UI.
-  void fetch(TRACK_EVENT_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    keepalive: true,
-  }).catch(() => {
-    /* Swallow tracking errors. */
+  // One CAPI post. A dropped request retries once with the same event id,
+  // so Meta still dedupes if the first post actually landed.
+  const body = JSON.stringify(payload);
+  const post = () =>
+    fetch(TRACK_EVENT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    });
+
+  const postOnce = () =>
+    post().then((response) => {
+      if (response.status >= 500) throw new Error('capi');
+    });
+
+  void postOnce().catch(() => {
+    void post().catch(() => {
+      /* Swallow tracking errors. */
+    });
   });
 }
 
@@ -117,7 +133,12 @@ export function trackLead(userData?: PixelUserData, eventId?: string): void {
   trackEvent('Lead', userData, eventId);
 }
 
-/** Standard event when a Calendly appointment is booked. */
+/** Standard event when a Calendly appointment is booked on the /schedule funnel. */
 export function trackSchedule(userData?: PixelUserData, eventId?: string): void {
   trackEvent('Schedule', userData, eventId);
+}
+
+/** Standard event when a Calendly appointment is booked on the original funnel. */
+export function trackCompleteRegistration(userData?: PixelUserData, eventId?: string): void {
+  trackEvent('CompleteRegistration', userData, eventId);
 }

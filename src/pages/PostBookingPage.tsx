@@ -6,11 +6,8 @@ import { ConfirmAppointment } from '../components/ConfirmAppointment';
 import { RealClientStories } from '../components/RealClientStories';
 import { postBookingCopy } from '../data/copy';
 import { allClientStories } from '../data/assets';
-import { trackSchedule } from '../lib/metaPixel';
-import {
-  consumePendingScheduleEventId,
-  getStoredApplicantUserData,
-} from '../lib/conversionTracking';
+import { trackCompleteRegistration, trackSchedule } from '../lib/metaPixel';
+import { consumePendingBookingConversion, getStoredApplicantUserData } from '../lib/conversionTracking';
 import './PostBookingPage.css';
 
 interface PostBookingStepProps {
@@ -34,12 +31,16 @@ export function PostBookingPage() {
   const { steps } = postBookingCopy;
 
   useEffect(() => {
-    // Reliable Schedule confirmation: fires only when the booked visitor reaches
-    // /post-booking, reusing the Calendly event_id so Meta dedupes. A direct
-    // visit / refresh has no pending id, so it won't count as a new booking.
-    const scheduleEventId = consumePendingScheduleEventId();
-    if (scheduleEventId) {
-      trackSchedule(getStoredApplicantUserData(), scheduleEventId);
+    // One Schedule or CompleteRegistration after Calendly. Direct visit / refresh
+    // has no pending id. trackSchedule / trackCompleteRegistration send browser
+    // pixel and CAPI with this same event id.
+    const pending = consumePendingBookingConversion();
+    if (!pending) return;
+    const userData = getStoredApplicantUserData();
+    if (pending.eventName === 'Schedule') {
+      trackSchedule(userData, pending.eventId);
+    } else {
+      trackCompleteRegistration(userData, pending.eventId);
     }
   }, []);
 

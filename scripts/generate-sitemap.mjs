@@ -30,6 +30,10 @@ const routes = [
   { path: '/privacy', changefreq: 'yearly', priority: '0.3' },
   { path: '/terms', changefreq: 'yearly', priority: '0.3' },
   { path: '/disclaimer', changefreq: 'yearly', priority: '0.3' },
+  { path: '/schedule', changefreq: 'monthly', priority: '0.6' },
+  { path: '/schedule/male', changefreq: 'monthly', priority: '0.6' },
+  { path: '/schedule/female', changefreq: 'monthly', priority: '0.6' },
+  { path: '/schedule/booking', changefreq: 'monthly', priority: '0.5' },
 ];
 
 const urlEntries = routes
@@ -53,6 +57,7 @@ const robots = `User-agent: *
 Allow: /
 
 Disallow: /post-booking
+Disallow: /schedule/post-booking
 
 Sitemap: ${origin}/sitemap.xml
 `;

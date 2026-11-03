@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Navigate, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Routes, Route, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { MetaPixelRouteTracker } from './components/MetaPixelRouteTracker';
 import { captureUtmFromUrl } from './lib/utm';
@@ -95,6 +95,48 @@ export default function App() {
           />
           <Route path="menopausal" element={<Navigate to="/female" replace />} />
           <Route path="45" element={<Navigate to="/female" replace />} />
+          <Route path="schedule" element={<Outlet />}>
+            <Route
+              index
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <HomePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="male"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <MalePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="female"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <FemalePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="booking"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <BookingPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="post-booking"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <PostBookingPage />
+                </Suspense>
+              }
+            />
+          </Route>
           <Route
             path="booking"
             element={

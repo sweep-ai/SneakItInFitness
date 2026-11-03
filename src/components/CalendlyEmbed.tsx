@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { trackSchedule } from '../lib/metaPixel';
-import { beginScheduleTracking, getStoredApplicantUserData } from '../lib/conversionTracking';
+import { trackCompleteRegistration, trackSchedule } from '../lib/metaPixel';
+import { beginBookingConversion, getStoredApplicantUserData } from '../lib/conversionTracking';
+import { bookingConversionEvent, useFunnelPaths } from '../lib/funnelPaths';
 import {
   CALENDLY_EMBED_SCRIPT_ID,
   CALENDLY_EMBED_SCRIPT_SRC,
-  CALENDLY_EVENT_URL,
   getCalendlyEmbedUrl,
   getCalendlyPrefillFromStorage,
   warmCalendlyAssets,
@@ -79,8 +79,10 @@ function loadCalendlyScript(onReady: () => void) {
 }
 
 export function CalendlyEmbed() {
+  const paths = useFunnelPaths();
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetInitializedRef = useRef(false);
+  const bookedRef = useRef(false);
   const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
@@ -109,10 +111,16 @@ export function CalendlyEmbed() {
       }
 
       if (calendlyEvent === 'calendly.event_scheduled') {
-        // Same event_id is reused on the /post-booking landing so the two fires dedupe.
-        const scheduleEventId = beginScheduleTracking();
-        trackSchedule(getStoredApplicantUserData(), scheduleEventId);
-        navigate('/post-booking', { replace: true });
+        // Calendly can emit this twice. The first one owns the conversion.
+        if (bookedRef.current) return;
+        bookedRef.current = true;
+        const conversion = bookingConversionEvent(paths.variant);
+        if (!beginBookingConversion(conversion)) {
+          const userData = getStoredApplicantUserData();
+          if (conversion === 'Schedule') trackSchedule(userData);
+          else trackCompleteRegistration(userData);
+        }
+        navigate(paths.postBooking, { replace: true });
       }
     };
 
@@ -124,10 +132,11 @@ export function CalendlyEmbed() {
 
       widgetInitializedRef.current = true;
       container.innerHTML = '';
+      const prefill = getCalendlyPrefillFromStorage();
       window.Calendly.initInlineWidget({
-        url: getCalendlyEmbedUrl(),
+        url: getCalendlyEmbedUrl(prefill),
         parentElement: container,
-        prefill: getCalendlyPrefillFromStorage(),
+        prefill,
       });
     };
 
@@ -141,7 +150,10 @@ export function CalendlyEmbed() {
         containerRef.current.innerHTML = '';
       }
     };
-  }, [navigate]);
+  }, [navigate, paths.postBooking, paths.variant]);
+
+  const prefill = getCalendlyPrefillFromStorage();
+  const embedUrl = getCalendlyEmbedUrl(prefill);
 
   return (
     <div className="calendly-embed-shell">
@@ -156,13 +168,13 @@ export function CalendlyEmbed() {
             <p className="calendly-embed-skeleton-label">Loading available times…</p>
           </div>
         )}
-        <div ref={containerRef} className="calendly-embed-frame" data-url={getCalendlyEmbedUrl()} />
+        <div ref={containerRef} className="calendly-embed-frame" data-url={embedUrl} />
       </div>
 
       {showFallback && !isReady && (
         <p className="calendly-embed-fallback">
           Taking a while?{' '}
-          <a href={CALENDLY_EVENT_URL} target="_blank" rel="noopener noreferrer">
+          <a href={embedUrl} target="_blank" rel="noopener noreferrer">
             Open the calendar in a new tab
           </a>
         </p>

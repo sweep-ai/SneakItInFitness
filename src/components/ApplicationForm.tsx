@@ -15,6 +15,7 @@ import { socialLinks } from '../data/social';
 import { submitApplication } from '../lib/submitApplication';
 import { trackLead } from '../lib/metaPixel';
 import { beginLeadTracking } from '../lib/conversionTracking';
+import { useFunnelPaths } from '../lib/funnelPaths';
 import { warmCalendlyAssets } from '../lib/calendly';
 import { getPhoneValidationError, isValidEmail } from '../lib/validators';
 import { PhoneField } from './PhoneField';
@@ -127,6 +128,7 @@ function OptionCheckmark() {
 
 export function ApplicationForm() {
   const navigate = useNavigate();
+  const paths = useFunnelPaths();
   const advanceTimeoutRef = useRef<number | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back'>('forward');
@@ -192,29 +194,33 @@ export function ApplicationForm() {
 
     try {
       await submitApplication(formData);
-      sessionStorage.setItem(APPLICATION_FORM_STORAGE_KEY, JSON.stringify(formData));
+      try {
+        sessionStorage.setItem(APPLICATION_FORM_STORAGE_KEY, JSON.stringify(formData));
+      } catch {
+        /* Prefill needs this. Lead still fires below when storage is blocked. */
+      }
 
       const financialDq = isFinancialDisqualification(formData);
-      if (!financialDq) {
-        const [firstName, ...restName] = formData.name.trim().split(/\s+/);
-        // Same event_id is reused on the /booking landing so the two fires dedupe.
-        const leadEventId = beginLeadTracking();
-        trackLead(
-          {
-            email: formData.email,
-            phone: formData.phone,
-            firstName,
-            lastName: restName.join(' ') || undefined,
-          },
-          leadEventId
-        );
+      const [firstName, ...restName] = formData.name.trim().split(/\s+/);
+      const leadUser = {
+        email: formData.email,
+        phone: formData.phone,
+        firstName,
+        lastName: restName.join(' ') || undefined,
+      };
+      if (!financialDq && isDisqualifiedLead(formData)) {
+        // Stays on this page, so this is the one Lead.
+        trackLead(leadUser);
+      } else if (!financialDq && !beginLeadTracking()) {
+        // Booking page cannot see the id. Fire the one Lead here.
+        trackLead(leadUser);
       }
 
       if (isDisqualifiedLead(formData)) {
         setDqReason(getDisqualificationReason(formData));
         setShowDqSlide(true);
       } else {
-        navigate('/booking');
+        navigate(paths.booking);
       }
     } catch (submitError) {
       const message =

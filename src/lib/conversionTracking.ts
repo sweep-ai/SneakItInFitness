@@ -4,16 +4,20 @@ import {
   type ApplicationFormData,
 } from '../data/applicationForm';
 import { generateEventId, type PixelUserData } from './metaPixel';
+import type { BookingConversionEvent } from './funnelPaths';
 
 /**
- * A conversion (Lead / Schedule) is fired at the moment it happens AND again
- * when the visitor lands on the destination page. Both fires share one event_id
- * — persisted here between the two page views — so Meta deduplicates them into a
- * single conversion. The landing-page fire is the reliable one, since the
- * action-time browser event can be interrupted by the route change.
+ * One Meta event per person per step. The pending id only lets the destination
+ * page fire that single event. Browser pixel and CAPI share the id inside
+ * trackEvent. A refresh or direct visit finds nothing pending and does not fire.
  */
 const LEAD_EVENT_ID_KEY = 'sneakit-lead-event-id';
-const SCHEDULE_EVENT_ID_KEY = 'sneakit-schedule-event-id';
+const BOOKING_CONVERSION_KEY = 'sneakit-booking-conversion';
+
+export interface PendingBookingConversion {
+  eventName: BookingConversionEvent;
+  eventId: string;
+}
 
 function safeGet(key: string): string | null {
   try {
@@ -23,12 +27,20 @@ function safeGet(key: string): string | null {
   }
 }
 
-function safeSet(key: string, value: string): void {
+/** True only when a later page read will see this exact value. */
+function safeSet(key: string, value: string): boolean {
   try {
     sessionStorage.setItem(key, value);
+    if (sessionStorage.getItem(key) === value) return true;
+  } catch {
+    /* fall through and clear a partial write */
+  }
+  try {
+    sessionStorage.removeItem(key);
   } catch {
     /* ignore storage failures */
   }
+  return false;
 }
 
 function safeRemove(key: string): void {
@@ -70,11 +82,13 @@ export function storedApplicantIsFinancialDq(): boolean {
   }
 }
 
-/** Generates + stores a Lead event id, so the /booking landing can dedupe. */
-export function beginLeadTracking(): string {
+/**
+ * Stores the one Lead id for the booking page.
+ * Returns false when storage did not keep it. Caller must fire Lead itself.
+ */
+export function beginLeadTracking(): boolean {
   const eventId = generateEventId();
-  safeSet(LEAD_EVENT_ID_KEY, eventId);
-  return eventId;
+  return safeSet(LEAD_EVENT_ID_KEY, eventId);
 }
 
 /** Returns and clears the pending Lead event id (fired on the /booking landing). */
@@ -84,16 +98,34 @@ export function consumePendingLeadEventId(): string | null {
   return eventId;
 }
 
-/** Generates + stores a Schedule event id, so the /post-booking landing can dedupe. */
-export function beginScheduleTracking(): string {
+/**
+ * Stores the one booking conversion for the post-booking page.
+ * Returns false when storage did not keep it. Caller must fire the event itself.
+ */
+export function beginBookingConversion(eventName: BookingConversionEvent): boolean {
   const eventId = generateEventId();
-  safeSet(SCHEDULE_EVENT_ID_KEY, eventId);
-  return eventId;
+  return safeSet(
+    BOOKING_CONVERSION_KEY,
+    JSON.stringify({ eventName, eventId } satisfies PendingBookingConversion)
+  );
 }
 
-/** Returns and clears the pending Schedule event id (fired on the /post-booking landing). */
-export function consumePendingScheduleEventId(): string | null {
-  const eventId = safeGet(SCHEDULE_EVENT_ID_KEY);
-  if (eventId) safeRemove(SCHEDULE_EVENT_ID_KEY);
-  return eventId;
+/** Returns and clears the pending booking conversion. Refresh / direct visit returns null. */
+export function consumePendingBookingConversion(): PendingBookingConversion | null {
+  const raw = safeGet(BOOKING_CONVERSION_KEY);
+  if (!raw) return null;
+  safeRemove(BOOKING_CONVERSION_KEY);
+  try {
+    const parsed = JSON.parse(raw) as PendingBookingConversion;
+    if (
+      (parsed.eventName === 'Schedule' || parsed.eventName === 'CompleteRegistration') &&
+      typeof parsed.eventId === 'string' &&
+      parsed.eventId
+    ) {
+      return parsed;
+    }
+  } catch {
+    /* drop corrupt payload */
+  }
+  return null;
 }

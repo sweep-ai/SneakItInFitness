@@ -4,6 +4,11 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 /** Graph API version used for Conversions API requests. */
 const GRAPH_API_VERSION = 'v21.0';
 
+/** Browser pixel and this endpoint must use the same names so event_id can dedupe. */
+export const CAPI_EVENT_NAMES = ['PageView', 'Lead', 'Schedule', 'CompleteRegistration'] as const;
+
+const ALLOWED_CAPI_EVENTS = new Set<string>(CAPI_EVENT_NAMES);
+
 /**
  * Meta dataset (Pixel) ID. Must match the `fbq('init', ...)` id in index.html
  * so browser and server events are attributed to the same dataset.
@@ -195,8 +200,13 @@ export async function handleTrackEventRequest(
     return;
   }
 
-  if (!body.eventName) {
-    sendJson(res, 400, { error: 'eventName is required' });
+  if (!body.eventName || !ALLOWED_CAPI_EVENTS.has(body.eventName)) {
+    sendJson(res, 400, { error: 'unsupported eventName' });
+    return;
+  }
+
+  if (!body.eventId?.trim()) {
+    sendJson(res, 400, { error: 'eventId is required for deduplication' });
     return;
   }
 

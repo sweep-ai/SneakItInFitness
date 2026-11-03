@@ -18,8 +18,8 @@ export interface CalendlyPrefill {
   customAnswers?: { a1?: string };
 }
 
-/** Embed URL with branding/UX params that reduce chrome and friction. */
-export function getCalendlyEmbedUrl(): string {
+/** Embed URL with branding params plus name, email, and phone (a1) prefill. */
+export function getCalendlyEmbedUrl(prefill?: CalendlyPrefill): string {
   const url = new URL(CALENDLY_EVENT_URL);
   url.searchParams.set('hide_gdpr_banner', '1');
   url.searchParams.set('hide_event_type_details', '1');
@@ -29,6 +29,9 @@ export function getCalendlyEmbedUrl(): string {
   url.searchParams.set('background_color', 'ffffff');
   url.searchParams.set('text_color', '000000');
   url.searchParams.set('primary_color', 'd70000');
+  if (prefill?.name) url.searchParams.set('name', prefill.name);
+  if (prefill?.email) url.searchParams.set('email', prefill.email);
+  if (prefill?.customAnswers?.a1) url.searchParams.set('a1', prefill.customAnswers.a1);
   return url.toString();
 }
 

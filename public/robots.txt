@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 
 Disallow: /post-booking
+Disallow: /schedule/post-booking
 
 Sitemap: https://sneak-it-in-fitness.vercel.app/sitemap.xml
