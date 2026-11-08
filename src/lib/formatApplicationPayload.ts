@@ -7,7 +7,7 @@ import {
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { getStoredUtmParams, type UtmParams } from './utm';
 
-const CHOICE_STEP_IDS = ['situation', 'goal', 'readiness'] as const;
+const CHOICE_STEP_IDS = ['situation', 'readiness'] as const;
 
 export interface ApplicationChoiceAnswer {
   prompt: string;
@@ -100,6 +100,14 @@ function formatChoiceAnswer(
   };
 }
 
+function formatGoalAnswer(text: string): ApplicationChoiceAnswer {
+  return {
+    prompt: getStepPrompt('goal'),
+    code: '',
+    label: text.trim(),
+  };
+}
+
 function formatYesNoAnswer(
   stepId: 'openToCoaching',
   value: '' | 'yes' | 'no'
@@ -135,7 +143,7 @@ export function formatApplicationPayload(
   const dqReason = getDisqualificationReason(data);
 
   const situation = formatChoiceAnswer('situation', data.situation);
-  const goal = formatChoiceAnswer('goal', data.goal);
+  const goal = formatGoalAnswer(data.goal);
   const openToCoaching = formatYesNoAnswer('openToCoaching', data.openToCoaching);
   const readiness = formatChoiceAnswer('readiness', data.readiness);
   const isJewish = getOptionLabel('isJewish', data.isJewish);

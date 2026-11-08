@@ -21,6 +21,7 @@ interface FunnelShellProps {
   transformations?: typeof transformationsCopy;
   bannerTestimonials?: Testimonial[];
   heroPhotos?: string[];
+  mobilePhoto?: string;
 }
 
 export function FunnelShell({
@@ -32,6 +33,7 @@ export function FunnelShell({
   transformations = transformationsCopy,
   bannerTestimonials,
   heroPhotos,
+  mobilePhoto,
 }: FunnelShellProps) {
   const icpGender =
     icpGenderProp ??
@@ -63,6 +65,7 @@ export function FunnelShell({
         headlineUnderline={heroCopy.headlineUnderline}
         subhead={getFunnelSubhead(icpGender)}
         photos={heroPhotos}
+        mobilePhoto={mobilePhoto}
       />
       <div className="container">
         <VSLPlayer gender={icpGender} />

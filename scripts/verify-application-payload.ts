@@ -7,7 +7,7 @@ const base = {
   name: 'Jane Doe',
   isJewish: 'yes' as const,
   situation: 'B',
-  goal: 'A',
+  goal: 'Lose 30 lbs, keep Shabbat meals, and train 3 days a week without restarting.',
   openToCoaching: 'yes' as const,
   readiness: 'B',
   instagram: '@jane',
@@ -84,8 +84,9 @@ const checks: Array<[string, boolean]> = [
   ],
   [
     'nested choice answers mapped',
-    qualified.goal.code === 'A' &&
-      qualified.goal.label.includes('Lose 25+') &&
+    qualified.goal.code === '' &&
+      qualified.goal.label.includes('Lose 30 lbs') &&
+      qualified.goal.prompt.includes('6-12 months') &&
       qualified.readiness.label.includes('in a position to invest'),
   ],
   [

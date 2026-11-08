@@ -19,7 +19,7 @@ export function getFunnelSubhead(gender?: IcpAudience): string {
       'Helped 100+ middle-aged women, perimenopausal, menopausal, and postmenopausal, lose weight and keep it off sustainably. Without any injections, living in the gym or excessive cardio.',
     ].join('\n');
   }
-  return `A professionally guided program built on your life, not a template. No living in the gym, excessive cardio, no giving up family meals, sacrificing holidays or our culture↓`;
+  return `Forge long-lasting healthy habits. No living in the gym, excessive cardio, giving up family meals, sacrificing holidays or our culture↓`;
 }
 
 export function getExclusiveProgramAudiencePhrase(gender?: IcpAudience): string {
@@ -49,9 +49,9 @@ export const founderManifestoLines = [
 ] as const;
 
 export const funnelCopy: FunnelCopy = {
-  headline: 'Jewish Adults Lose\n20+ LBS GUARANTEED\nUsing A Sustainable System\nAnd Keep It Off This Time.',
+  headline: 'Jewish Adults Lose\n20+ LBS GUARANTEED\nUsing A Sustainable System\nTo Keep It Off Forever.',
   headlineHighlight: ['20+ LBS GUARANTEED'],
-  headlineUnderline: ['Keep It Off This Time'],
+  headlineUnderline: ['Keep It Off Forever'],
 };
 
 export const eligibilityTitle = 'Check Eligibility In 60 Seconds';

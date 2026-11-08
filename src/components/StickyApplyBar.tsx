@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import './StickyApplyBar.css';
 
-const SCROLL_THRESHOLD_PX = 480;
+/** Counts as "still at the top" so the bar stays up through tiny scroll jitter. */
+const TOP_THRESHOLD_PX = 8;
 
 function scrollToApplicationForm() {
   const form = document.getElementById('application-form');
@@ -13,38 +14,22 @@ function scrollToApplicationForm() {
 }
 
 export function StickyApplyBar() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     const form = document.getElementById('application-form');
-    let formInView = false;
 
     const update = () => {
-      const scrolledEnough = window.scrollY > SCROLL_THRESHOLD_PX;
-      setVisible(scrolledEnough && !formInView);
+      const atTop = window.scrollY <= TOP_THRESHOLD_PX;
+      const scrolledPastForm = form ? form.getBoundingClientRect().bottom < 0 : false;
+      setVisible(atTop || scrolledPastForm);
     };
-
-    const observer =
-      form && 'IntersectionObserver' in window
-        ? new IntersectionObserver(
-            (entries) => {
-              formInView = entries[0]?.isIntersecting ?? false;
-              update();
-            },
-            { threshold: 0.2 }
-          )
-        : null;
-
-    if (observer && form) {
-      observer.observe(form);
-    }
 
     window.addEventListener('scroll', update, { passive: true });
     update();
 
     return () => {
       window.removeEventListener('scroll', update);
-      observer?.disconnect();
     };
   }, []);
 

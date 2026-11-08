@@ -66,7 +66,8 @@ function getStepValidationError(
   }
 
   switch (step.type) {
-    case 'text': {
+    case 'text':
+    case 'longtext': {
       const value = data[step.id as keyof ApplicationFormData] as string;
       if (value.trim().length === 0) {
         return 'Please complete this question to continue.';
@@ -372,6 +373,20 @@ export function ApplicationForm() {
             }
           />
         );
+      case 'longtext':
+        return (
+          <textarea
+            id={`application-${step.id}`}
+            className="application-form-textarea"
+            rows={6}
+            value={data[step.id as keyof ApplicationFormData] as string}
+            placeholder={step.placeholder}
+            aria-describedby={step.hint ? `application-hint-${step.id}` : undefined}
+            onChange={(event) =>
+              updateField(step.id as keyof ApplicationFormData, event.target.value)
+            }
+          />
+        );
       case 'occupationAge':
         return (
           <div className="application-form-contact-fields">
@@ -569,6 +584,11 @@ export function ApplicationForm() {
               {step.prompt}
               {step.required && <span aria-hidden="true"> *</span>}
             </p>
+            {step.hint ? (
+              <p className="application-form-hint" id={`application-hint-${step.id}`}>
+                {step.hint}
+              </p>
+            ) : null}
 
             <div
               className="application-form-field"

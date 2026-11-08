@@ -7,8 +7,10 @@ export interface ApplicationStep {
   id: string;
   prompt: string;
   required?: boolean;
-  type: 'text' | 'yesno' | 'single' | 'contactDetails' | 'occupationAge';
+  type: 'text' | 'longtext' | 'yesno' | 'single' | 'contactDetails' | 'occupationAge';
   placeholder?: string;
+  /** Helper line under the prompt. */
+  hint?: string;
   options?: ApplicationOption[];
 }
 
@@ -38,15 +40,11 @@ export const applicationFormSteps: ApplicationStep[] = [
   },
   {
     id: 'goal',
-    prompt: 'What is your primary goal over the next 6 months?',
-    type: 'single',
+    prompt:
+      'What does a successful result for you look like after 6-12 months of the Swolekol program?',
+    hint: 'Be as specific and detailed as possible',
+    type: 'longtext',
     required: true,
-    options: [
-      { id: 'A', label: 'Lose 25+ lbs and keep it off' },
-      { id: 'B', label: 'Rebuild my discipline, habits, structure & consistency' },
-      { id: 'C', label: 'Increase energy, focus & performance at work' },
-      { id: 'D', label: 'Become a more confident leader in my career & relationships / family' },
-    ],
   },
   {
     id: 'openToCoaching',

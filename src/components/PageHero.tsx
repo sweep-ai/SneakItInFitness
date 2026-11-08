@@ -8,6 +8,8 @@ interface PageHeroProps {
   headlineUnderline?: string | string[];
   subhead: string;
   photos?: string[];
+  /** When set, mobile viewports show this photo beside a wrapped headline instead of the photo-grid background. */
+  mobilePhoto?: string;
 }
 
 function toPhraseList(value?: string | string[]): string[] {
@@ -106,12 +108,13 @@ export function PageHero({
   headlineUnderline,
   subhead,
   photos = heroBackgroundPhotos,
+  mobilePhoto,
 }: PageHeroProps) {
   const pool = photos.length > 0 ? photos : heroBackgroundPhotos;
   const gridPhotos = Array.from({ length: 24 }, (_, index) => pool[index % pool.length]);
 
   return (
-    <header className="page-hero">
+    <header className={`page-hero${mobilePhoto ? ' page-hero--has-mobile-photo' : ''}`}>
       <div className="page-hero-bg" aria-hidden="true">
         <div className="page-hero-photo-grid">
           {gridPhotos.map((src, index) => (
@@ -129,6 +132,18 @@ export function PageHero({
           <p className="page-hero-subhead">{subhead}</p>
         </div>
       </div>
+
+      {mobilePhoto && (
+        <div className="page-hero-mobile">
+          <img className="page-hero-mobile-photo" src={mobilePhoto} alt="" loading="eager" decoding="async" />
+          <div className="page-hero-mobile-photo-tint" aria-hidden="true" />
+          <div className="page-hero-mobile-photo-fade" aria-hidden="true" />
+          <h1 className="page-hero-mobile-headline">
+            {renderMarkedHeadline(headline, headlineHighlight, headlineUnderline)}
+          </h1>
+          <p className="page-hero-mobile-subhead">{subhead}</p>
+        </div>
+      )}
     </header>
   );
 }

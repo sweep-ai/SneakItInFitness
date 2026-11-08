@@ -72,7 +72,7 @@ import ataraVideo from '../../assets/testimonials/Atara.mp4';
 import rachelVideo from '../../assets/testimonials/Rachel.mp4';
 
 import logo from '../../assets/branding/swolekolLogo.png';
-import ariHeader from '../../assets/branding/ari_header.webp';
+import ariHeader from '../../assets/branding/ari-hero-mobile.png';
 import ariMom from '../../assets/branding/ari_mom.webp';
 import ariComp from '../../assets/branding/ari_comp.webp';
 import meetingConfirm from '../../assets/post-booking/meeting_confirm.png';

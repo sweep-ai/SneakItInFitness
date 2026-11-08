@@ -56,7 +56,9 @@ function buildFields(payload: ApplicationWebhookPayload): Record<string, string>
 
   if (payload.isJewish?.trim()) fields['Jewish?'] = payload.isJewish.trim();
   if (payload.situation?.label) fields['What is going on right now?'] = payload.situation.label;
-  if (payload.goal?.label) fields['What is your main goal?'] = payload.goal.label;
+  if (payload.goal?.label) {
+    fields[payload.goal.prompt?.trim() || 'What does a successful result for you look like?'] = payload.goal.label;
+  }
   if (payload.openToCoaching?.label) fields['Open to coaching?'] = payload.openToCoaching.label;
   if (payload.readiness?.label) fields['Ready to invest?'] = payload.readiness.label;
   if (payload.occupation?.trim()) fields.Occupation = payload.occupation.trim();

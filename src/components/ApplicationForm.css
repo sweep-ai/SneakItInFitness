@@ -77,10 +77,9 @@
 
 .application-form-hint {
   margin: calc(-1 * var(--space-xs)) 0 var(--space-sm);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.45;
   color: var(--color-muted);
 }
 

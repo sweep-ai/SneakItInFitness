@@ -1,4 +1,4 @@
-import { menClientStories } from '../data/assets';
+import { menClientStories, ariHeaderSrc } from '../data/assets';
 import { FunnelShell } from '../components/FunnelShell';
 import { RealClientStories } from '../components/RealClientStories';
 
@@ -7,6 +7,7 @@ export function MalePage() {
     <FunnelShell
       bannerMode="men"
       icpGender="male"
+      mobilePhoto={ariHeaderSrc}
       afterBanner={<RealClientStories stories={menClientStories} hideTitle />}
     />
   );
