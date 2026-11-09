@@ -8,7 +8,7 @@ import { FinalCTA } from './FinalCTA';
 import { ExclusiveProgram } from './ExclusiveProgram';
 import { FounderManifesto } from './FounderManifesto';
 import { ScrollingBanner } from './ScrollingBanner';
-import { StickyApplyBar } from './StickyApplyBar';
+import { StickyApplyBar, scrollToApplicationForm } from './StickyApplyBar';
 import { menTestimonials, womenTestimonials, type Testimonial } from '../data/assets';
 import './FunnelShell.css';
 
@@ -68,6 +68,13 @@ export function FunnelShell({
         mobilePhoto={mobilePhoto}
       />
       <div className="container">
+        <button
+          type="button"
+          className="funnel-apply-above-video-btn"
+          onClick={scrollToApplicationForm}
+        >
+          Apply Now
+        </button>
         <VSLPlayer gender={icpGender} />
         <h2 className="funnel-eligibility-title">{eligibilityTitle}</h2>
         <ApplicationForm />

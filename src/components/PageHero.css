@@ -105,6 +105,10 @@
 }
 
 @media (max-width: 767px) {
+  .page-hero--has-mobile-photo.page-hero {
+    margin-bottom: 0;
+  }
+
   .page-hero--has-mobile-photo .page-hero-bg,
   .page-hero--has-mobile-photo .page-hero-inner {
     display: none;
@@ -114,7 +118,7 @@
     display: block;
     position: relative;
     overflow: hidden;
-    padding: calc(var(--space-lg) + 3rem) var(--space-sm) var(--space-md);
+    padding: calc(var(--space-lg) + 3rem) var(--space-sm) calc(var(--space-md) + 3rem);
     background:
       linear-gradient(180deg, rgba(26, 4, 4, 0.55) 0%, rgba(45, 8, 8, 0.9) 45%, rgba(26, 4, 4, 0.98) 100%);
   }
