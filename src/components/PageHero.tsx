@@ -1,6 +1,22 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { heroBackgroundPhotos } from '../data/assets';
 import './PageHero.css';
+
+function useDesktopHeroGrid(): boolean {
+  const [show, setShow] = useState(
+    () => typeof window === 'undefined' || window.matchMedia('(min-width: 768px)').matches,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 768px)');
+    const onChange = () => setShow(media.matches);
+    onChange();
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+
+  return show;
+}
 
 interface PageHeroProps {
   headline: string;
@@ -110,19 +126,29 @@ export function PageHero({
   photos = heroBackgroundPhotos,
   mobilePhoto,
 }: PageHeroProps) {
+  const showGrid = useDesktopHeroGrid();
   const pool = photos.length > 0 ? photos : heroBackgroundPhotos;
   const gridPhotos = Array.from({ length: 24 }, (_, index) => pool[index % pool.length]);
 
   return (
     <header className={`page-hero${mobilePhoto ? ' page-hero--has-mobile-photo' : ''}`}>
-      <div className="page-hero-bg" aria-hidden="true">
-        <div className="page-hero-photo-grid">
-          {gridPhotos.map((src, index) => (
-            <img key={`${src}-${index}`} src={src} alt="" loading="lazy" decoding="async" />
-          ))}
+      {showGrid && (
+        <div className="page-hero-bg" aria-hidden="true">
+          <div className="page-hero-photo-grid">
+            {gridPhotos.map((src, index) => (
+              <img
+                key={`${src}-${index}`}
+                src={src}
+                alt=""
+                loading="lazy"
+                fetchPriority="low"
+                decoding="async"
+              />
+            ))}
+          </div>
+          <div className="page-hero-overlay" />
         </div>
-        <div className="page-hero-overlay" />
-      </div>
+      )}
 
       <div className="page-hero-inner">
         <div className="page-hero-copy">
@@ -135,7 +161,16 @@ export function PageHero({
 
       {mobilePhoto && (
         <div className="page-hero-mobile">
-          <img className="page-hero-mobile-photo" src={mobilePhoto} alt="" loading="eager" decoding="async" />
+          <img
+            className="page-hero-mobile-photo"
+            src={mobilePhoto}
+            alt=""
+            width={514}
+            height={960}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
           <div className="page-hero-mobile-photo-tint" aria-hidden="true" />
           <div className="page-hero-mobile-photo-fade" aria-hidden="true" />
           <h1 className="page-hero-mobile-headline">

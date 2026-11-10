@@ -40,6 +40,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   // Expose env vars used by the dev-server middleware (loadEnv doesn't set process.env).
   process.env.META_CAPI_ACCESS_TOKEN = env.META_CAPI_ACCESS_TOKEN;
+  if (env.META_CAPI_TRAINING_ACCESS_TOKEN) {
+    process.env.META_CAPI_TRAINING_ACCESS_TOKEN = env.META_CAPI_TRAINING_ACCESS_TOKEN;
+  }
   process.env.ZAPIER_WEBHOOK = env.ZAPIER_WEBHOOK;
   process.env.GOOGLE_SHEET_WEBHOOK = env.GOOGLE_SHEET_WEBHOOK;
   process.env.GHL_INTEGRATION_TOKEN = env.GHL_INTEGRATION_TOKEN;

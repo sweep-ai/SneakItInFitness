@@ -3,6 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="image" href="/branding/swolekol-logo.webp" type="image/webp" fetchpriority="high" />
+    <script>
+      if (matchMedia('(max-width: 767px)').matches) {
+        var heroPreload = document.createElement('link');
+        heroPreload.rel = 'preload';
+        heroPreload.as = 'image';
+        heroPreload.href = '/branding/ari-hero-mobile.webp';
+        heroPreload.type = 'image/webp';
+        heroPreload.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(heroPreload);
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -42,8 +54,11 @@
         s.parentNode.insertBefore(t, s);
       })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '1880087192677392');
-      // PageView is fired from the app (see MetaPixelRouteTracker) with a shared
-      // event_id so it deduplicates against the Conversions API server event.
+      if (location.pathname === '/schedule' || location.pathname.indexOf('/schedule/') === 0) {
+        fbq('init', '3091081311239345');
+      }
+      // PageView is fired from the app with a shared event_id.
+      // The training pixel is inited only on /schedule routes.
     </script>
     <!-- End Meta Pixel Code -->
     <!-- Microsoft Clarity -->

@@ -13,6 +13,13 @@ interface Fbq {
     options?: FbqEventOptions
   ): void;
   (
+    command: 'trackSingle',
+    pixelId: string,
+    event: string,
+    params?: Record<string, unknown>,
+    options?: FbqEventOptions
+  ): void;
+  (
     command: 'trackCustom',
     event: string,
     params?: Record<string, unknown>,

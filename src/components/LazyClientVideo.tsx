@@ -34,7 +34,7 @@ export function LazyClientVideo({ story }: LazyClientVideoProps) {
       <video
         className="client-story-video"
         src={shouldLoad ? story.src : undefined}
-        poster={story.poster}
+        poster={shouldLoad ? story.poster : undefined}
         controls={shouldLoad}
         playsInline
         preload="none"

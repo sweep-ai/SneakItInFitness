@@ -28,6 +28,67 @@
   transform: scale(0.98);
 }
 
+.funnel-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  margin: 0.45rem auto 0.2rem;
+  text-align: left;
+}
+
+.funnel-proof-faces {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.funnel-proof-face {
+  width: 58px;
+  height: 58px;
+  margin-left: -16px;
+  border: 3px solid #000;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #1a1a1a;
+}
+
+.funnel-proof-face:first-child {
+  margin-left: 0;
+}
+
+.funnel-proof-face--ring {
+  box-shadow: 0 0 0 3px #f5b301;
+}
+
+.funnel-proof-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.funnel-proof-stars {
+  display: flex;
+  gap: 0.15rem;
+  color: #f5b301;
+}
+
+.funnel-proof-star {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.funnel-proof-copy {
+  margin: 0;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
 .funnel-eligibility-title {
   margin: var(--space-md) auto var(--space-sm);
   max-width: 22rem;

@@ -15,6 +15,20 @@ const ALLOWED_CAPI_EVENTS = new Set<string>(CAPI_EVENT_NAMES);
  */
 export const META_DATASET_ID = '1880087192677392';
 
+/** Training dataset. Same event_id, only for /schedule page URLs. */
+export const META_DATASET_ID_TRAINING = '3091081311239345';
+
+/** True for /schedule and /schedule/* event_source_url values. */
+export function isScheduleEventSource(eventSourceUrl: string | undefined): boolean {
+  if (!eventSourceUrl) return false;
+  try {
+    const path = new URL(eventSourceUrl).pathname;
+    return path === '/schedule' || path.startsWith('/schedule/');
+  } catch {
+    return false;
+  }
+}
+
 /** SHA-256 hash of a normalized (trimmed, lowercased) value, per Meta spec. */
 function hashNormalized(value: string | undefined | null): string | undefined {
   if (!value) return undefined;
@@ -76,9 +90,12 @@ function buildUserData(ud: CapiUserData): Record<string, unknown> {
   return userData;
 }
 
-/** Sends a single server event to the Meta Conversions API. Throws on failure. */
-export async function sendConversionsApiEvent(input: CapiEventInput): Promise<void> {
-  const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
+/** Sends a single server event to one Meta dataset. Throws on failure. */
+export async function sendConversionsApiEvent(
+  input: CapiEventInput & { datasetId?: string; accessToken?: string }
+): Promise<void> {
+  const accessToken = input.accessToken ?? process.env.META_CAPI_ACCESS_TOKEN;
+  const datasetId = input.datasetId ?? META_DATASET_ID;
   if (!accessToken) {
     throw new Error('META_CAPI_ACCESS_TOKEN is not configured');
   }
@@ -100,7 +117,7 @@ export async function sendConversionsApiEvent(input: CapiEventInput): Promise<vo
   const testEventCode = process.env.META_CAPI_TEST_EVENT_CODE;
   if (testEventCode) payload.test_event_code = testEventCode;
 
-  const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${META_DATASET_ID}/events?access_token=${encodeURIComponent(
+  const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${datasetId}/events?access_token=${encodeURIComponent(
     accessToken
   )}`;
 
@@ -224,19 +241,39 @@ export async function handleTrackEventRequest(
     fbc: bodyUser.fbc ?? context.fbc,
   };
 
-  try {
-    await sendConversionsApiEvent({
-      eventName: body.eventName,
-      eventId: body.eventId,
-      eventSourceUrl: body.eventSourceUrl,
-      userData,
-      customData: body.customData,
-    });
-    sendJson(res, 200, { success: true });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Conversions API request failed';
-    // Tracking failures must never surface to visitors; log for observability.
+  const eventInput = {
+    eventName: body.eventName,
+    eventId: body.eventId,
+    eventSourceUrl: body.eventSourceUrl,
+    userData,
+    customData: body.customData,
+  };
+  const trainingToken =
+    process.env.META_CAPI_TRAINING_ACCESS_TOKEN?.trim() || process.env.META_CAPI_ACCESS_TOKEN;
+  const sendsTraining = isScheduleEventSource(body.eventSourceUrl);
+
+  const [primary, training] = await Promise.allSettled([
+    sendConversionsApiEvent({ ...eventInput, datasetId: META_DATASET_ID }),
+    sendsTraining
+      ? sendConversionsApiEvent({
+          ...eventInput,
+          datasetId: META_DATASET_ID_TRAINING,
+          accessToken: trainingToken,
+        })
+      : Promise.resolve(),
+  ]);
+
+  if (training.status === 'rejected') {
+    const message = training.reason instanceof Error ? training.reason.message : 'training pixel failed';
+    console.error('[track-event] training pixel', message);
+  }
+
+  if (primary.status === 'rejected') {
+    const message = primary.reason instanceof Error ? primary.reason.message : 'Conversions API request failed';
     console.error('[track-event]', message);
     sendJson(res, 502, { success: false, error: message });
+    return;
   }
+
+  sendJson(res, 200, { success: true });
 }

@@ -55,7 +55,7 @@ import alyss from '../../assets/women/Alyss.JPG';
 import janie from '../../assets/women/Janie.JPG';
 import kara from '../../assets/women/Kara.JPG';
 import mrsSokol from '../../assets/women/MrsSokol.JPG';
-import nelly from '../../assets/women/Nelly.png';
+import nelly from '../../assets/women/Nelly.jpg';
 
 import ajaVideo from '../../assets/testimonials/Aja.mp4';
 import alyssVideo from '../../assets/testimonials/Alyss.mp4';
@@ -71,8 +71,6 @@ import vaishaliVideo from '../../assets/testimonials/Vaishali.mp4';
 import ataraVideo from '../../assets/testimonials/Atara.mp4';
 import rachelVideo from '../../assets/testimonials/Rachel.mp4';
 
-import logo from '../../assets/branding/swolekolLogo.png';
-import ariHeader from '../../assets/branding/ari-hero-mobile.png';
 import ariMom from '../../assets/branding/ari_mom.webp';
 import ariComp from '../../assets/branding/ari_comp.webp';
 import meetingConfirm from '../../assets/post-booking/meeting_confirm.png';
@@ -123,7 +121,7 @@ export const womenTestimonials: Testimonial[] = [
   { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
   { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
-  { src: kristaPoster, name: 'Krista', stat: 'Lost 55 lbs in 5 months' },
+  { src: kristaPoster, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
   { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
@@ -131,7 +129,7 @@ export const womenTestimonials: Testimonial[] = [
 ];
 
 export const womenClientStories: ClientStoryVideo[] = [
-  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: 'Lost 60 lbs in 6 months' },
+  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: ajaVideo, poster: ajaPoster, name: 'Aja', stat: 'Lost 60 lbs in 6 months' },
   { src: mrsSokolVideo, poster: mrsSokolPoster, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
   { src: heatherVideo, poster: heatherPoster, name: 'Heather', stat: 'Lost 42 lbs in 7 months' },
@@ -149,7 +147,7 @@ export const womenClientStories: ClientStoryVideo[] = [
 /** Older-looking women first for the 45+ / menopausal funnel. */
 export const menopauseTestimonials: Testimonial[] = [
   { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
-  { src: kristaPoster, name: 'Krista', stat: 'Lost 55 lbs in 5 months' },
+  { src: kristaPoster, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
   { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
@@ -160,7 +158,7 @@ export const menopauseTestimonials: Testimonial[] = [
 
 export const menopauseClientStories: ClientStoryVideo[] = [
   { src: mrsSokolVideo, poster: mrsSokolPoster, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
-  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: 'Lost 60 lbs in 6 months' },
+  { src: kristaVideo, poster: kristaPoster, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: ajaVideo, poster: ajaPoster, name: 'Aja', stat: 'Lost 60 lbs in 6 months' },
   { src: chrissyVideo, poster: chrissyPoster, name: 'Chrissy', stat: '6 month full body transformation' },
   { src: erinVideo, poster: erinPoster, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
@@ -173,6 +171,13 @@ export const menopauseClientStories: ClientStoryVideo[] = [
 ];
 
 export const menopauseHeroPhotos = menopauseTestimonials.map((item) => item.src);
+
+/** Face crops for the proof row above the video. */
+export const proofFaces = [
+  { src: '/branding/proof-kara.jpg', name: 'Kara', position: 'center 30%' },
+  { src: '/branding/proof-janie.jpg', name: 'Janie', position: 'center 35%' },
+  { src: '/branding/proof-roni.jpg', name: 'Roni', position: 'center 30%' },
+];
 
 function interleave<T>(first: T[], second: T[]): T[] {
   const merged: T[] = [];
@@ -189,8 +194,9 @@ export const allClientStories: ClientStoryVideo[] = interleave(
   womenClientStories
 );
 
-export const logoSrc = logo;
-export const ariHeaderSrc = ariHeader;
+/** Small static files in /public so the header can preload them before the app bundle. */
+export const logoSrc = '/branding/swolekol-logo.webp';
+export const ariHeaderSrc = '/branding/ari-hero-mobile.webp';
 export const ariMomSrc = ariMom;
 export const ariCompSrc = ariComp;
 export const meetingConfirmSrc = meetingConfirm;

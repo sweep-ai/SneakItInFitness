@@ -167,7 +167,8 @@ export function VSLPlayer({
                 src={config.poster}
                 alt=""
                 className="vsl-player-thumb"
-                loading="eager"
+                loading="lazy"
+                decoding="async"
               />
             )}
             <PlayButton />
@@ -188,7 +189,7 @@ export function VSLPlayer({
               autoPlay
               muted={isMuted}
               playsInline
-              preload="auto"
+              preload="metadata"
               onLoadedMetadata={handleVideoReady}
               onLoadedData={handleVideoReady}
               onCanPlay={handleVideoReady}
@@ -233,7 +234,8 @@ export function VSLPlayer({
               src={thumbnail}
               alt=""
               className="vsl-player-thumb"
-              loading="eager"
+              loading="lazy"
+              decoding="async"
               onError={(e) => {
                 const target = e.currentTarget;
                 target.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;

@@ -1,7 +1,10 @@
-import { CAPI_EVENT_NAMES } from '../api/track-event/metaCapi';
+import { readFileSync } from 'node:fs';
+import { CAPI_EVENT_NAMES, isScheduleEventSource, META_DATASET_ID, META_DATASET_ID_TRAINING } from '../api/track-event/metaCapi';
 import { getCalendlyEmbedUrl } from '../src/lib/calendly';
 import { bookingConversionEvent, funnelPathsFor } from '../src/lib/funnelPaths';
-import { META_STANDARD_EVENTS } from '../src/lib/metaPixel';
+import { META_PIXEL_ID, META_PIXEL_ID_TRAINING, META_STANDARD_EVENTS } from '../src/lib/metaPixel';
+
+const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
 const main = funnelPathsFor('default');
 const schedule = funnelPathsFor('schedule');
@@ -35,6 +38,28 @@ const checks: Array<[string, boolean]> = [
   ['calendly url prefills name', embed.searchParams.get('name') === 'Jane Doe'],
   ['calendly url prefills email', embed.searchParams.get('email') === 'jane@example.com'],
   ['calendly url prefills phone as a1', embed.searchParams.get('a1') === '+13105615995'],
+  [
+    'training pixel matches live and training datasets',
+    META_PIXEL_ID === META_DATASET_ID &&
+      META_PIXEL_ID_TRAINING === '3091081311239345' &&
+      META_DATASET_ID_TRAINING === META_PIXEL_ID_TRAINING,
+  ],
+  [
+    'training pixel is inited only on /schedule',
+    indexHtml.includes("location.pathname === '/schedule'") &&
+      indexHtml.includes(`fbq('init', '${META_PIXEL_ID_TRAINING}')`) &&
+      !indexHtml.includes("fbq('track', 'PageView')") &&
+      !indexHtml.slice(indexHtml.indexOf('<noscript>'), indexHtml.indexOf('</noscript>')).includes(META_PIXEL_ID_TRAINING),
+  ],
+  [
+    'training CAPI follows the schedule URL only',
+    isScheduleEventSource('https://sneak-it-in-fitness.vercel.app/schedule') &&
+      isScheduleEventSource('https://sneak-it-in-fitness.vercel.app/schedule/booking') &&
+      isScheduleEventSource('https://sneak-it-in-fitness.vercel.app/schedule/post-booking') &&
+      !isScheduleEventSource('https://sneak-it-in-fitness.vercel.app/') &&
+      !isScheduleEventSource('https://sneak-it-in-fitness.vercel.app/booking') &&
+      !isScheduleEventSource('https://sneak-it-in-fitness.vercel.app/post-booking'),
+  ],
 ];
 
 let failed = 0;

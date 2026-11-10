@@ -7,7 +7,15 @@ export function Layout() {
   return (
     <div className="layout">
       <header className="layout-header">
-        <img src={logoSrc} alt="Swolekol LLC" className="layout-logo" width={200} height={44} />
+        <img
+          src={logoSrc}
+          alt="Swolekol LLC"
+          className="layout-logo"
+          width={200}
+          height={44}
+          fetchPriority="high"
+          decoding="async"
+        />
         <p className="layout-slots">
           <span className="layout-slots-dot" aria-hidden="true" />
           Limited slots available

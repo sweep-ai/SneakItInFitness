@@ -1,5 +1,10 @@
-/** Meta (Facebook) Pixel ID — must match the snippet in index.html */
+import { isSchedulePath } from './funnelPaths';
+
+/** Live campaign pixel. Must match the first `fbq('init')` in index.html. */
 export const META_PIXEL_ID = '1880087192677392';
+
+/** Training pixel. Fires only on /schedule routes. */
+export const META_PIXEL_ID_TRAINING = '3091081311239345';
 
 const TRACK_EVENT_ENDPOINT = '/api/track-event';
 
@@ -38,8 +43,18 @@ function trackEvent(eventName: string, userData?: PixelUserData, eventId?: strin
   const eventSourceUrl = typeof window !== 'undefined' ? window.location.href : undefined;
 
   if (fbqAvailable()) {
-    // eventID enables Meta to dedupe this against the matching server event.
-    window.fbq?.('track', eventName, {}, { eventID: resolvedEventId });
+    // Live pixel on every page. Training pixel only while the URL is /schedule.
+    window.fbq?.('trackSingle', META_PIXEL_ID, eventName, {}, { eventID: resolvedEventId });
+    if (typeof window !== 'undefined' && isSchedulePath(window.location.pathname)) {
+      window.fbq?.('init', META_PIXEL_ID_TRAINING);
+      window.fbq?.(
+        'trackSingle',
+        META_PIXEL_ID_TRAINING,
+        eventName,
+        {},
+        { eventID: resolvedEventId }
+      );
+    }
   }
 
   sendServerEvent(eventName, resolvedEventId, eventSourceUrl, userData);
