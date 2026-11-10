@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import type { IncomingMessage, ServerResponse } from 'node:http';
+import { facebookClickIdFromUrl } from '../../src/lib/facebookClickId.js';
 
 /** Graph API version used for Conversions API requests. */
 const GRAPH_API_VERSION = 'v21.0';
@@ -229,6 +230,12 @@ export async function handleTrackEventRequest(
 
   const context = getRequestUserContext(req);
   const bodyUser = body.userData ?? {};
+  const sendsTraining = isScheduleEventSource(body.eventSourceUrl);
+  // Schedule pixel customer parameters: client_ip_address (unhashed) and fbc (click id).
+  const clickId =
+    bodyUser.fbc ||
+    context.fbc ||
+    (sendsTraining ? facebookClickIdFromUrl(body.eventSourceUrl) : undefined);
 
   const userData: CapiUserData = {
     email: bodyUser.email,
@@ -238,7 +245,7 @@ export async function handleTrackEventRequest(
     clientIpAddress: context.clientIpAddress,
     clientUserAgent: context.clientUserAgent,
     fbp: bodyUser.fbp ?? context.fbp,
-    fbc: bodyUser.fbc ?? context.fbc,
+    fbc: clickId,
   };
 
   const eventInput = {
@@ -250,7 +257,6 @@ export async function handleTrackEventRequest(
   };
   const trainingToken =
     process.env.META_CAPI_TRAINING_ACCESS_TOKEN?.trim() || process.env.META_CAPI_ACCESS_TOKEN;
-  const sendsTraining = isScheduleEventSource(body.eventSourceUrl);
 
   if (sendsTraining) {
     // Old pixel is off on /schedule.

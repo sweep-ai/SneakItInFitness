@@ -1,3 +1,4 @@
+import { facebookClickIdFromFbclid, fbcMatchesFbclid } from './facebookClickId';
 import { isSchedulePath } from './funnelPaths';
 
 /** Live campaign pixel. Must match the first `fbq('init')` in index.html. */
@@ -32,6 +33,53 @@ function getCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return undefined;
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : undefined;
+}
+
+const FBC_STORAGE_KEY = 'sneakit-fbc';
+
+function readStoredClickId(): string | undefined {
+  try {
+    return sessionStorage.getItem(FBC_STORAGE_KEY) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function storeClickId(fbc: string): void {
+  try {
+    sessionStorage.setItem(FBC_STORAGE_KEY, fbc);
+  } catch {
+    /* Storage can be blocked. The cookie still carries the click id. */
+  }
+  if (getCookie('_fbc') === fbc) return;
+  document.cookie = `_fbc=${encodeURIComponent(fbc)}; path=/; max-age=7776000; SameSite=Lax`;
+}
+
+/**
+ * Schedule pixel click id. Prefers the _fbc cookie, then the fbclid URL parameter.
+ * Meta parameter name is `fbc`. Do not hash.
+ */
+function scheduleClickId(): string | undefined {
+  if (typeof window === 'undefined' || !isSchedulePath(window.location.pathname)) return undefined;
+
+  const fbclid = new URLSearchParams(window.location.search).get('fbclid')?.trim();
+  const cookieFbc = getCookie('_fbc');
+  const storedFbc = readStoredClickId();
+  const current = cookieFbc || storedFbc;
+
+  if (fbclid && (!current || !fbcMatchesFbclid(current, fbclid))) {
+    const fbc = facebookClickIdFromFbclid(fbclid);
+    if (!fbc) return current;
+    storeClickId(fbc);
+    return fbc;
+  }
+
+  if (current) {
+    storeClickId(current);
+    return current;
+  }
+
+  return undefined;
 }
 
 /**
@@ -83,7 +131,7 @@ function sendServerEvent(
     userData: {
       ...userData,
       fbp: getCookie('_fbp'),
-      fbc: getCookie('_fbc'),
+      fbc: scheduleClickId() ?? getCookie('_fbc'),
     },
   };
 

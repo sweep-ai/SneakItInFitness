@@ -57,6 +57,18 @@
       if (onSchedule) {
         // Old pixel is off on /schedule. Events go to the new pixel only.
         // fbq('init', '1880087192677392');
+        try {
+          var fbclid = new URLSearchParams(location.search).get('fbclid');
+          var fbcMatch = document.cookie.match(/(?:^|; )_fbc=([^;]*)/);
+          var existingFbc = fbcMatch ? decodeURIComponent(fbcMatch[1]) : '';
+          if (fbclid && (!existingFbc || existingFbc.slice(-fbclid.length - 1) !== '.' + fbclid)) {
+            var fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+            document.cookie = '_fbc=' + encodeURIComponent(fbc) + '; path=/; max-age=7776000; SameSite=Lax';
+            sessionStorage.setItem('sneakit-fbc', fbc);
+          } else if (existingFbc) {
+            sessionStorage.setItem('sneakit-fbc', existingFbc);
+          }
+        } catch (e) {}
         fbq('init', '3091081311239345');
       } else {
         fbq('init', '1880087192677392');

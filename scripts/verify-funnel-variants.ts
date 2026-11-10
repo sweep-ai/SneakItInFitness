@@ -1,10 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { CAPI_EVENT_NAMES, isScheduleEventSource, META_DATASET_ID, META_DATASET_ID_TRAINING } from '../api/track-event/metaCapi';
+import { facebookClickIdFromFbclid, facebookClickIdFromUrl } from '../src/lib/facebookClickId';
 import { getCalendlyEmbedUrl } from '../src/lib/calendly';
 import { bookingConversionEvent, funnelPathsFor } from '../src/lib/funnelPaths';
 import { META_PIXEL_ID, META_PIXEL_ID_TRAINING, META_STANDARD_EVENTS } from '../src/lib/metaPixel';
 
 const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const metaCapiSource = readFileSync(new URL('../api/track-event/metaCapi.ts', import.meta.url), 'utf8');
 
 const main = funnelPathsFor('default');
 const schedule = funnelPathsFor('schedule');
@@ -51,6 +53,15 @@ const checks: Array<[string, boolean]> = [
       indexHtml.includes(`fbq('init', '${META_PIXEL_ID_TRAINING}')`) &&
       !indexHtml.includes("fbq('track', 'PageView')") &&
       !indexHtml.slice(indexHtml.indexOf('<noscript>'), indexHtml.indexOf('</noscript>')).includes(META_PIXEL_ID_TRAINING),
+  ],
+  [
+    'schedule click id uses the Meta fbc parameter',
+    facebookClickIdFromFbclid('AbCdEf', 1554763741205) === 'fb.1.1554763741205.AbCdEf' &&
+      facebookClickIdFromUrl('https://sneak-it-in-fitness.vercel.app/schedule?fbclid=AbCdEf', 1554763741205) ===
+        'fb.1.1554763741205.AbCdEf' &&
+      indexHtml.includes("var fbc = 'fb.1.' + Date.now() + '.' + fbclid;") &&
+      metaCapiSource.includes('client_ip_address') &&
+      metaCapiSource.includes('userData.fbc = ud.fbc'),
   ],
   [
     'training CAPI follows the schedule URL only',
