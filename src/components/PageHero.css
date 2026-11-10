@@ -88,10 +88,19 @@
   white-space: pre-line;
 }
 
+.page-hero--with-lead .page-hero-inner {
+  padding-top: var(--space-md);
+}
+
 @media (min-width: 768px) {
   .page-hero-inner {
     padding: calc(var(--space-xl) + 0.5rem) var(--space-md);
     min-height: 280px;
+  }
+
+  .page-hero--with-lead .page-hero-inner {
+    padding-top: var(--space-sm);
+    min-height: 240px;
   }
 
   .page-hero-photo-grid {
@@ -107,6 +116,8 @@
 @media (max-width: 767px) {
   .page-hero--has-mobile-photo.page-hero {
     margin-bottom: 0;
+    background:
+      linear-gradient(180deg, rgba(26, 4, 4, 0.55) 0%, rgba(45, 8, 8, 0.9) 45%, rgba(26, 4, 4, 0.98) 100%);
   }
 
   .page-hero--has-mobile-photo .page-hero-bg,
@@ -118,9 +129,8 @@
     display: block;
     position: relative;
     overflow: hidden;
-    padding: calc(var(--space-lg) + 3rem) var(--space-sm) calc(var(--space-md) + 3rem);
-    background:
-      linear-gradient(180deg, rgba(26, 4, 4, 0.55) 0%, rgba(45, 8, 8, 0.9) 45%, rgba(26, 4, 4, 0.98) 100%);
+    padding: var(--space-sm) var(--space-sm) calc(var(--space-md) + 3rem);
+    background: none;
   }
 
   .page-hero-mobile-photo {
@@ -166,7 +176,7 @@
   .page-hero-mobile-headline {
     position: relative;
     z-index: 2;
-    margin: 0;
+    margin: 5.5rem 0 0;
     padding-top: 0;
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 7.8vw, 2rem);

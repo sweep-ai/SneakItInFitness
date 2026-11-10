@@ -34,7 +34,11 @@
   justify-content: center;
   gap: 0.85rem;
   width: 100%;
-  margin: 0.45rem auto 0.2rem;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  padding: 0.85rem 1rem 0;
+  background: none;
   text-align: left;
 }
 
@@ -45,20 +49,28 @@
 }
 
 .funnel-proof-face {
+  position: relative;
+  z-index: 1;
   width: 58px;
   height: 58px;
   margin-left: -16px;
-  border: 3px solid #000;
+  border: 3px solid #1a0404;
   border-radius: 50%;
   object-fit: cover;
   background: #1a1a1a;
 }
 
 .funnel-proof-face:first-child {
+  z-index: 1;
   margin-left: 0;
 }
 
+.funnel-proof-face:nth-child(2) {
+  z-index: 2;
+}
+
 .funnel-proof-face--ring {
+  z-index: 3;
   box-shadow: 0 0 0 3px #f5b301;
 }
 

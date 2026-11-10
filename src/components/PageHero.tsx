@@ -26,6 +26,8 @@ interface PageHeroProps {
   photos?: string[];
   /** When set, mobile viewports show this photo beside a wrapped headline instead of the photo-grid background. */
   mobilePhoto?: string;
+  /** Sits at the top of the hero so the headline background continues behind it. */
+  children?: ReactNode;
 }
 
 function toPhraseList(value?: string | string[]): string[] {
@@ -125,13 +127,14 @@ export function PageHero({
   subhead,
   photos = heroBackgroundPhotos,
   mobilePhoto,
+  children,
 }: PageHeroProps) {
   const showGrid = useDesktopHeroGrid();
   const pool = photos.length > 0 ? photos : heroBackgroundPhotos;
   const gridPhotos = Array.from({ length: 24 }, (_, index) => pool[index % pool.length]);
 
   return (
-    <header className={`page-hero${mobilePhoto ? ' page-hero--has-mobile-photo' : ''}`}>
+    <header className={`page-hero${mobilePhoto ? ' page-hero--has-mobile-photo' : ''}${children ? ' page-hero--with-lead' : ''}`}>
       {showGrid && (
         <div className="page-hero-bg" aria-hidden="true">
           <div className="page-hero-photo-grid">
@@ -149,6 +152,8 @@ export function PageHero({
           <div className="page-hero-overlay" />
         </div>
       )}
+
+      {children}
 
       <div className="page-hero-inner">
         <div className="page-hero-copy">

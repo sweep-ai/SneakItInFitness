@@ -66,7 +66,36 @@ export function FunnelShell({
         subhead={getFunnelSubhead(icpGender)}
         photos={heroPhotos}
         mobilePhoto={mobilePhoto}
-      />
+      >
+      <div className="funnel-proof">
+        <div className="funnel-proof-faces">
+          {proofFaces.map((face, index) => (
+            <img
+              key={face.name}
+              className={`funnel-proof-face${index === proofFaces.length - 1 ? ' funnel-proof-face--ring' : ''}`}
+              src={face.src}
+              alt=""
+              style={{ objectPosition: face.position }}
+              width={64}
+              height={64}
+            />
+          ))}
+        </div>
+        <div className="funnel-proof-meta">
+          <div className="funnel-proof-stars" aria-label="5 stars">
+            {Array.from({ length: 5 }, (_, index) => (
+              <svg key={index} className="funnel-proof-star" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M10 1.4l2.2 4.7 5.2.7-3.8 3.6.9 5.2L10 13.2 5.5 15.6l.9-5.2L2.6 6.8l5.2-.7L10 1.4z"
+                />
+              </svg>
+            ))}
+          </div>
+          <p className="funnel-proof-copy">3,142 lbs lost across 200+ clients</p>
+        </div>
+      </div>
+      </PageHero>
       <div className="container">
         <button
           type="button"
@@ -75,34 +104,6 @@ export function FunnelShell({
         >
           Apply Now
         </button>
-        <div className="funnel-proof">
-          <div className="funnel-proof-faces">
-            {proofFaces.map((face, index) => (
-              <img
-                key={face.name}
-                className={`funnel-proof-face${index === proofFaces.length - 1 ? ' funnel-proof-face--ring' : ''}`}
-                src={face.src}
-                alt=""
-                style={{ objectPosition: face.position }}
-                width={64}
-                height={64}
-              />
-            ))}
-          </div>
-          <div className="funnel-proof-meta">
-            <div className="funnel-proof-stars" aria-label="5 stars">
-              {Array.from({ length: 5 }, (_, index) => (
-                <svg key={index} className="funnel-proof-star" viewBox="0 0 20 20" aria-hidden="true">
-                  <path
-                    fill="currentColor"
-                    d="M10 1.4l2.2 4.7 5.2.7-3.8 3.6.9 5.2L10 13.2 5.5 15.6l.9-5.2L2.6 6.8l5.2-.7L10 1.4z"
-                  />
-                </svg>
-              ))}
-            </div>
-            <p className="funnel-proof-copy">3,142 lbs lost across 200+ clients</p>
-          </div>
-        </div>
         <VSLPlayer gender={icpGender} />
         <h2 className="funnel-eligibility-title">{eligibilityTitle}</h2>
         <ApplicationForm />
