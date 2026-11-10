@@ -53,12 +53,15 @@
         s = b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t, s);
       })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1880087192677392');
-      if (location.pathname === '/schedule' || location.pathname.indexOf('/schedule/') === 0) {
+      var onSchedule = location.pathname === '/schedule' || location.pathname.indexOf('/schedule/') === 0;
+      if (onSchedule) {
+        // Old pixel is off on /schedule. Events go to the new pixel only.
+        // fbq('init', '1880087192677392');
         fbq('init', '3091081311239345');
+      } else {
+        fbq('init', '1880087192677392');
       }
       // PageView is fired from the app with a shared event_id.
-      // The training pixel is inited only on /schedule routes.
     </script>
     <!-- End Meta Pixel Code -->
     <!-- Microsoft Clarity -->
@@ -80,13 +83,17 @@
   </head>
   <body>
     <noscript>
-      <img
-        height="1"
-        width="1"
-        style="display: none"
-        alt=""
-        src="https://www.facebook.com/tr?id=1880087192677392&amp;ev=PageView&amp;noscript=1"
-      />
+      <!--
+        No static PageView. This image cannot tell /schedule from the main funnel,
+        so it would send the old pixel on schedule pages.
+        <img
+          height="1"
+          width="1"
+          style="display: none"
+          alt=""
+          src="https://www.facebook.com/tr?id=1880087192677392&amp;ev=PageView&amp;noscript=1"
+        />
+      -->
     </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

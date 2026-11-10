@@ -45,8 +45,9 @@ const checks: Array<[string, boolean]> = [
       META_DATASET_ID_TRAINING === META_PIXEL_ID_TRAINING,
   ],
   [
-    'training pixel is inited only on /schedule',
+    'schedule pages init only the new pixel',
     indexHtml.includes("location.pathname === '/schedule'") &&
+      indexHtml.includes("// fbq('init', '1880087192677392');") &&
       indexHtml.includes(`fbq('init', '${META_PIXEL_ID_TRAINING}')`) &&
       !indexHtml.includes("fbq('track', 'PageView')") &&
       !indexHtml.slice(indexHtml.indexOf('<noscript>'), indexHtml.indexOf('</noscript>')).includes(META_PIXEL_ID_TRAINING),

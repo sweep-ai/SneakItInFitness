@@ -252,24 +252,29 @@ export async function handleTrackEventRequest(
     process.env.META_CAPI_TRAINING_ACCESS_TOKEN?.trim() || process.env.META_CAPI_ACCESS_TOKEN;
   const sendsTraining = isScheduleEventSource(body.eventSourceUrl);
 
-  const [primary, training] = await Promise.allSettled([
-    sendConversionsApiEvent({ ...eventInput, datasetId: META_DATASET_ID }),
-    sendsTraining
-      ? sendConversionsApiEvent({
-          ...eventInput,
-          datasetId: META_DATASET_ID_TRAINING,
-          accessToken: trainingToken,
-        })
-      : Promise.resolve(),
-  ]);
-
-  if (training.status === 'rejected') {
-    const message = training.reason instanceof Error ? training.reason.message : 'training pixel failed';
-    console.error('[track-event] training pixel', message);
+  if (sendsTraining) {
+    // Old pixel is off on /schedule.
+    // await sendConversionsApiEvent({ ...eventInput, datasetId: META_DATASET_ID });
+    try {
+      await sendConversionsApiEvent({
+        ...eventInput,
+        datasetId: META_DATASET_ID_TRAINING,
+        accessToken: trainingToken,
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'training pixel failed';
+      console.error('[track-event] training pixel', message);
+      sendJson(res, 502, { success: false, error: message });
+      return;
+    }
+    sendJson(res, 200, { success: true });
+    return;
   }
 
-  if (primary.status === 'rejected') {
-    const message = primary.reason instanceof Error ? primary.reason.message : 'Conversions API request failed';
+  try {
+    await sendConversionsApiEvent({ ...eventInput, datasetId: META_DATASET_ID });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Conversions API request failed';
     console.error('[track-event]', message);
     sendJson(res, 502, { success: false, error: message });
     return;
