@@ -7,7 +7,7 @@ import isaiahBanner from '../../assets/men/Isaiah.jpg';
 import elliotBanner from '../../assets/men/Elliot.jpg';
 import mattBanner from '../../assets/men/Matt.jpg';
 import chelseaBanner from '../../assets/women/Chelsea.jpg';
-import erinBanner from '../../assets/women/Erin.jpg';
+import erinBanner from '../../assets/women/Erin.webp';
 import harrisBanner from '../../assets/testimonial-posters/Harris.jpg';
 
 import elliottVideo from '../../assets/testimonials/Elliott.mp4';
@@ -23,6 +23,7 @@ import tobyVideo from '../../assets/testimonials/Toby.mp4';
 import tylerVideo from '../../assets/testimonials/Tyler.mp4';
 import howardVideo from '../../assets/testimonials/Howard.mp4';
 import michaelVideo from '../../assets/testimonials/Michael.mp4';
+import danielVideo from '../../assets/testimonials/Daniel.mp4';
 
 import ajaPoster from '../../assets/testimonial-posters/Aja.jpg';
 import alyssPoster from '../../assets/testimonial-posters/Alyss.jpg';
@@ -49,6 +50,7 @@ import vaishaliPoster from '../../assets/testimonial-posters/Vaishali.jpg';
 import ataraPoster from '../../assets/testimonial-posters/Atara.jpg';
 import howardPoster from '../../assets/testimonial-posters/Howard.jpg';
 import michaelPoster from '../../assets/testimonial-posters/Michael.jpg';
+import danielPoster from '../../assets/testimonial-posters/Daniel.jpg';
 import rachelPoster from '../../assets/testimonial-posters/Rachel.jpg';
 
 import alyss from '../../assets/women/Alyss.JPG';
@@ -56,6 +58,14 @@ import janie from '../../assets/women/Janie.JPG';
 import kara from '../../assets/women/Kara.JPG';
 import mrsSokol from '../../assets/women/MrsSokol.JPG';
 import nelly from '../../assets/women/Nelly.jpg';
+import rutBanner from '../../assets/women/Rut.webp';
+import rivkieBanner from '../../assets/women/Rivkie.webp';
+import moniqueBanner from '../../assets/women/Monique.webp';
+import elianaBanner from '../../assets/women/Eliana.webp';
+import ataraBanner from '../../assets/women/Atara.webp';
+import heatherBanner from '../../assets/women/Heather.webp';
+import savannahBanner from '../../assets/women/Savannah.webp';
+import kristaBanner from '../../assets/women/Krista.webp';
 
 import ajaVideo from '../../assets/testimonials/Aja.mp4';
 import alyssVideo from '../../assets/testimonials/Alyss.mp4';
@@ -115,17 +125,25 @@ export const menClientStories: ClientStoryVideo[] = [
   { src: rabbiMattVideo, poster: rabbiMattPoster, name: 'Rabbi Matt', stat: 'Lost 20 lbs in 3 months' },
   { src: jonathanVideo, poster: jonathanPoster, name: 'Jonathan', stat: 'Lost 20 lbs in 60 days' },
   { src: tobyVideo, poster: tobyPoster, name: 'Toby', stat: 'Lost 20 lbs in 5 months' },
+  { src: danielVideo, poster: danielPoster, name: 'Daniel', stat: 'Lost 40 lbs in 90 days' },
 ];
 
 export const womenTestimonials: Testimonial[] = [
-  { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
+  { src: erinBanner, name: 'Erin', stat: 'Lost 20 lbs in 4 months' },
   { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
-  { src: kristaPoster, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
+  { src: kristaBanner, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
   { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
   { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
+  { src: rutBanner, name: 'Rut', stat: 'Lost 10 lbs in 10 weeks' },
+  { src: rivkieBanner, name: 'Rivkie', stat: 'Lost 17 lbs in 2.5 months' },
+  { src: moniqueBanner, name: 'Monique', stat: 'Lost 30 lbs in 5.5 months' },
+  { src: elianaBanner, name: 'Eliana', stat: 'Lost 11 lbs in 11 weeks' },
+  { src: ataraBanner, name: 'Atara', stat: 'Lost 25 lbs in 3.5 months' },
+  { src: heatherBanner, name: 'Heather', stat: 'Lost 45 lbs in 7 months' },
+  { src: savannahBanner, name: 'Savannah', stat: 'Lost 20 lbs in 3 months' },
 ];
 
 export const womenClientStories: ClientStoryVideo[] = [
@@ -147,13 +165,20 @@ export const womenClientStories: ClientStoryVideo[] = [
 /** Older-looking women first for the 45+ / menopausal funnel. */
 export const menopauseTestimonials: Testimonial[] = [
   { src: mrsSokol, name: 'Roni (My Mom)', stat: 'Lost 50 lbs in 8 months' },
-  { src: kristaPoster, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
+  { src: kristaBanner, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
-  { src: erinBanner, name: 'Erin', stat: 'Lost 15 lbs in 3 months' },
+  { src: erinBanner, name: 'Erin', stat: 'Lost 20 lbs in 4 months' },
   { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
   { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
+  { src: rutBanner, name: 'Rut', stat: 'Lost 10 lbs in 10 weeks' },
+  { src: rivkieBanner, name: 'Rivkie', stat: 'Lost 17 lbs in 2.5 months' },
+  { src: moniqueBanner, name: 'Monique', stat: 'Lost 30 lbs in 5.5 months' },
+  { src: elianaBanner, name: 'Eliana', stat: 'Lost 11 lbs in 11 weeks' },
+  { src: ataraBanner, name: 'Atara', stat: 'Lost 25 lbs in 3.5 months' },
+  { src: heatherBanner, name: 'Heather', stat: 'Lost 45 lbs in 7 months' },
+  { src: savannahBanner, name: 'Savannah', stat: 'Lost 20 lbs in 3 months' },
 ];
 
 export const menopauseClientStories: ClientStoryVideo[] = [
