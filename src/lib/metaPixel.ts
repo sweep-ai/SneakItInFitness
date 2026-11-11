@@ -116,6 +116,88 @@ export const META_STANDARD_EVENTS = ['PageView', 'Lead', 'Schedule', 'CompleteRe
 
 export type MetaStandardEvent = (typeof META_STANDARD_EVENTS)[number];
 
+const CONVERSION_EVENTS = new Set<string>(['Lead', 'Schedule', 'CompleteRegistration']);
+const CAPI_OUTBOX_KEY = 'sneakit-capi-outbox';
+
+interface ServerEventPayload {
+  eventName: string;
+  eventId: string;
+  eventSourceUrl?: string;
+  userData?: PixelUserData & { fbp?: string; fbc?: string };
+}
+
+function readOutbox(): ServerEventPayload[] {
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem(CAPI_OUTBOX_KEY) || '[]') as ServerEventPayload[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeOutbox(items: ServerEventPayload[]): void {
+  try {
+    sessionStorage.setItem(CAPI_OUTBOX_KEY, JSON.stringify(items.slice(-20)));
+  } catch {
+    /* Storage can be blocked. The request below still sends. */
+  }
+}
+
+function rememberServerEvent(payload: ServerEventPayload): void {
+  if (!CONVERSION_EVENTS.has(payload.eventName)) return;
+  const rest = readOutbox().filter(
+    (item) => !(item.eventName === payload.eventName && item.eventId === payload.eventId)
+  );
+  writeOutbox([...rest, payload]);
+}
+
+function forgetServerEvent(eventName: string, eventId: string): void {
+  writeOutbox(readOutbox().filter((item) => !(item.eventName === eventName && item.eventId === eventId)));
+}
+
+let retryArmed = false;
+
+function armServerRetry(): void {
+  if (retryArmed || typeof window === 'undefined') return;
+  retryArmed = true;
+  window.addEventListener('online', () => flushServerEvents());
+}
+
+function postServerEvent(payload: ServerEventPayload, beacon: boolean): void {
+  const body = JSON.stringify(payload);
+  if (beacon && CONVERSION_EVENTS.has(payload.eventName)) {
+    try {
+      navigator.sendBeacon?.(TRACK_EVENT_ENDPOINT, new Blob([body], { type: 'application/json' }));
+    } catch {
+      /* fetch below still sends the event */
+    }
+  }
+
+  const post = () =>
+    fetch(TRACK_EVENT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    });
+
+  const finish = (response: Response) => {
+    if (response.ok || (response.status >= 400 && response.status < 500 && response.status !== 408 && response.status !== 429)) {
+      forgetServerEvent(payload.eventName, payload.eventId);
+      return;
+    }
+    throw new Error('capi');
+  };
+
+  void post()
+    .then(finish)
+    .catch(() => {
+      void post().then(finish).catch(() => {
+        /* Kept in the outbox. The next page or online event retries the same event id. */
+      });
+    });
+}
+
 function sendServerEvent(
   eventName: string,
   eventId: string,
@@ -124,7 +206,7 @@ function sendServerEvent(
 ): void {
   if (typeof fetch === 'undefined') return;
 
-  const payload = {
+  const payload: ServerEventPayload = {
     eventName,
     eventId,
     eventSourceUrl,
@@ -135,27 +217,28 @@ function sendServerEvent(
     },
   };
 
-  // One CAPI post. A dropped request retries once with the same event id,
-  // so Meta still dedupes if the first post actually landed.
-  const body = JSON.stringify(payload);
-  const post = () =>
-    fetch(TRACK_EVENT_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body,
-      keepalive: true,
-    });
+  // Same event id on every attempt. Meta counts one event when the pixel
+  // eventID matches this CAPI event_id, even if the post is delivered twice.
+  rememberServerEvent(payload);
+  armServerRetry();
+  postServerEvent(payload, true);
+}
 
-  const postOnce = () =>
-    post().then((response) => {
-      if (response.status >= 500) throw new Error('capi');
-    });
+/** Retries conversion events whose server post never returned success. */
+export function flushServerEvents(): void {
+  for (const payload of readOutbox()) {
+    postServerEvent(payload, false);
+  }
+}
 
-  void postOnce().catch(() => {
-    void post().catch(() => {
-      /* Swallow tracking errors. */
-    });
-  });
+/** CAPI only. Used before navigation so a Schedule is not lost if the next page never paints. */
+export function sendServerConversion(
+  eventName: MetaStandardEvent,
+  eventId: string,
+  userData?: PixelUserData
+): void {
+  const eventSourceUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+  sendServerEvent(eventName, eventId, eventSourceUrl, userData);
 }
 
 /** Fires on every page/route view (browser + server). */

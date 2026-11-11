@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { trackPageView } from '../lib/metaPixel';
+import { flushServerEvents, trackPageView } from '../lib/metaPixel';
 
 /**
  * index.html only initializes the pixel; every PageView (including the first)
@@ -17,6 +17,7 @@ export function MetaPixelRouteTracker() {
     if (previousPathRef.current === path) return;
 
     previousPathRef.current = path;
+    flushServerEvents();
     trackPageView();
   }, [location.pathname, location.search]);
 

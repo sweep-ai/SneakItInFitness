@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { trackCompleteRegistration, trackSchedule } from '../lib/metaPixel';
+import { trackCompleteRegistration, trackSchedule, sendServerConversion } from '../lib/metaPixel';
 import { beginBookingConversion, getStoredApplicantUserData } from '../lib/conversionTracking';
 import { bookingConversionEvent, useFunnelPaths } from '../lib/funnelPaths';
 import {
@@ -115,10 +115,14 @@ export function CalendlyEmbed() {
         if (bookedRef.current) return;
         bookedRef.current = true;
         const conversion = bookingConversionEvent(paths.variant);
-        if (!beginBookingConversion(conversion)) {
-          const userData = getStoredApplicantUserData();
+        const userData = getStoredApplicantUserData();
+        const pending = beginBookingConversion(conversion);
+        if (!pending) {
           if (conversion === 'Schedule') trackSchedule(userData);
           else trackCompleteRegistration(userData);
+        } else {
+          // Pixel fires once on the next page with this same event id.
+          sendServerConversion(pending.eventName, pending.eventId, userData);
         }
         navigate(paths.postBooking, { replace: true });
       }

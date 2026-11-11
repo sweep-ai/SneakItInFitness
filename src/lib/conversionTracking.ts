@@ -100,14 +100,12 @@ export function consumePendingLeadEventId(): string | null {
 
 /**
  * Stores the one booking conversion for the post-booking page.
- * Returns false when storage did not keep it. Caller must fire the event itself.
+ * Returns null when storage did not keep it. Caller must fire the event itself.
  */
-export function beginBookingConversion(eventName: BookingConversionEvent): boolean {
-  const eventId = generateEventId();
-  return safeSet(
-    BOOKING_CONVERSION_KEY,
-    JSON.stringify({ eventName, eventId } satisfies PendingBookingConversion)
-  );
+export function beginBookingConversion(eventName: BookingConversionEvent): PendingBookingConversion | null {
+  const pending: PendingBookingConversion = { eventName, eventId: generateEventId() };
+  if (!safeSet(BOOKING_CONVERSION_KEY, JSON.stringify(pending))) return null;
+  return pending;
 }
 
 /** Returns and clears the pending booking conversion. Refresh / direct visit returns null. */
