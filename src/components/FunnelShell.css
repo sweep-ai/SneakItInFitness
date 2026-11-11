@@ -58,6 +58,7 @@
   border-radius: 50%;
   object-fit: cover;
   background: #1a1a1a;
+  box-shadow: 0 0 0 3px #f5b301;
 }
 
 .funnel-proof-face:first-child {
@@ -71,7 +72,6 @@
 
 .funnel-proof-face--ring {
   z-index: 3;
-  box-shadow: 0 0 0 3px #f5b301;
 }
 
 .funnel-proof-meta {

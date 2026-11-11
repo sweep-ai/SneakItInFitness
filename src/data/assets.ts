@@ -172,11 +172,11 @@ export const menopauseClientStories: ClientStoryVideo[] = [
 
 export const menopauseHeroPhotos = menopauseTestimonials.map((item) => item.src);
 
-/** Face crops under the logo. Krista and Elliott sit behind Roni. */
+/** Face crops under the logo. Back woman and middle client sit behind Roni. */
 export const proofFaces = [
-  { src: '/branding/proof-krista.jpg', name: 'Krista', position: 'center 40%' },
-  { src: '/branding/proof-elliott.jpg', name: 'Elliott', position: 'center' },
-  { src: '/branding/proof-roni.jpg', name: 'Roni', position: 'center 30%' },
+  { src: '/branding/proof-back.webp', name: 'Back', position: 'center 35%' },
+  { src: '/branding/proof-middle.webp', name: 'Middle', position: 'center' },
+  { src: '/branding/proof-roni.webp', name: 'Roni', position: 'center 30%' },
 ];
 
 function interleave<T>(first: T[], second: T[]): T[] {

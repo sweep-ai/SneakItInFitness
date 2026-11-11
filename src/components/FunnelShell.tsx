@@ -78,6 +78,7 @@ export function FunnelShell({
               style={{ objectPosition: face.position }}
               width={64}
               height={64}
+              decoding="async"
             />
           ))}
         </div>
