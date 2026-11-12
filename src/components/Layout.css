@@ -15,7 +15,7 @@
 }
 
 .layout-logo {
-  height: 36px;
+  height: 44px;
   width: auto;
   max-width: 160px;
   object-fit: contain;
@@ -77,7 +77,7 @@
   }
 
   .layout-logo {
-    height: 44px;
+    height: 52px;
     max-width: 200px;
   }
 

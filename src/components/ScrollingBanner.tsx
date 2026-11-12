@@ -25,6 +25,7 @@ export function ScrollingBanner({
                 decoding="async"
                 width={204}
                 height={240}
+                style={item.position ? { objectPosition: item.position } : undefined}
               />
             </div>
             <div className="scrolling-banner-caption">

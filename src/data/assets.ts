@@ -90,6 +90,8 @@ export interface Testimonial {
   src: string;
   name: string;
   stat: string;
+  /** object-position when the banner crop clips the body. */
+  position?: string;
 }
 
 export const menTestimonials: Testimonial[] = [
@@ -129,7 +131,7 @@ export const menClientStories: ClientStoryVideo[] = [
 ];
 
 export const womenTestimonials: Testimonial[] = [
-  { src: erinBanner, name: 'Erin', stat: 'Lost 20 lbs in 4 months' },
+  { src: erinBanner, name: 'Erin', stat: 'Lost 20 lbs in 4 months', position: '22% center' },
   { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
   { src: kristaBanner, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
@@ -140,8 +142,8 @@ export const womenTestimonials: Testimonial[] = [
   { src: rutBanner, name: 'Rut', stat: 'Lost 10 lbs in 10 weeks' },
   { src: rivkieBanner, name: 'Rivkie', stat: 'Lost 17 lbs in 2.5 months' },
   { src: moniqueBanner, name: 'Monique', stat: 'Lost 30 lbs in 5.5 months' },
-  { src: elianaBanner, name: 'Eliana', stat: 'Lost 11 lbs in 11 weeks' },
-  { src: ataraBanner, name: 'Atara', stat: 'Lost 25 lbs in 3.5 months' },
+  { src: elianaBanner, name: 'Eliana', stat: 'Lost 11 lbs in 11 weeks', position: '22% center' },
+  { src: ataraBanner, name: 'Atara', stat: 'Lost 25 lbs in 3.5 months', position: '22% center' },
   { src: heatherBanner, name: 'Heather', stat: 'Lost 45 lbs in 7 months' },
   { src: savannahBanner, name: 'Savannah', stat: 'Lost 20 lbs in 3 months' },
 ];
@@ -168,15 +170,15 @@ export const menopauseTestimonials: Testimonial[] = [
   { src: kristaBanner, name: 'Krista', stat: 'Lost 80 lbs in 8 months' },
   { src: nelly, name: 'Nelly', stat: 'Lost 25 lbs in 3 months' },
   { src: janie, name: 'Janie', stat: 'Lost 35 lbs in 6 months' },
-  { src: erinBanner, name: 'Erin', stat: 'Lost 20 lbs in 4 months' },
+  { src: erinBanner, name: 'Erin', stat: 'Lost 20 lbs in 4 months', position: '22% center' },
   { src: kara, name: 'Kara', stat: 'Lost 45 lbs in 7 months' },
   { src: alyss, name: 'Alyss', stat: 'Lost 30 lbs in 3 months' },
   { src: chelseaBanner, name: 'Chelsea', stat: 'Lost 15 lbs in 90 days' },
   { src: rutBanner, name: 'Rut', stat: 'Lost 10 lbs in 10 weeks' },
   { src: rivkieBanner, name: 'Rivkie', stat: 'Lost 17 lbs in 2.5 months' },
   { src: moniqueBanner, name: 'Monique', stat: 'Lost 30 lbs in 5.5 months' },
-  { src: elianaBanner, name: 'Eliana', stat: 'Lost 11 lbs in 11 weeks' },
-  { src: ataraBanner, name: 'Atara', stat: 'Lost 25 lbs in 3.5 months' },
+  { src: elianaBanner, name: 'Eliana', stat: 'Lost 11 lbs in 11 weeks', position: '22% center' },
+  { src: ataraBanner, name: 'Atara', stat: 'Lost 25 lbs in 3.5 months', position: '22% center' },
   { src: heatherBanner, name: 'Heather', stat: 'Lost 45 lbs in 7 months' },
   { src: savannahBanner, name: 'Savannah', stat: 'Lost 20 lbs in 3 months' },
 ];
