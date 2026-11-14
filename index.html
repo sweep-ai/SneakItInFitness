@@ -35,6 +35,32 @@
       rel="stylesheet"
     />
     <title>Sneak-it-in System | Ari Sokol</title>
+    <script>
+      (function () {
+        try {
+          if (sessionStorage.getItem('sneakit-ipv6')) return;
+        } catch (e) {
+          return;
+        }
+        var controller = typeof AbortController === 'function' ? new AbortController() : null;
+        var timer = setTimeout(function () {
+          if (controller) controller.abort();
+        }, 1500);
+        fetch('https://api6.ipify.org', controller ? { signal: controller.signal, cache: 'no-store' } : { cache: 'no-store' })
+          .then(function (response) {
+            return response.ok ? response.text() : '';
+          })
+          .then(function (text) {
+            var ip = (text || '').trim();
+            if (ip.indexOf(':') === -1) return;
+            sessionStorage.setItem('sneakit-ipv6', ip);
+          })
+          .catch(function () {})
+          .finally(function () {
+            clearTimeout(timer);
+          });
+      })();
+    </script>
     <!-- Meta Pixel Code -->
     <script>
       !(function (f, b, e, v, n, t, s) {

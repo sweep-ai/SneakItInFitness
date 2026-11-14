@@ -1,3 +1,4 @@
+import { clientIpv6, readClientIpv6 } from './clientIpv6';
 import { facebookClickIdFromFbclid, fbcMatchesFbclid } from './facebookClickId';
 import { isSchedulePath } from './funnelPaths';
 
@@ -123,7 +124,7 @@ interface ServerEventPayload {
   eventName: string;
   eventId: string;
   eventSourceUrl?: string;
-  userData?: PixelUserData & { fbp?: string; fbc?: string };
+  userData?: PixelUserData & { fbp?: string; fbc?: string; clientIpAddress?: string };
 }
 
 function readOutbox(): ServerEventPayload[] {
@@ -214,6 +215,7 @@ function sendServerEvent(
       ...userData,
       fbp: getCookie('_fbp'),
       fbc: scheduleClickId() ?? getCookie('_fbc'),
+      clientIpAddress: readClientIpv6(),
     },
   };
 
@@ -241,9 +243,9 @@ export function sendServerConversion(
   sendServerEvent(eventName, eventId, eventSourceUrl, userData);
 }
 
-/** Fires on every page/route view (browser + server). */
+/** Fires on every page/route view (browser + server). Waits briefly so CAPI can send IPv6. */
 export function trackPageView(): void {
-  trackEvent('PageView');
+  void clientIpv6().then(() => trackEvent('PageView'));
 }
 
 /** Fires when a visitor completes the application form. */

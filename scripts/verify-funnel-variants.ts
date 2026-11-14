@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { CAPI_EVENT_NAMES, isScheduleEventSource, META_DATASET_ID, META_DATASET_ID_TRAINING } from '../api/track-event/metaCapi';
+import { CAPI_EVENT_NAMES, isScheduleEventSource, META_DATASET_ID, META_DATASET_ID_TRAINING, preferredClientIp, selectClientIp } from '../api/track-event/metaCapi';
 import { facebookClickIdFromFbclid, facebookClickIdFromUrl } from '../src/lib/facebookClickId';
 import { getCalendlyEmbedUrl } from '../src/lib/calendly';
 import { bookingConversionEvent, funnelPathsFor } from '../src/lib/funnelPaths';
@@ -61,7 +61,19 @@ const checks: Array<[string, boolean]> = [
         'fb.1.1554763741205.AbCdEf' &&
       indexHtml.includes("var fbc = 'fb.1.' + Date.now() + '.' + fbclid;") &&
       metaCapiSource.includes('client_ip_address') &&
-      metaCapiSource.includes('userData.fbc = ud.fbc'),
+      metaCapiSource.includes('userData.fbc = ud.fbc') &&
+      !metaCapiSource.includes('remoteAddress') &&
+      selectClientIp(['203.0.113.5, 2606:4700:4700::1111']) === '2606:4700:4700::1111' &&
+      selectClientIp(['[2606:4700:4700::1111]:443']) === '2606:4700:4700::1111' &&
+      selectClientIp(['::ffff:203.0.113.9']) === '203.0.113.9' &&
+      selectClientIp(['10.0.0.1', '203.0.113.8']) === '203.0.113.8' &&
+      selectClientIp(['203.0.113.8']) === '203.0.113.8' &&
+      selectClientIp(['127.0.0.1', '::1']) === undefined &&
+      preferredClientIp('2606:4700:4700::1111', '203.0.113.8') === '2606:4700:4700::1111' &&
+      preferredClientIp('203.0.113.9', '203.0.113.8') === '203.0.113.8' &&
+      preferredClientIp('::1', '203.0.113.8') === '203.0.113.8' &&
+      indexHtml.includes('https://api6.ipify.org') &&
+      indexHtml.includes('sneakit-ipv6'),
   ],
   [
     'training CAPI follows the schedule URL only',

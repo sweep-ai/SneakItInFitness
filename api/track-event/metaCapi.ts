@@ -146,21 +146,117 @@ function parseCookies(cookieHeader: string | undefined): Record<string, string> 
   }, {});
 }
 
+function headerText(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value.join(',');
+  return value ?? '';
+}
+
+function isIpv4(ip: string): boolean {
+  const parts = ip.split('.');
+  if (parts.length !== 4) return false;
+  return parts.every((part) => /^\d{1,3}$/.test(part) && Number(part) <= 255);
+}
+
+function isPublicIpv4(ip: string): boolean {
+  if (!isIpv4(ip)) return false;
+  const [a, b] = ip.split('.').map(Number);
+  if (a === 0 || a === 10 || a === 127) return false;
+  if (a === 169 && b === 254) return false;
+  if (a === 172 && b >= 16 && b <= 31) return false;
+  if (a === 192 && b === 168) return false;
+  if (a === 100 && b >= 64 && b <= 127) return false;
+  return true;
+}
+
+function isIpv6(ip: string): boolean {
+  if (!ip.includes(':') || !/^[0-9a-f:]+$/i.test(ip)) return false;
+  const halves = ip.split('::');
+  if (halves.length > 2) return false;
+  const groups = ip.split(':').filter((group) => group.length > 0);
+  if (groups.some((group) => group.length > 4)) return false;
+  return ip.includes('::') ? groups.length < 8 : groups.length === 8;
+}
+
+function isPublicIpv6(ip: string): boolean {
+  if (!isIpv6(ip)) return false;
+  const lower = ip.toLowerCase();
+  if (lower === '::' || lower === '::1') return false;
+  const head = Number.parseInt(lower.split(':')[0] || '0', 16);
+  if (head >= 0xfe80 && head <= 0xfebf) return false;
+  if (head >= 0xfc00 && head <= 0xfdff) return false;
+  return true;
+}
+
+/** Strip brackets, zone ids, ports, and IPv4-mapped IPv6. Reject private addresses. */
+export function normalizeClientIp(token: string): string | undefined {
+  let value = token.trim().replace(/^"|"$/g, '');
+  const bracketed = value.match(/^\[([^\]]+)\](?::\d+)?$/);
+  if (bracketed) value = bracketed[1];
+  const zone = value.indexOf('%');
+  if (zone !== -1) value = value.slice(0, zone);
+  if (/^\d{1,3}(?:\.\d{1,3}){3}:\d+$/.test(value)) {
+    value = value.slice(0, value.lastIndexOf(':'));
+  }
+  const mapped = value.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i);
+  if (mapped) value = mapped[1];
+  if (isPublicIpv6(value) || isPublicIpv4(value)) return value;
+  return undefined;
+}
+
+/**
+ * Meta matches the pixel's observed address. IPv6 wins when the request
+ * carries one. Otherwise the first public IPv4. Never a private or server address.
+ */
+export function selectClientIp(rawValues: Array<string | undefined>): string | undefined {
+  const ips = rawValues
+    .flatMap((value) => (value ?? '').split(','))
+    .map((token) => normalizeClientIp(token))
+    .filter((ip): ip is string => Boolean(ip));
+  return ips.find((ip) => ip.includes(':')) ?? ips[0];
+}
+
+/**
+ * Browser-reported IPv6 wins. Vercel only observes IPv4.
+ * A client-supplied IPv4 is ignored so the header stays the source for that case.
+ */
+export function preferredClientIp(
+  reported: string | undefined,
+  observed: string | undefined
+): string | undefined {
+  const fromBrowser = normalizeClientIp(reported ?? '');
+  if (fromBrowser?.includes(':')) return fromBrowser;
+  return observed;
+}
+
+function forwardedHeaderIps(header: string): string[] {
+  const ips: string[] = [];
+  const pattern = /for=\s*"?(\[[^\]]+\]|[^;,\s"]+)/gi;
+  for (const match of header.matchAll(pattern)) {
+    ips.push(match[1]);
+  }
+  return ips;
+}
+
 /**
  * Derives the request-scoped fields Meta uses for matching: the visitor IP,
  * user agent, and the _fbp / _fbc cookies dropped by the browser pixel.
+ * Called by handleTrackEventRequest in this file (PageView and conversions).
  */
 export function getRequestUserContext(
   req: IncomingMessage
 ): Pick<CapiUserData, 'clientIpAddress' | 'clientUserAgent' | 'fbp' | 'fbc'> {
-  const forwardedFor = (req.headers['x-forwarded-for'] as string | undefined) ?? '';
-  const clientIpAddress =
-    forwardedFor.split(',')[0]?.trim() || req.socket?.remoteAddress || undefined;
-  const clientUserAgent = (req.headers['user-agent'] as string | undefined) ?? undefined;
-  const cookies = parseCookies(req.headers.cookie);
+  const headers = req.headers;
+  const clientIpAddress = selectClientIp([
+    headerText(headers['x-vercel-forwarded-for']),
+    headerText(headers['x-real-ip']),
+    headerText(headers['x-forwarded-for']),
+    ...forwardedHeaderIps(headerText(headers.forwarded)),
+  ]);
+  const clientUserAgent = headerText(headers['user-agent']) || undefined;
+  const cookies = parseCookies(headerText(headers.cookie) || undefined);
 
   return {
-    clientIpAddress: clientIpAddress || undefined,
+    clientIpAddress,
     clientUserAgent,
     fbp: cookies['_fbp'],
     fbc: cookies['_fbc'],
@@ -186,6 +282,7 @@ interface TrackEventRequestBody {
     lastName?: string;
     fbp?: string;
     fbc?: string;
+    clientIpAddress?: string;
   };
   customData?: Record<string, unknown>;
 }
@@ -242,7 +339,7 @@ export async function handleTrackEventRequest(
     phone: bodyUser.phone,
     firstName: bodyUser.firstName,
     lastName: bodyUser.lastName,
-    clientIpAddress: context.clientIpAddress,
+    clientIpAddress: preferredClientIp(bodyUser.clientIpAddress, context.clientIpAddress),
     clientUserAgent: context.clientUserAgent,
     fbp: bodyUser.fbp ?? context.fbp,
     fbc: clickId,
