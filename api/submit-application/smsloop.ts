@@ -69,7 +69,10 @@ function buildFields(payload: ApplicationWebhookPayload): Record<string, string>
 }
 
 /** Sends an application lead to SMSLoop so the AI opener texts them. */
-export async function sendLeadToSmsloop(payload: ApplicationWebhookPayload): Promise<SmsloopResponse> {
+export async function sendLeadToSmsloop(
+  payload: ApplicationWebhookPayload,
+  extra: { fields?: Record<string, string>; context?: Record<string, string> } = {},
+): Promise<SmsloopResponse> {
   const config = getSmsloopConfig();
   if (!config) {
     throw new Error('SMSLOOP_URL/SMSLOOP_SECRET is not configured');
@@ -82,6 +85,7 @@ export async function sendLeadToSmsloop(payload: ApplicationWebhookPayload): Pro
   const context: Record<string, string> = { lead_status: payload.leadStatus };
   if (payload.dqReason) context.dq_reason = payload.dqReason;
   if (payload.smsConsentTimestamp) context.consent_given_at = payload.smsConsentTimestamp;
+  Object.assign(context, extra.context);
 
   const body: Record<string, unknown> = {
     phone: formatPhoneForGhl(payload.phone),
@@ -89,7 +93,7 @@ export async function sendLeadToSmsloop(payload: ApplicationWebhookPayload): Pro
     last_name: lastName,
     email: payload.email?.trim() || undefined,
     source: payload.source?.trim() || 'Application quiz',
-    fields: buildFields(payload),
+    fields: { ...buildFields(payload), ...extra.fields },
     scenario,
     context,
   };

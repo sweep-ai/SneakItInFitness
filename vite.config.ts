@@ -3,6 +3,7 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { handleTrackEventRequest } from './api/track-event/metaCapi.js';
 import { handleSubmitApplicationRequest } from './api/submit-application/handler.js';
+import { handleSimpleCheckWebhookRequest } from './api/simplecheck-webhook/handler.js';
 
 function submitApplicationApi(): Plugin {
   return {
@@ -36,6 +37,23 @@ function trackEventApi(): Plugin {
   };
 }
 
+function simpleCheckWebhookApi(): Plugin {
+  return {
+    name: 'simplecheck-webhook-api',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        // Match with or without the ?token= query string.
+        if (!req.url?.startsWith('/api/simplecheck-webhook') || req.method !== 'POST') {
+          next();
+          return;
+        }
+
+        void handleSimpleCheckWebhookRequest(req, res as ServerResponse);
+      });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   // Expose env vars used by the dev-server middleware (loadEnv doesn't set process.env).
@@ -47,12 +65,22 @@ export default defineConfig(({ mode }) => {
   process.env.GOOGLE_SHEET_WEBHOOK = env.GOOGLE_SHEET_WEBHOOK;
   process.env.GHL_INTEGRATION_TOKEN = env.GHL_INTEGRATION_TOKEN;
   process.env.GHL_LOCATION_ID = env.GHL_LOCATION_ID;
+  for (const key of [
+    'SIMPLECHECK_SIGNING_SECRET',
+    'SIMPLECHECK_WEBHOOK_SECRET',
+    'SIMPLECHECK_WEBHOOK_LOG_BODY',
+    'SMSLOOP_URL',
+    'SMSLOOP_SECRET',
+    'SMSLOOP_SCENARIO',
+  ]) {
+    if (env[key]) process.env[key] = env[key];
+  }
   if (env.META_CAPI_TEST_EVENT_CODE) {
     process.env.META_CAPI_TEST_EVENT_CODE = env.META_CAPI_TEST_EVENT_CODE;
   }
 
   return {
-    plugins: [react(), submitApplicationApi(), trackEventApi()],
+    plugins: [react(), submitApplicationApi(), trackEventApi(), simpleCheckWebhookApi()],
     server: {
       headers: {
         'Cache-Control': 'no-store',

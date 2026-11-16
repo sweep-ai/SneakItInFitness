@@ -17,6 +17,8 @@ interface FunnelShellProps {
   icpGender?: IcpAudience;
   children?: ReactNode;
   afterBanner?: ReactNode;
+  /** Replaces the eligibility heading and ApplicationForm when set. */
+  formReplacement?: ReactNode;
   heroCopy?: FunnelCopy;
   transformations?: typeof transformationsCopy;
   bannerTestimonials?: Testimonial[];
@@ -29,6 +31,7 @@ export function FunnelShell({
   icpGender: icpGenderProp,
   children,
   afterBanner,
+  formReplacement,
   heroCopy = funnelCopy,
   transformations = transformationsCopy,
   bannerTestimonials,
@@ -106,8 +109,14 @@ export function FunnelShell({
           Apply Now
         </button>
         <VSLPlayer gender={icpGender} />
-        <h2 className="funnel-eligibility-title">{eligibilityTitle}</h2>
-        <ApplicationForm />
+        {formReplacement ? (
+          <div id="application-form">{formReplacement}</div>
+        ) : (
+          <>
+            <h2 className="funnel-eligibility-title">{eligibilityTitle}</h2>
+            <ApplicationForm />
+          </>
+        )}
         {children}
       </div>
       <section className="funnel-transformations" aria-labelledby="funnel-transformations-heading">

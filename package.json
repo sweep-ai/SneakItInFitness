@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && npm run verify:payload && npm run verify:ghl && npm run verify:booking && npm run verify:smsloop && npm run verify:funnel && vite build",
+    "build": "node scripts/generate-sitemap.mjs && tsc --noEmit && npm run verify:payload && npm run verify:ghl && npm run verify:booking && npm run verify:smsloop && npm run verify:funnel && npm run verify:simplecheck && vite build",
     "compress-assets": "node scripts/compress-assets.mjs",
     "preview": "vite preview",
     "verify:payload": "tsx scripts/verify-application-payload.ts",
@@ -13,6 +13,7 @@
     "verify:booking": "tsx scripts/verify-booking-webhook.ts",
     "verify:smsloop": "tsx scripts/verify-smsloop-inbound.ts",
     "verify:funnel": "tsx scripts/verify-funnel-variants.ts",
+    "verify:simplecheck": "tsx scripts/verify-simplecheck-webhook.ts",
     "test:ghl": "tsx scripts/test-ghl-live.ts"
   },
   "dependencies": {
