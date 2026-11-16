@@ -19,14 +19,6 @@ export function isSchedulePath(pathname: string): boolean {
   return pathname === '/schedule' || pathname.startsWith('/schedule/');
 }
 
-/**
- * The /schedule front cover. SimpleCheck owns tracking here, so this site
- * sends no PageView or Lead from it (browser pixel or Conversions API).
- */
-export function isScheduleFrontCoverPath(pathname: string): boolean {
-  return pathname === '/schedule' || pathname === '/schedule/';
-}
-
 export function funnelVariantFromPath(pathname: string): FunnelVariant {
   return isSchedulePath(pathname) ? 'schedule' : 'default';
 }

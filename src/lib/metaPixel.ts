@@ -1,6 +1,6 @@
 import { clientIpv6, readClientIpv6 } from './clientIpv6';
 import { facebookClickIdFromFbclid, fbcMatchesFbclid } from './facebookClickId';
-import { isScheduleFrontCoverPath, isSchedulePath } from './funnelPaths';
+import { isSchedulePath } from './funnelPaths';
 
 /** Live campaign pixel. Must match the first `fbq('init')` in index.html. */
 export const META_PIXEL_ID = '1880087192677392';
@@ -88,11 +88,12 @@ function scheduleClickId(): string | undefined {
  * Meta dedupes that pair. Callers must not track the same step from two pages.
  */
 function trackEvent(eventName: string, userData?: PixelUserData, eventId?: string): void {
-  // SimpleCheck handles PageView and Lead on the /schedule front cover.
+  // SimpleCheck sends the page view and Lead events across the /schedule funnel.
+  // Only Schedule (and CompleteRegistration) are ours there.
   if (
     typeof window !== 'undefined' &&
     (eventName === 'PageView' || eventName === 'Lead') &&
-    isScheduleFrontCoverPath(window.location.pathname)
+    isSchedulePath(window.location.pathname)
   ) {
     return;
   }
@@ -254,7 +255,7 @@ export function sendServerConversion(
 
 /** Fires on every page/route view (browser + server). Waits briefly so CAPI can send IPv6. */
 export function trackPageView(): void {
-  if (typeof window !== 'undefined' && isScheduleFrontCoverPath(window.location.pathname)) return;
+  if (typeof window !== 'undefined' && isSchedulePath(window.location.pathname)) return;
   void clientIpv6().then(() => trackEvent('PageView'));
 }
 
