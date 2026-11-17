@@ -7,7 +7,6 @@ import {
   APPLICATION_FORM_STORAGE_KEY,
   emptyApplicationFormData,
   isDisqualifiedLead,
-  isFinancialDisqualification,
   type ApplicationFormData,
   type ApplicationStep,
 } from '../data/applicationForm';
@@ -201,7 +200,6 @@ export function ApplicationForm() {
         /* Prefill needs this. Lead still fires below when storage is blocked. */
       }
 
-      const financialDq = isFinancialDisqualification(formData);
       const [firstName, ...restName] = formData.name.trim().split(/\s+/);
       const leadUser = {
         email: formData.email,
@@ -209,10 +207,8 @@ export function ApplicationForm() {
         firstName,
         lastName: restName.join(' ') || undefined,
       };
-      if (!financialDq && isDisqualifiedLead(formData)) {
-        // Stays on this page, so this is the one Lead.
-        trackLead(leadUser);
-      } else if (!financialDq && !beginLeadTracking()) {
+      // Disqualified leads never fire Lead. Qualified leads fire it on /booking.
+      if (!isDisqualifiedLead(formData) && !beginLeadTracking()) {
         // Booking page cannot see the id. Fire the one Lead here.
         trackLead(leadUser);
       }
